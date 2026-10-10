@@ -1,5 +1,8 @@
 # Planejador de Projetos AI
 
+**v1.0.0** — homologada e publicada em produção:
+[planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br).
+
 Aplicação web que recebe uma especificação técnica de projeto (PDF ou texto)
 e utiliza Inteligência Artificial para gerar os artefatos iniciais de gestão
 de projetos correspondentes ao framework escolhido manualmente pelo usuário:
@@ -22,7 +25,10 @@ método utilizar.
 
 ## Status do projeto
 
-Em desenvolvimento incremental, por etapas. Estado atual:
+**Versão 1.0.0 — homologada e publicada em produção** em
+[planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br),
+via Vercel, com banco de produção dedicado no Neon (separado do ambiente de
+desenvolvimento). Estado atual:
 
 - [x] **Etapa 1** — estrutura do projeto, configuração inicial e interface
       (landing page, identidade visual, componentes base).
@@ -38,8 +44,14 @@ Em desenvolvimento incremental, por etapas. Estado atual:
       cronograma, cards de Sprint e slides de Kick-off (PRD §48-51).
 - [x] **Etapa 6** — exportação (texto, PDF e Excel), tratamento de erros
       (sessão expirada, erro de rede, error boundaries), headers de
-      segurança e suite de testes unitários. **MVP completo** quanto às 6
-      etapas planejadas — ver limitações no final deste documento.
+      segurança e suite de testes unitários.
+- [x] **Etapa 7** — auditoria de segurança e produção: rate limiting de
+      gerações por usuário e de tentativas de autenticação (ambos
+      persistidos no Postgres, não em memória — ver
+      `src/lib/rate-limit/`), correções de paginação de impressão nos
+      três frameworks, publicação na Vercel com domínio próprio e HTTPS,
+      e homologação funcional e visual completa dos três frameworks em
+      produção. **v1.0.0.**
 
 ## Arquitetura
 
@@ -482,37 +494,65 @@ nenhuma chamada à IA ocorre fora do backend. O banco de dados armazena
 apenas o necessário para autenticação (email + hash da senha). Detalhes em
 [`docs/PRD.md`](docs/PRD.md) (§14) e em [`/privacy`](src/app/privacy/page.tsx).
 
+## Melhorias futuras
+
+Itens avaliados e deliberadamente **fora** do escopo da v1.0.0 — não
+implementados, apenas registrados para priorização futura:
+
+- **Planejamento Híbrido (Ágil + Preditivo)** — um quarto "framework" que
+  combina elementos de Scrum/Kanban com as fases e marcos da Cascata, para
+  projetos que precisam de um cronograma macro preditivo (fases, marcos,
+  dependências) junto com execução iterativa (backlog, sprints ou fluxo
+  contínuo) dentro de cada fase. Não avaliado em profundidade ainda —
+  exigiria um novo schema de IA, um novo agente de estruturação (ou
+  adaptação dos três atuais) e uma nova apresentação visual própria;
+  provavelmente o maior item de esforço do roadmap.
+- **Recuperação de senha por e-mail** — depende de integrar um serviço
+  transacional de e-mail (PRD, OQ-001), ainda não avaliado.
+- **Região das Vercel Functions em São Paulo** — hoje em `iad1`
+  (Virgínia, EUA); o banco de produção já está em São Paulo. Mudar a
+  região da function para `gru1` reduziria a latência de banco, mas a
+  tentativa de configurar isso pelo painel não persistiu em testes
+  anteriores — requer nova tentativa ou configuração manual.
+- **Content-Security-Policy completa** — hoje só os headers básicos
+  (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+  `Permissions-Policy`) estão ativos; uma CSP completa foi adiada
+  deliberadamente por exigir um esforço de tuning maior que o
+  justificável até aqui.
+- **Testes de carga e auditoria de acessibilidade com leitor de tela** —
+  não realizados em nenhuma fase do projeto.
+- **`engines` no `package.json`** — fixar a versão do Node usada em
+  desenvolvimento (22.x) explicitamente no manifesto do pacote, para não
+  depender apenas da configuração manual no painel da Vercel.
+
 ## Limitações conhecidas
 
-Registradas com a mesma transparência usada durante todo o desenvolvimento
-— nenhuma delas foi testada de ponta a ponta por mim, por não haver acesso
-a um banco Neon real, a uma chave do Gemini nem a um navegador nesta
-sessão de desenvolvimento:
+Atualizado na homologação da v1.0.0 — reflete o que foi de fato validado,
+não apenas revisado por código:
 
-- **Nenhuma geração real foi executada contra a API do Gemini.** Toda a
-  camada de IA foi validada por leitura dos tipos do SDK instalado,
-  inspeção do JSON Schema real gerado por cada contrato, lint, typecheck,
-  build e os testes unitários — mas não por uma chamada de verdade.
-- **Nenhum cadastro/login real foi testado contra um Neon de produção.**
-- **Interações puramente client-side** (tabs do Kanban, disclosure de
-  critérios de aceite, drag-and-drop de upload, o próprio botão de
-  exportação) foram revisadas por código e confirmadas por renderização
-  server-side com dados simulados, mas não clicadas de fato num
-  navegador.
-- **Responsividade não validada visualmente** nos tamanhos de referência
-  do PRD (§95: ~375 px, ~430 px, ~768 px, ~1366 px, ≥1440 px) — o CSS
-  responsivo foi escrito e revisado, mas não visto rodando.
-- **Rate limiting não está ativo** — a especificação original pede
-  apenas que fique "preparado" (RNF-007); não implementei nenhuma
-  limitação de requisições de verdade, por não ter sido pedido
-  explicitamente nas 6 etapas combinadas.
-- **Recuperação de senha por email não foi implementada** — o PRD
-  (OQ-001) condiciona isso à simplicidade da integração com um serviço
-  transacional, o que não chegou a ser avaliado.
-- **Nenhum teste de carga, de acessibilidade com leitor de tela, nem
-  auditoria de segurança foi executado** — apenas revisão de código.
-
-**Antes de considerar o MVP pronto para uso real**, recomendo fortemente:
-configurar um Neon e uma chave do Gemini reais e testar o fluxo completo
-(cadastro → login → geração nos 3 frameworks → exportação) em um
-navegador, nos tamanhos de tela do PRD §95.
+- **Testado de ponta a ponta em produção real**: cadastro, login,
+  logout, proteção de rotas, geração nos 3 frameworks com chamadas reais
+  à API Gemini, e exportação — tudo contra o banco Neon de produção e no
+  domínio oficial, não apenas em ambiente local ou simulado.
+- **Rate limiting ativo e verificado em produção** — cota diária de
+  gerações por usuário e proteção contra tentativas excessivas de
+  login/cadastro, ambos persistidos no Postgres (não em memória, correto
+  para múltiplas instâncias serverless da Vercel). Verificado
+  diretamente no banco de produção após uma geração real: exatamente 1
+  unidade de cota debitada por geração completa.
+- **Responsividade**: validada nas larguras de desktop e tablet comuns
+  usadas ao longo dos testes funcionais; **não houve uma passagem
+  dedicada pelos breakpoints específicos do PRD §95** (~375 px, ~430 px)
+  em dispositivo ou emulação de tela realmente pequena — o CSS
+  responsivo existe e foi usado nos testes, mas essa cobertura específica
+  continua pendente.
+- **Recuperação de senha por e-mail não foi implementada** — ver
+  "Melhorias futuras".
+- **Nenhum teste de carga nem auditoria de acessibilidade com leitor de
+  tela foi executado** — ver "Melhorias futuras". Uma auditoria de
+  segurança **foi** realizada (autenticação, variáveis de ambiente,
+  rate limiting, exposição de credenciais) — não é mais uma lacuna.
+- **Uma vulnerabilidade moderada transitiva** (`exceljs` → `uuid`,
+  bounds-check de buffer) segue sem correção — risco real baixo dado o
+  padrão de uso (nunca passamos buffer controlado pelo usuário para
+  geração de UUID), mas registrado para acompanhamento.
