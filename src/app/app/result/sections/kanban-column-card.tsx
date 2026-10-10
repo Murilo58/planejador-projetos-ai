@@ -14,7 +14,14 @@ export function KanbanColumnCard({
   items: Item[];
 }) {
   return (
-    <Card className="flex h-full flex-col p-4 print:h-auto print:break-inside-avoid-page">
+    // Sem `break-inside-avoid` na coluna inteira de propósito: uma coluna
+    // com muitos itens pode ser mais alta que uma página inteira — tratá-la
+    // como bloco atômico empurraria a coluna inteira para a página seguinte,
+    // deixando a página anterior quase vazia (mesma causa já diagnosticada
+    // no Material de Kick-off da Cascata). A proteção fica só em cada
+    // cartão individual (abaixo), permitindo que colunas longas se
+    // distribuam normalmente entre páginas sem nunca cortar um cartão.
+    <Card className="flex h-full flex-col p-4 print:h-auto">
       <CardContent className="flex flex-1 flex-col gap-3 p-0">
         <div className="flex items-center justify-between gap-2 print:break-after-avoid">
           <h3 className="text-foreground font-semibold">{column.name}</h3>

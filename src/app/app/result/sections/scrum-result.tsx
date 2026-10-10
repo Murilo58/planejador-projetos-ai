@@ -10,12 +10,12 @@ export function ScrumResult({ data }: { data: ScrumOutput }) {
   return (
     <div className="flex flex-col gap-8">
       <section>
-        <h2 className="text-foreground text-lg font-semibold">
+        <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
           Backlog priorizado
         </h2>
         <div className="mt-4 flex flex-col gap-4">
           {data.backlog.map((story, index) => (
-            <Card key={story.title} className="p-5">
+            <Card key={story.title} className="p-5 print:break-inside-avoid">
               <CardContent className="flex flex-col gap-3 p-0">
                 <div className="flex items-start gap-3">
                   <span className="bg-accent text-accent-foreground flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
@@ -63,10 +63,10 @@ export function ScrumResult({ data }: { data: ScrumOutput }) {
       </section>
 
       <section>
-        <h2 className="text-foreground text-lg font-semibold">
+        <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
           Primeira Sprint sugerida
         </h2>
-        <Card className="border-primary/30 bg-accent/40 mt-4 p-5">
+        <Card className="border-primary/30 bg-accent/40 mt-4 p-5 print:break-inside-avoid">
           <CardContent className="flex flex-col gap-3 p-0">
             <div className="flex items-center gap-2">
               <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full">
@@ -90,7 +90,7 @@ export function ScrumResult({ data }: { data: ScrumOutput }) {
       </section>
 
       <section>
-        <h2 className="text-foreground text-lg font-semibold">
+        <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
           Cronograma macro
         </h2>
         <Card className="mt-4 p-5">

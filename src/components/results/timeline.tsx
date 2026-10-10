@@ -19,7 +19,7 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         return (
-          <li key={item.title} className="flex gap-4">
+          <li key={item.title} className="flex gap-4 print:break-inside-avoid">
             <div className="flex flex-col items-center">
               <span className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
                 {index + 1}

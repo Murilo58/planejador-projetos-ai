@@ -33,7 +33,15 @@ export function Disclosure({
         />
         {title}
       </button>
-      {isOpen ? <div className="mt-2 pl-6">{children}</div> : null}
+      {/* Sempre no DOM (nunca desmontado) para que a impressão mostre o
+          conteúdo mesmo que o usuário nunca tenha expandido o bloco na
+          tela — `window.print()` não pode exibir o que não existe no
+          DOM. `hidden`/`block` controla a tela conforme `isOpen`;
+          `print:block` força a exibição na impressão independente
+          disso. */}
+      <div className={cn("mt-2 pl-6", isOpen ? "block" : "hidden print:block")}>
+        {children}
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
           do Kick-off abaixo, não para estes três. */}
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         <section>
-          <h2 className="text-foreground text-lg font-semibold">
+          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
             TAP — Termo de Abertura do Projeto
           </h2>
           <Card className="mt-4 overflow-hidden p-0">
@@ -36,21 +36,42 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
                 <FieldValue value={data.tap.scopeSummary} />
               </div>
               <div className="bg-border h-px" />
-              <div className="grid gap-4 sm:grid-cols-2">
-                <ListField label="Stakeholders" items={data.tap.stakeholders} />
-                <ListField
-                  label="Critérios de sucesso"
-                  items={data.tap.successCriteria}
-                />
-                <ListField label="Premissas" items={data.tap.assumptions} />
-                <ListField label="Restrições" items={data.tap.constraints} />
+              {/* Impressão em Flexbox, não Grid — mesmo motivo do EapBoard
+                  e do Material de Kick-off: evita páginas com espaços
+                  vazios causadas pela fragmentação pouco confiável de
+                  CSS Grid multi-linha nos motores de impressão. */}
+              <div className="grid gap-4 sm:grid-cols-2 print:flex print:flex-wrap">
+                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
+                  <ListField
+                    label="Stakeholders"
+                    items={data.tap.stakeholders}
+                  />
+                </div>
+                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
+                  <ListField
+                    label="Critérios de sucesso"
+                    items={data.tap.successCriteria}
+                  />
+                </div>
+                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
+                  <ListField
+                    label="Premissas"
+                    items={data.tap.assumptions}
+                  />
+                </div>
+                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
+                  <ListField
+                    label="Restrições"
+                    items={data.tap.constraints}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
         </section>
 
         <section>
-          <h2 className="text-foreground text-lg font-semibold">
+          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
             EAP — Estrutura Analítica do Projeto
           </h2>
           <div className="mt-4">
@@ -59,7 +80,7 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
         </section>
 
         <section>
-          <h2 className="text-foreground text-lg font-semibold">
+          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
             Cronograma macro
           </h2>
           <Card className="mt-4 p-5">
