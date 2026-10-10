@@ -1,0 +1,78 @@
+// Planejador de Projetos AI — schema do banco de dados.
+//
+// Escopo deliberadamente mínimo (PRD §13 / RNF-010): apenas o necessário
+// para autenticação e operação básica. Não há tabelas de projetos,
+// documentos, especificações ou artefatos gerados — a aplicação não é um
+// repositório de conteúdo enviado pelo usuário (RN-007, RN-008, RN-010).
+//
+// Autenticação via Auth.js com Credentials provider + sessão em JWT: não
+// há Adapter nem tabelas Account/Session/VerificationToken, pois a sessão
+// não é persistida em banco (RNF-012 trata apenas do resultado temporário
+// no navegador, não da sessão de autenticação).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+// --- Controles de uso e proteção contra abuso (auditoria de produção) ------
+//
+// Sem relação (@relation) com User de propósito: são dados de controle
+// operacional, não dados de negócio — mantê-los desacoplados evita tocar
+// no model User e simplifica a migration (puramente aditiva).
+
+/// Uma linha por tentativa de geração iniciada (Etapa 1 — Extração).
+/// `id` é o `generationId` gerado no navegador e reutilizado pelas Etapas
+/// 2 e 3 da MESMA geração — nunca cobrado de novo nessas etapas (ver
+/// src/lib/rate-limit/generation-quota.ts). `completedAt` marca uma
+/// geração já finalizada, para que seu id não seja reaproveitado depois.
+model Generation {
+  id          String    @id
+  userId      String
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([userId, createdAt])
+}
+
+/// Cota diária de gerações por usuário (RF — proteção contra uso indevido
+/// da API Gemini). Uma linha por usuário por dia; o incremento é feito via
+/// SQL atômico (INSERT ... ON CONFLICT ... DO UPDATE ... WHERE), nunca por
+/// um "ler depois escrever" da aplicação — por isso é seguro sob múltiplas
+/// instâncias/requisições simultâneas da Vercel.
+model GenerationQuota {
+  userId    String
+  day       DateTime
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, day])
+}
+
+/// Tentativas de autenticação (login/cadastro), por IP e/ou por e-mail
+/// (hash, nunca em texto puro — ver src/lib/rate-limit/auth-attempts.ts).
+/// Nunca contém senha, token ou qualquer dado de credencial.
+model AuthAttempt {
+  id        String   @id @default(cuid())
+  key       String
+  kind      String
+  succeeded Boolean
+  createdAt DateTime @default(now())
+
+  @@index([key, kind, createdAt])
+}

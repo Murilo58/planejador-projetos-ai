@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Tokens de identidade visual — Planejador de Projetos AI
+ * Fonte: docs/PRD.md §13 (Requisitos Visuais) e a paleta de referência da
+ * especificação original (base navy/graphite/slate, superfícies claras,
+ * destaque indigo/violeta). Definido aqui como ponto único de verdade;
+ * DESIGN_SYSTEM.md (futuro) documentará o racional com mais detalhe.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Cor de destaque de IA (uso reservado: hero, geração, seleção — PRD §13.3) */
+  --color-ai-accent-foreground: var(--ai-accent-foreground);
+  --color-ai-accent: var(--ai-accent);
+
+  /* Estados semânticos (sucesso / atenção) usados nos artefatos por framework */
+  --color-success-foreground: var(--success-foreground);
+  --color-success: var(--success);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning: var(--warning);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Superfícies */
+  --background: #f7f8fa; /* Soft Background */
+  --foreground: #111827; /* Deep Slate */
+  --card: #ffffff; /* Surface */
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+
+  /* Ação primária */
+  --primary: #4f46e5; /* Primary (indigo) */
+  --primary-foreground: #ffffff;
+
+  /* Ações e superfícies secundárias */
+  --secondary: #eef0f4;
+  --secondary-foreground: #111827;
+  --muted: #f1f2f6;
+  --muted-foreground: #6b7280;
+  --accent: #eef2ff;
+  --accent-foreground: #4338ca;
+
+  /* Estado destrutivo */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Bordas, inputs, foco */
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #6366f1; /* Primary Accent */
+
+  /* Identidade de IA (uso reservado — não é a cor de ação primária) */
+  --ai-accent: #7c3aed;
+  --ai-accent-foreground: #ffffff;
+
+  /* Estados semânticos dos artefatos (prioridade, avisos de WIP etc.) */
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+}
+
+.dark {
+  --background: #0b1220; /* Dark Navy */
+  --foreground: #f1f5f9;
+  --card: #111827; /* Deep Slate */
+  --card-foreground: #f1f5f9;
+  --popover: #111827;
+  --popover-foreground: #f1f5f9;
+
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+
+  --secondary: #1c2535;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1c2535;
+  --muted-foreground: #94a3b8;
+  --accent: #1e1b4b;
+  --accent-foreground: #c7d2fe;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: color-mix(in oklch, white 10%, transparent);
+  --input: color-mix(in oklch, white 14%, transparent);
+  --ring: #818cf8;
+
+  --ai-accent: #a78bfa;
+  --ai-accent-foreground: #1e1b4b;
+
+  --success: #22c55e;
+  --success-foreground: #052e16;
+  --warning: #f59e0b;
+  --warning-foreground: #451a03;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Gradiente de identidade (índigo → violeta), reservado para hero e
+   pequenos destaques ligados à IA — PRD §13.3, não aplicado em cards/botões. */
+.gradient-ai {
+  background-image: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--ai-accent) 100%
+  );
+}
+
+/* Exportação em PDF via impressão nativa do navegador (RF-054) — garante
+   que cores de fundo intencionais (hero, slides do Kick-off) sejam
+   impressas mesmo quando o navegador, por padrão, omite "gráficos de
+   fundo" na impressão. */
+@media print {
+  * {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}
+
+/* Layout de impressão dimensionado para A4, com margens consistentes
+   independentes do padrão de cada navegador/usuário — é a base usada
+   para calcular quantas colunas cabem no grid do Kick-off (ver
+   cascata-result.tsx). `size: A4` é um indicativo seguido pela maioria
+   dos navegadores quando o usuário mantém o tamanho de papel padrão no
+   diálogo de impressão; ele ainda pode escolher outro tamanho lá.
+
+   Esta regra NÃO remove o cabeçalho/rodapé automático do navegador
+   (data, URL, numeração de página) — isso é uma preferência do próprio
+   diálogo de impressão do navegador ("Cabeçalhos e rodapés", em "Mais
+   configurações"), fora do alcance de CSS/JS de qualquer página. Não
+   existe propriedade de CSS nem API de JavaScript padrão para
+   desativar isso remotamente — é uma restrição deliberada dos
+   navegadores (Chrome, Edge, Firefox), para impedir que páginas
+   controlem o que aparece na impressão do usuário. */
+@page {
+  size: A4;
+  margin: 16mm 14mm;
+}
