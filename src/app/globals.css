@@ -74,7 +74,13 @@
   --secondary: #eef0f4;
   --secondary-foreground: #111827;
   --muted: #f1f2f6;
-  --muted-foreground: #6b7280;
+  /* #6b7280 passava no contraste contra --background (4.55:1) mas ficava
+     abaixo do mínimo AA (4.5:1) sobre fundos com tinta de --muted (medido
+     em 4.47:1 pelo Lighthouse) — achado real da auditoria de
+     acessibilidade, não hipotético. Um tom levemente mais escuro resolve
+     nos dois contextos sem mudar a hierarquia visual (mesmo tom de
+     cinza-azulado, só um passo mais escuro). */
+  --muted-foreground: #656b78;
   --accent: #eef2ff;
   --accent-foreground: #4338ca;
 
