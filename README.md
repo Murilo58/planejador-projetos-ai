@@ -514,21 +514,32 @@ implementados, apenas registrados para priorização futura:
   região da function para `gru1` reduziria a latência de banco, mas a
   tentativa de configurar isso pelo painel não persistiu em testes
   anteriores — requer nova tentativa ou configuração manual.
-- **Content-Security-Policy completa** — hoje só os headers básicos
-  (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
-  `Permissions-Policy`) estão ativos; uma CSP completa foi adiada
-  deliberadamente por exigir um esforço de tuning maior que o
-  justificável até aqui.
-- **Testes de carga e auditoria de acessibilidade com leitor de tela** —
-  não realizados em nenhuma fase do projeto.
-- **`engines` no `package.json`** — fixar a versão do Node usada em
-  desenvolvimento (22.x) explicitamente no manifesto do pacote, para não
-  depender apenas da configuração manual no painel da Vercel.
+- **Ativar a Content-Security-Policy em modo bloqueante** — desde a
+  v1.0.1, uma CSP sem nonce roda em `Content-Security-Policy-Report-Only`
+  (validada contra os 3 frameworks, exportações e autenticação, sem
+  violações). Falta um ciclo de validação em ambiente de preview antes de
+  trocar para o header bloqueante (`Content-Security-Policy`).
+- **Navegação por setas nos widgets `role="radio"`/`role="tab"`
+  customizados** (seleção de framework em `/app/new` e o seletor
+  "Colar texto/Enviar PDF") — hoje operáveis via Tab individual por item
+  + Enter/Space, mas sem o roving tabindex + setas do padrão WAI-ARIA
+  APG. Não é uma falha de WCAG 2.1 AA, mas diverge do padrão esperado;
+  implementar é mudança de comportamento funcional, fora do escopo de
+  correção "simples e segura" da v1.0.1.
+- **Testes de carga** — não realizados em nenhuma fase do projeto, e
+  deliberadamente não executados contra produção.
+- **Vulnerabilidades `high` pré-existentes em dependências de
+  desenvolvimento do Prisma** (`deepmerge-ts`, `mysql2`, via
+  devDependency `prisma`) — presentes desde a v1.0.0, não afetam o
+  runtime de produção (não são carregadas no bundle), e a correção
+  automática exigiria downgrade do Prisma. Fora do escopo desta
+  manutenção; decisão de correção fica para avaliação futura separada.
 
 ## Limitações conhecidas
 
-Atualizado na homologação da v1.0.0 — reflete o que foi de fato validado,
-não apenas revisado por código:
+Atualizado na homologação da v1.0.0 e na validação da manutenção v1.0.1
+(branch `maint/v1.0.1`, ainda não publicada em produção) — reflete o que
+foi de fato validado, não apenas revisado por código:
 
 - **Testado de ponta a ponta em produção real**: cadastro, login,
   logout, proteção de rotas, geração nos 3 frameworks com chamadas reais
@@ -548,11 +559,17 @@ não apenas revisado por código:
   continua pendente.
 - **Recuperação de senha por e-mail não foi implementada** — ver
   "Melhorias futuras".
-- **Nenhum teste de carga nem auditoria de acessibilidade com leitor de
-  tela foi executado** — ver "Melhorias futuras". Uma auditoria de
-  segurança **foi** realizada (autenticação, variáveis de ambiente,
-  rate limiting, exposição de credenciais) — não é mais uma lacuna.
-- **Uma vulnerabilidade moderada transitiva** (`exceljs` → `uuid`,
-  bounds-check de buffer) segue sem correção — risco real baixo dado o
-  padrão de uso (nunca passamos buffer controlado pelo usuário para
-  geração de UUID), mas registrado para acompanhamento.
+- **Nenhum teste de carga foi executado** — ver "Melhorias futuras".
+  Auditoria de acessibilidade automatizada (Lighthouse, 4 páginas
+  públicas, 100/100) e navegação por teclado nos fluxos principais
+  (login, cadastro, assistente de criação, resultado) **foram**
+  validadas na branch `maint/v1.0.1`; auditoria com leitor de tela real
+  segue pendente. Uma auditoria de segurança **foi** realizada
+  (autenticação, variáveis de ambiente, rate limiting, exposição de
+  credenciais) — não é mais uma lacuna.
+- **A vulnerabilidade moderada transitiva `exceljs` → `uuid`** foi
+  corrigida na branch `maint/v1.0.1` via `overrides`
+  (`uuid@^11.1.1`), validada com exportação Excel de ponta a ponta.
+  Permanecem 13 vulnerabilidades `high` pré-existentes em dependências
+  de desenvolvimento do Prisma (`deepmerge-ts`, `mysql2`) — ver
+  "Melhorias futuras".
