@@ -1,6 +1,6 @@
 # Planejador de Projetos AI
 
-**v1.0.0** — homologada e publicada em produção:
+**v1.0.1** — homologada e publicada em produção:
 [planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br).
 
 Aplicação web que recebe uma especificação técnica de projeto (PDF ou texto)
@@ -25,10 +25,11 @@ método utilizar.
 
 ## Status do projeto
 
-**Versão 1.0.0 — homologada e publicada em produção** em
+**Versão 1.0.1 — homologada e publicada em produção** em
 [planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br),
 via Vercel, com banco de produção dedicado no Neon (separado do ambiente de
-desenvolvimento). Estado atual:
+desenvolvimento, e agora também do ambiente de Preview — ver Etapa 8).
+Estado atual:
 
 - [x] **Etapa 1** — estrutura do projeto, configuração inicial e interface
       (landing page, identidade visual, componentes base).
@@ -52,6 +53,22 @@ desenvolvimento). Estado atual:
       três frameworks, publicação na Vercel com domínio próprio e HTTPS,
       e homologação funcional e visual completa dos três frameworks em
       produção. **v1.0.0.**
+- [x] **Etapa 8** — manutenção v1.0.1, concluída e publicada: correção da
+      vulnerabilidade `exceljs`→`uuid` (override para `uuid@^11.1.1`),
+      Content-Security-Policy em `Report-Only`, `engines.node` declarado,
+      correção de contraste AA (`--muted-foreground`), validação completa
+      em deployment Preview dedicado antes de seguir para produção, tag
+      `v1.0.1` e merge em `main`. Na sequência, já em produção: avaliação
+      de segurança consolidada (dependências, aplicação e infraestrutura —
+      ver "Melhorias futuras" para os itens de risco residual aceito) e
+      isolamento Production/Preview — banco de dados dedicado (branch
+      `preview` do Neon, schema aplicado via `prisma migrate deploy`, sem
+      nenhum dado de produção copiado) e `AUTH_SECRET` exclusivo por
+      ambiente, configurados via Vercel CLI (`vercel env add`) com os
+      valores de Production nunca expostos ou alterados no processo.
+      `GEMINI_API_KEY` permanece deliberadamente compartilhada por ora
+      (ver "Melhorias futuras"). Manutenção encerrada — próximo ciclo de
+      trabalho é a v1.1.
 
 ## Arquitetura
 
@@ -555,9 +572,9 @@ implementados, apenas registrados para priorização futura:
 
 ## Limitações conhecidas
 
-Atualizado na homologação da v1.0.0 e na validação da manutenção v1.0.1
-(branch `maint/v1.0.1`, ainda não publicada em produção) — reflete o que
-foi de fato validado, não apenas revisado por código:
+Atualizado na homologação da v1.0.0 e na manutenção v1.0.1 (publicada em
+produção, tag `v1.0.1`) — reflete o que foi de fato validado, não apenas
+revisado por código:
 
 - **Testado de ponta a ponta em produção real**: cadastro, login,
   logout, proteção de rotas, geração nos 3 frameworks com chamadas reais
