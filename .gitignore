@@ -52,3 +52,6 @@ next-env.d.ts
 /Planejador de Projetos AI — Especificação Completa do Produto.md
 /Planejador de Projetos AI.pdf
 /Prompt/
+
+.vercel
+.env*
