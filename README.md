@@ -545,10 +545,13 @@ implementados, apenas registrados para priorização futura:
   limites de cadastro/login (`AUTH_RATE_LIMIT`), além de Preview exigir
   login na Vercel (Deployment Protection) para ser sequer acessado — não
   há caminho para consumo descontrolado mesmo com a chave compartilhada.
-  Quando essa separação for priorizada, o ideal é usar **projetos
-  distintos no Google AI Studio/Cloud** (não só chaves diferentes no
-  mesmo projeto), para que a cota de cada ambiente seja monitorada e
-  limitada de forma realmente independente.
+  Decisão reafirmada considerando também o volume atual de uso, ainda
+  baixo — **gatilho para revisitar**: se o volume de gerações crescer o
+  suficiente para dificultar distinguir consumo de teste do de produção
+  no painel do Google AI Studio, separar a chave. Quando priorizado, o
+  ideal é usar **projetos distintos no Google AI Studio/Cloud** (não só
+  chaves diferentes no mesmo projeto), para que a cota de cada ambiente
+  seja monitorada e limitada de forma realmente independente.
 
 ## Limitações conhecidas
 
