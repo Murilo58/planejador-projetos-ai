@@ -534,6 +534,21 @@ implementados, apenas registrados para priorização futura:
   runtime de produção (não são carregadas no bundle), e a correção
   automática exigiria downgrade do Prisma. Fora do escopo desta
   manutenção; decisão de correção fica para avaliação futura separada.
+- **`GEMINI_API_KEY` dedicada para Preview** — desde o isolamento de
+  Production/Preview (v1.0.1), `DATABASE_URL`/`DIRECT_URL`/`AUTH_SECRET`
+  já têm valores exclusivos por ambiente, mas `GEMINI_API_KEY` continua
+  compartilhada entre os dois. Risco residual aceito deliberadamente por
+  ora: a chave só é lida no servidor (`src/lib/ai/client.ts`, nunca
+  importada por código client-side, sem prefixo `NEXT_PUBLIC_`) e todo
+  consumo — em Production ou Preview — já passa pela cota diária por
+  usuário (`GENERATION_QUOTA.dailyLimit`, hoje 10 gerações/dia) e pelos
+  limites de cadastro/login (`AUTH_RATE_LIMIT`), além de Preview exigir
+  login na Vercel (Deployment Protection) para ser sequer acessado — não
+  há caminho para consumo descontrolado mesmo com a chave compartilhada.
+  Quando essa separação for priorizada, o ideal é usar **projetos
+  distintos no Google AI Studio/Cloud** (não só chaves diferentes no
+  mesmo projeto), para que a cota de cada ambiente seja monitorada e
+  limitada de forma realmente independente.
 
 ## Limitações conhecidas
 
