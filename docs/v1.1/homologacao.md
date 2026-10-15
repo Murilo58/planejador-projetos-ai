@@ -7,8 +7,8 @@
 - **Situação:** **homologação aprovada** pelo responsável pelo produto em
   15/10/2026 (seção 12). Publicada como `v1.1.0` e `v1.1.1`; **Híbrido
   ativado em produção** em 15/10/2026 (seção 14). Validação funcional do
-  Cascata + Scrum em produção concluída (seção 15); demais verificações
-  pendentes.
+  Cascata + Scrum e do Cascata + Kanban em produção concluída (seções 14 e
+  15); demais verificações pendentes.
 
 ## 1. Testes automatizados
 
@@ -392,7 +392,8 @@ cache de build.
 **Verificações em produção:**
 
 - [x] Geração completa do **Cascata + Scrum** (seção 15).
-- [ ] Geração completa do **Cascata + Kanban**.
+- [x] Geração completa do **Cascata + Kanban**, validada pelo
+      responsável em 15/10/2026.
 - [ ] Cota debitando exatamente 1 por geração do Híbrido.
 - [ ] Exportações do Híbrido: Excel e PDF (impressão) conferidos. O
       Markdown do Cascata + Scrum foi exportado e usado na investigação da
