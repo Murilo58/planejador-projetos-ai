@@ -5,8 +5,9 @@
   de documentação.
 - **Base de comparação:** `main` @ `607e1f1` (v1.0.2, em produção).
 - **Situação:** **homologação aprovada** pelo responsável pelo produto em
-  15/10/2026 (seção 12). Merge em `main`, tag e publicação em produção
-  **aguardam autorização explícita**.
+  15/10/2026 (seção 12). Publicada como `v1.1.0` e `v1.1.1`; **Híbrido
+  ativado em produção** em 15/10/2026 (seção 14), com verificações
+  pendentes.
 
 ## 1. Testes automatizados
 
@@ -298,8 +299,8 @@ item a item**.
   custo de 21–41 s por geração. É a primeira candidata a otimização.
 - **Critérios de sucesso e escopo**: ver os riscos residuais das seções 6
   e 7.
-- **Produção**: o Híbrido permanece desligado (variável ausente) até
-  decisão explícita.
+- **Produção**: o Híbrido foi ativado em 15/10/2026 (seção 14), com
+  verificações ainda pendentes.
 - **Itens do checklist não confirmados individualmente** (seção 9): a
   regressão manual dos 3 frameworks é mitigada pelos snapshots e pelo
   HTML idêntico com a flag desligada; exportações e especificação perto do
@@ -365,3 +366,32 @@ mais as seções 79 a 107 da especificação completa), a geração falhou na
   do tempo máximo por chamada (seção 10).
 - A redução de itens no Kanban da especificação média pode ser variação
   do modelo, mas não foi descartada com uma única execução.
+
+## 14. Ativação em produção
+
+| Etapa | Referência | Data |
+| --- | --- | --- |
+| Merge da v1.1 em `main` (PR #1) | `963b0c9`, tag `v1.1.0` | 15/10/2026 |
+| Merge da correção da Extração (PR #2) | `f83ad7c`, tag `v1.1.1` | 15/10/2026 |
+| `HYBRID_PLANNING_ENABLED=true` em Production e redeploy sem cache de build | painel da Vercel, pelo responsável | 15/10/2026 |
+
+Deploy de rollback (v1.1.1 com o Híbrido desligado):
+`3ghuYEXFFMPgVr56sSqAdceC1BeP`. Para desligar: Instant Rollback para esse
+deploy e remover a variável, ou remover a variável e fazer redeploy sem
+cache de build.
+
+**Verificado em produção:**
+
+- Pelo responsável: domínio oficial, página inicial com o texto citando o
+  Híbrido e painel autenticado com o card "Planejamento Híbrido", com
+  Scrum, Kanban e Cascata preservados.
+- Leitura automatizada da página pública: descrição do site com "Scrum,
+  Kanban, Cascata ou Híbrido" e card "Planejamento Híbrido" presentes.
+
+**Pendente em produção:**
+
+- [ ] Geração completa do Híbrido (Cascata + Scrum e Cascata + Kanban),
+      com a cota debitando exatamente 1.
+- [ ] Exportações do Híbrido: PDF (impressão), Excel e Markdown abertos e
+      conferidos.
+- [ ] Responsividade em mobile (página inicial, assistente e resultado).

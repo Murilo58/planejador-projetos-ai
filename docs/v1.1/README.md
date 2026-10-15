@@ -12,7 +12,7 @@ macro com fases e marcos, execução ágil (backlog e Sprints, ou quadro
 Kanban) e a **matriz de rastreabilidade** entre a EAP e os itens ágeis.
 
 Disponível somente com a feature flag `HYBRID_PLANNING_ENABLED=true`.
-Desligada por padrão — e em produção até decisão explícita.
+Desligada por padrão; **ativada em produção em 15/10/2026** (v1.1.1).
 
 ## Documentos
 
@@ -99,8 +99,8 @@ Decisões registradas:
 
 | Ambiente | Valor | Observação |
 | --- | --- | --- |
-| Production | ausente (desligada) | Até decisão explícita de liberar |
-| Preview | `true` | Somente para homologação |
+| Production | `true` | Ativado em 15/10/2026, sobre a v1.1.1 |
+| Preview | `true` | Homologação |
 | Local | opcional | `HYBRID_PLANNING_ENABLED="true"` no `.env.local` |
 
 Variáveis de ambiente na Vercel só valem após um novo deploy. A landing

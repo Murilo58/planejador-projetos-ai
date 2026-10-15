@@ -1,9 +1,9 @@
 # Planejador de Projetos AI
 
-**v1.0.2** — publicada em produção:
-[planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br).
-**v1.1** (Planejamento Híbrido) — em homologação na branch `release/v1.1`,
-atrás de feature flag e desligada em produção.
+**v1.1.1** — publicada em produção:
+[planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br),
+com o **Planejamento Híbrido ativado** (feature flag
+`HYBRID_PLANNING_ENABLED` ligada em Production desde 15/10/2026).
 
 Aplicação web que recebe uma especificação técnica de projeto (PDF ou texto)
 e utiliza Inteligência Artificial para gerar os artefatos iniciais de gestão
@@ -91,7 +91,8 @@ Estado atual:
       entre a EAP e cada item ágil e lacunas exibidas como pontos de
       atenção. Inclui assistente, tela de resultado, exportações
       (Markdown, Excel, PDF) e cards nas telas iniciais, tudo atrás da
-      feature flag `HYBRID_PLANNING_ENABLED` (desligada em produção).
+      feature flag `HYBRID_PLANNING_ENABLED` (ligada em produção desde
+      15/10/2026).
       Kick-off fora do escopo. Scrum, Kanban e Cascata preservados,
       com contrato de IA e exportações congelados em snapshots. Detalhes
       e relatório de homologação em [`docs/v1.1/`](docs/v1.1/README.md).
@@ -422,7 +423,7 @@ modelo `.env.example`, sem valores reais):
 | `AUTH_SECRET` | Production, Preview, Development | Gere um valor **próprio para produção**, diferente do usado em desenvolvimento local (`npx auth secret`) |
 | `GEMINI_API_KEY` | Production, Preview, Development | Chave de produção da API Gemini — considere uma chave dedicada, separada da usada em desenvolvimento, para poder revogar/monitorar uso isoladamente |
 | `GEMINI_MODEL` | Opcional | Só se quiser fixar um modelo específico em vez do padrão (`gemini-flash-latest`) |
-| `HYBRID_PLANNING_ENABLED` | Preview (homologação) | `true` habilita o Híbrido. **Não cadastrar em Production** até decisão de liberar; vale a partir do próximo deploy (a landing page lê no build) |
+| `HYBRID_PLANNING_ENABLED` | Production, Preview | `true` habilita o Híbrido (ativado em Production em 15/10/2026). Vale a partir do próximo deploy, sem cache de build (a landing page lê no build); para desligar, remover a variável e fazer redeploy |
 
 Nenhum valor real é citado aqui de propósito — preencha diretamente no
 painel da Vercel, nunca em um arquivo do repositório.
