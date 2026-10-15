@@ -314,12 +314,13 @@ npm run test          # roda a suíte uma vez
 npm run test:watch    # modo watch
 ```
 
-175 testes em 16 arquivos. Além do que já existia na v1.0 — descrito a
+179 testes em 17 arquivos. Além do que já existia na v1.0 — descrito a
 seguir —, a v1.1 adicionou: snapshots do contrato de IA (schemas,
 instruções e configuração) dos 3 frameworks e do Híbrido, snapshots
 "golden" das exportações (Markdown byte a byte e Excel com abas, valores e
-estilos), testes de domínio do Híbrido (integridade e rastreabilidade) e
-das Server Actions com a IA simulada (feature flag, cota e revalidação).
+estilos), testes de domínio do Híbrido (integridade e rastreabilidade),
+das Server Actions com a IA simulada (feature flag, cota e revalidação)
+e dos textos de apresentação com a flag ligada e desligada.
 Atualizar um snapshot é uma decisão consciente, nunca rotina.
 
 Da v1.0, cobrindo (spec §94): validação da entrada

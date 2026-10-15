@@ -124,6 +124,7 @@ e fazer redeploy — sem rollback de código.
 | — | `23927e9` | Cards nas telas iniciais |
 | — | `c246822` | Correção: critérios de sucesso do projeto reconhecidos na Extração e usados no TAP |
 | — | `45c4c0d` | Correção: escopo resumido do TAP com fonte explícita |
+| — | `a7a99c5` | Textos da landing page e das telas de login/cadastro citam o Híbrido (só com a flag ligada) |
 
 ## Melhorias candidatas (pós-v1.1)
 

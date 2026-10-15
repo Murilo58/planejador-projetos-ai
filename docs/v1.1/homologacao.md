@@ -1,18 +1,19 @@
 # v1.1 — Relatório consolidado de homologação
 
 - **Data:** 15/10/2026
-- **Branch / commit avaliado:** `release/v1.1` @ `45c4c0d`, mais os commits
+- **Branch / commit avaliado:** `release/v1.1` @ `a7a99c5`, mais os commits
   de documentação.
 - **Base de comparação:** `main` @ `607e1f1` (v1.0.2, em produção).
-- **Situação:** verificações automatizadas e locais **concluídas**;
-  homologação manual no Preview **pendente de confirmação**. A seção
-  "Checklist da homologação manual" registra o que ainda precisa ser
-  confirmado antes do merge.
+- **Situação:** **homologação aprovada** pelo responsável pelo produto em
+  15/10/2026 (seção 12). Merge em `main`, tag e publicação em produção
+  **aguardam autorização explícita**.
 
 ## 1. Testes automatizados
 
-**175 testes em 16 arquivos, todos aprovados**, além de `tsc --noEmit`,
-ESLint e `next build` sem erros, executados localmente a cada fase.
+**179 testes em 17 arquivos, todos aprovados**, além de `tsc --noEmit` e
+ESLint sem erros (última execução em 15/10/2026, sobre `a7a99c5`).
+`next build` aprovado localmente a cada fase e no deploy de Preview de
+`a7a99c5`.
 
 | Área | Arquivo(s) | O que garante |
 | --- | --- | --- |
@@ -22,6 +23,7 @@ ESLint e `next build` sem erros, executados localmente a cada fase.
 | Pipeline (actions) | `pipeline.actions.test.ts` | Flag desligada bloqueia IA, cota e sessão; cota cobrada uma vez; revalidação a cada etapa; Scrum e Kanban recebem os mesmos dados da v1.0.2; extrações anteriores à correção continuam aceitas |
 | Retentativas | `generate-structured*.test.ts` | Espera com jitter em indisponibilidade transitória (v1.0.2) |
 | Exportações golden | `exports.golden.test.ts` | Markdown byte a byte e Excel (abas, valores, estilos) dos 3 frameworks e de 3 pacotes do Híbrido |
+| Textos de apresentação | `planning-copy.test.ts` | Flag desligada: textos exatamente iguais aos da v1.0; ligada: Híbrido mencionado com as duas modalidades |
 | Demais | `to-excel`, `to-markdown`, `output-schemas`, `password`, `limits`, `schema`, `rate-limit/*` | Suíte da v1.0 (rate limiting contra o Postgres real) e o campo `successCriteria` da extração |
 
 ## 2. Validação real com a IA
@@ -80,7 +82,17 @@ configuração: `HYBRID_PLANNING_ENABLED` não valia para o ambiente Preview
 no momento do build. A página pública é estática e lê a variável no
 build; o painel a lê a cada acesso, mas também só depois de um novo
 deploy. **Ação:** cadastrar a variável com o valor exato `true`, só para
-Preview, e fazer redeploy sem cache de build.
+Preview, e fazer redeploy sem cache de build. **Situação:** os cards e os textos
+com o Híbrido foram validados no Preview pelo responsável (seção 12), o
+que indica que a flag passou a valer nesse ambiente.
+
+**Textos de apresentação** (commit `a7a99c5`). O parágrafo do hero, o
+passo "Escolha" de "Como funciona", o rodapé das telas de login e
+cadastro e a descrição do site (`<meta name="description">`) passam a
+citar "Scrum, Kanban, Cascata ou Híbrido" **somente com a flag ligada**
+(`src/lib/planning-copy.ts`). Com a flag desligada, os textos são
+exatamente os da v1.0 (HTML idêntico e testes da seção 1). Validados no
+Preview pelo responsável.
 
 ## 6. Correção durante a homologação: critérios de sucesso do TAP
 
@@ -237,36 +249,38 @@ origem, sem números ou metas acrescentados.
 | Vercel (Preview) | `23927e9` | Concluído com sucesso |
 | Vercel (Preview) | `ed6d89e` | Concluído com sucesso |
 | Vercel (Preview) | `522941b` (inclui `c246822`) | Concluído com sucesso |
-| Vercel (Preview) | push com `45c4c0d` e este relatório | Enviado após este registro |
+| Vercel (Preview) | `45c4c0d` / `e79930f` | Concluído com sucesso |
+| Vercel (Preview) | `a7a99c5` | Concluído com sucesso (ambiente da homologação final) |
 
-A configuração de `HYBRID_PLANNING_ENABLED=true` no ambiente Preview é
-feita no painel da Vercel. Ela **ainda não foi confirmada neste
-relatório** (ver seção 5).
+A flag `HYBRID_PLANNING_ENABLED=true` foi configurada no ambiente Preview
+pelo painel da Vercel; o Híbrido ficou visível na homologação final.
 
 ## 9. Checklist da homologação manual (Preview, flag ligada)
 
-Preencher antes do merge:
+Resultado conforme a aprovação do responsável (seção 12). Itens marcados
+foram citados na aprovação; os demais não foram detalhados
+individualmente no retorno e ficam registrados como **não confirmados
+item a item**.
 
-- [ ] Card na landing page e no painel, em desktop e mobile.
-- [ ] Assistente: grupo "Planejamento Híbrido" visível e as duas
-      combinações selecionáveis.
-- [ ] Geração real com **Cascata + Scrum**.
-- [ ] Geração real com **Cascata + Kanban**.
+- [x] Card na landing page e textos de apresentação com o Híbrido.
+- [x] Geração real com **Cascata + Scrum** e **Cascata + Kanban**
+      ("geração dos artefatos").
+- [x] TAP: **escopo resumido preenchido** e **critérios de sucesso**
+      presentes.
+- [ ] Card no painel e assistente com as duas combinações (implícitos na
+      geração, não citados).
+- [ ] Layout em mobile.
 - [ ] Geração real com uma especificação **perto do limite** (~100 mil
       caracteres).
-- [ ] TAP com a especificação completa do produto em Cascata, Cascata +
-      Scrum e Cascata + Kanban: **escopo resumido preenchido** e
-      **critérios de sucesso** da seção 106 presentes; o escopo não usa os
-      critérios.
 - [ ] TAP com uma especificação sem critérios: critérios "Não
       identificado na especificação." e escopo preenchido.
-- [ ] Resultado: matriz de rastreabilidade e pontos de atenção legíveis;
-      layout em desktop e mobile.
+- [ ] Matriz de rastreabilidade e pontos de atenção conferidos na tela.
 - [ ] Exportações do Híbrido: PDF (impressão), Excel e Markdown abertos e
       conferidos.
-- [ ] Regressão: uma geração e as exportações de Scrum, Kanban e Cascata;
-      cores de prioridade no Excel do Scrum.
-- [ ] Cota: cada geração do Híbrido debita exatamente 1.
+- [ ] Regressão manual: uma geração e as exportações de Scrum, Kanban e
+      Cascata; cores de prioridade no Excel do Scrum.
+- [ ] Cota: cada geração do Híbrido debita exatamente 1 (coberto por
+      teste automatizado; não conferido no Preview).
 
 ## 10. Riscos e limitações conhecidas
 
@@ -285,9 +299,29 @@ Preencher antes do merge:
   e 7.
 - **Produção**: o Híbrido permanece desligado (variável ausente) até
   decisão explícita.
+- **Itens do checklist não confirmados individualmente** (seção 9): a
+  regressão manual dos 3 frameworks é mitigada pelos snapshots e pelo
+  HTML idêntico com a flag desligada; exportações e especificação perto do
+  limite não têm essa cobertura no navegador.
 
 ## 11. Recomendação
 
-Liberar o merge em `main` **somente após** o preenchimento do checklist da
-seção 9. O deploy de produção deve ocorrer com a flag desligada; ligá-la
-fica para uma decisão separada.
+Homologação aprovada. Publicar com a flag **desligada** em produção, o que
+mantém o comportamento da v1.0.2 para os usuários (textos, cards e
+actions do Híbrido inativos). Ligar o Híbrido em produção é uma decisão
+separada, de preferência após conferir os itens não confirmados da
+seção 9.
+
+## 12. Aprovação
+
+- **Data:** 15/10/2026.
+- **Aprovado por:** responsável pelo produto (Murilo58).
+- **Escopo declarado:** ajustes do TAP (escopo resumido e critérios de
+  sucesso), geração dos artefatos e textos da landing page, no Preview de
+  `a7a99c5` com a flag ligada.
+- **Evidências automatizadas:** 179 testes em 17 arquivos, typecheck,
+  lint e build aprovados (seção 1); 60 chamadas reais à IA válidas na
+  primeira tentativa (seções 2, 6 e 7).
+- **Ressalvas:** riscos da seção 10 e itens não confirmados da seção 9.
+- **Pendente de autorização:** merge em `main`, tag `v1.1.0` e deploy de
+  produção.
