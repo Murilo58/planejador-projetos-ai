@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getPlanningCopy } from "@/lib/planning-copy";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Planejador de Projetos AI",
-  description:
-    "Transforme especificações técnicas em artefatos estruturados de gestão de projetos (Scrum, Kanban ou Cascata) com apoio de Inteligência Artificial.",
+  description: getPlanningCopy().siteDescription,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

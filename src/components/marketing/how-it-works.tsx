@@ -2,29 +2,33 @@ import { FileUp, ListChecks, Sparkles } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getPlanningCopy } from "@/lib/planning-copy";
 
-const STEPS = [
-  {
-    icon: FileUp,
-    title: "Envie",
-    description:
-      "Faça upload de um PDF com texto selecionável ou cole o conteúdo técnico diretamente no campo de especificação.",
-  },
-  {
-    icon: ListChecks,
-    title: "Escolha",
-    description:
-      "Selecione manualmente o framework de trabalho: Scrum, Kanban ou Cascata. A IA não decide por você.",
-  },
-  {
-    icon: Sparkles,
-    title: "Gere",
-    description:
-      "A aplicação interpreta a especificação e estrutura os artefatos correspondentes ao framework escolhido.",
-  },
-] as const;
+// O passo "Escolha" depende da feature flag do Planejamento Híbrido
+// (lida no servidor) — por isso os passos são montados na renderização.
+const stepsFor = (chooseStepDescription: string) =>
+  [
+    {
+      icon: FileUp,
+      title: "Envie",
+      description:
+        "Faça upload de um PDF com texto selecionável ou cole o conteúdo técnico diretamente no campo de especificação.",
+    },
+    {
+      icon: ListChecks,
+      title: "Escolha",
+      description: chooseStepDescription,
+    },
+    {
+      icon: Sparkles,
+      title: "Gere",
+      description:
+        "A aplicação interpreta a especificação e estrutura os artefatos correspondentes ao framework escolhido.",
+    },
+  ] as const;
 
 export function HowItWorks() {
+  const steps = stepsFor(getPlanningCopy().chooseStepDescription);
   return (
     <section id="como-funciona" className="py-20 sm:py-28">
       <Container>
@@ -38,7 +42,7 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
-          {STEPS.map((step, index) => (
+          {steps.map((step, index) => (
             <Card key={step.title} className="relative">
               <CardHeader>
                 <span className="text-muted-foreground absolute top-4 right-4 text-xs font-medium">

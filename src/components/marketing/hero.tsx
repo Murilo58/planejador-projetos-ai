@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
+import { getPlanningCopy } from "@/lib/planning-copy";
 
 export function Hero() {
   return (
@@ -29,9 +30,7 @@ export function Hero() {
         </h1>
 
         <p className="max-w-2xl text-lg leading-relaxed text-white/70">
-          Envie uma especificação em PDF ou texto, escolha o framework — Scrum,
-          Kanban ou Cascata — e receba o pacote inicial de planejamento, pronto
-          para revisar e evoluir com sua equipe.
+          {getPlanningCopy().heroDescription}
         </p>
 
         <div className="flex flex-col gap-3 pt-2 sm:flex-row">
