@@ -14,9 +14,10 @@ export const metadata: Metadata = {
  * Teto explícito de duração para as 3 Server Actions dos agentes de IA
  * chamadas nesta página (Extração, Estruturação, Consolidação) — cada
  * uma é uma invocação de Function independente (RF-081/FE-07), nunca a
- * soma das três. Pior caso real por etapa: 60s × 2 tentativas = 120s
- * (`AI_CONFIG` em `src/lib/ai/config.ts`); 150s dá ~25% de folga sem
- * depender do padrão implícito da plataforma (hoje 300s no Hobby/Pro).
+ * soma das três. Pior caso real por etapa: 60s × 2 tentativas + até 5s
+ * de espera entre elas = 125s (`AI_CONFIG` em `src/lib/ai/config.ts`);
+ * 150s dá ~20% de folga sem depender do padrão implícito da plataforma
+ * (hoje 300s no Hobby/Pro).
  */
 export const maxDuration = 150;
 

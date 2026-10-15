@@ -1,3 +1,4 @@
+import { ApiError } from "@google/genai";
 import { z } from "zod";
 
 import { AI_CONFIG } from "@/lib/ai/config";
@@ -86,17 +87,29 @@ export async function generateStructured<T>({
     } catch (error) {
       lastError = error;
       const classified = classifyError(error);
+      const isLastAttempt = attempt >= AI_CONFIG.maxAttemptsPerStage;
+      const retryDelayMs =
+        !isLastAttempt && isTransientUnavailability(error)
+          ? randomRetryDelayMs()
+          : 0;
       logAiEvent("stage_attempt_failed", {
         stage,
         attempt,
         code: classified.code,
+        retryDelayMs,
       });
 
       // Timeout e resposta inválida podem ser recuperados com nova
-      // tentativa; indisponibilidade do serviço normalmente não muda em
-      // milissegundos, mas uma segunda tentativa ainda é barata e segura.
-      if (attempt >= AI_CONFIG.maxAttemptsPerStage) {
+      // tentativa imediata. Já uma indisponibilidade transitória do
+      // serviço (ex.: 503 "high demand", 429) não muda em milissegundos:
+      // repetir na hora fazia as duas tentativas falharem juntas em ~1s
+      // (observado na PoC da v1.1 — docs/v1.1/poc-fase0.md). Por isso,
+      // nesses casos, a nova tentativa espera alguns segundos com jitter.
+      if (isLastAttempt) {
         throw classified;
+      }
+      if (retryDelayMs > 0) {
+        await sleep(retryDelayMs);
       }
     }
   }
@@ -104,6 +117,33 @@ export async function generateStructured<T>({
   // Inalcançável (o loop sempre retorna ou lança), mas mantém o TypeScript
   // satisfeito e evita qualquer loop silencioso.
   throw classifyError(lastError);
+}
+
+/**
+ * Status HTTP da API de IA que indicam indisponibilidade passageira —
+ * vale esperar antes de tentar de novo. Erros sem status (falha de rede
+ * antes de qualquer resposta) também entram aqui. Timeouts ficam de fora
+ * de propósito: já consumiram o tempo máximo da tentativa, e esperar mais
+ * só aproximaria a etapa do `maxDuration` da Server Action.
+ */
+const TRANSIENT_HTTP_STATUSES = new Set([429, 500, 502, 503, 504]);
+
+function isTransientUnavailability(error: unknown): boolean {
+  if (error instanceof AiGenerationError) return false;
+  if (error instanceof Error && error.name === "TimeoutError") return false;
+  if (error instanceof ApiError) {
+    return TRANSIENT_HTTP_STATUSES.has(error.status);
+  }
+  return true;
+}
+
+function randomRetryDelayMs(): number {
+  const { minMs, maxMs } = AI_CONFIG.transientRetryDelay;
+  return Math.round(minMs + Math.random() * (maxMs - minMs));
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function classifyError(error: unknown): AiGenerationError {

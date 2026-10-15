@@ -69,6 +69,12 @@ Estado atual:
       `GEMINI_API_KEY` permanece deliberadamente compartilhada por ora
       (ver "Melhorias futuras"). Manutenção encerrada — próximo ciclo de
       trabalho é a v1.1.
+- [ ] **Etapa 9** — manutenção v1.0.2 (branch `hotfix/v1.0.2`, em
+      validação): nova tentativa com espera de 2–5s com jitter quando a
+      IA falha por indisponibilidade transitória (503, 429, 5xx ou
+      rede). Antes, a segunda tentativa era imediata e caía no mesmo
+      pico de demanda — problema observado na prova de conceito da v1.1
+      (`docs/v1.1/poc-fase0.md`, branch `poc/v1.1-hybrid`).
 
 ## Arquitetura
 
@@ -174,9 +180,12 @@ ausentes seguem marcados como "Não identificado na especificação."
   recebida de volta do cliente (RNF-001) antes de consumir a IA de novo.
 - **Retry limitado e sanitizado** (`generate-structured.ts`): no máximo 2
   tentativas por etapa (RNF-029), erros classificados em
-  indisponibilidade/timeout/resposta inválida, e nenhum log grava prompt,
-  resposta do modelo ou a especificação do usuário — só a classificação do
-  erro (RF-066).
+  indisponibilidade/timeout/resposta inválida. Indisponibilidade
+  transitória (503, 429, 5xx, rede) espera 2–5s com jitter antes da nova
+  tentativa (v1.0.2); timeout e resposta inválida repetem na hora. Pior
+  caso por etapa: 125s, dentro do `maxDuration` de 150s. Nenhum log grava
+  prompt, resposta do modelo ou a especificação do usuário — só a
+  classificação do erro (RF-066).
 - **EAP em dois níveis fixos, não uma árvore arbitrária** — decisão já
   tomada na Etapa 4 por incompatibilidade real com o schema JSON do
   Gemini (`$ref` recursivo), mas que também simplificou a Etapa 5: a
@@ -229,8 +238,8 @@ ausentes seguem marcados como "Não identificado na especificação."
   rodam como requisições independentes (confirmado na documentação do
   Next.js: cada ação é seu próprio POST), então o limite de duração da
   Vercel se aplica a cada uma das 3 etapas individualmente, nunca à soma
-  — o pior caso real de uma etapa (60s × 2 tentativas, `AI_CONFIG`) é
-  ~120s; 150s dá folga sem depender do padrão implícito da plataforma.
+  — o pior caso real de uma etapa (60s × 2 tentativas + até 5s de espera, `AI_CONFIG`) é
+  ~125s; 150s dá folga sem depender do padrão implícito da plataforma.
 - **Cota de gerações por usuário, no Postgres (`src/lib/rate-limit/`)**,
   não em memória — a aplicação roda em múltiplas instâncias serverless
   na Vercel, que não compartilham memória entre si; a atomicidade do
