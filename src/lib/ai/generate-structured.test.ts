@@ -130,3 +130,75 @@ describe("generateStructured — nova tentativa", () => {
     await expect(result).rejects.toMatchObject({ code: "timeout" });
   });
 });
+
+describe("generateStructured — limites da resposta (v1.1.1)", () => {
+  beforeEach(() => {
+    generateContent.mockReset();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("não repete quando a resposta é cortada pelo teto de tokens", async () => {
+    generateContent.mockResolvedValue({
+      text: '{"ok":',
+      candidates: [{ finishReason: "MAX_TOKENS" }],
+    });
+
+    await expect(call()).rejects.toMatchObject({ code: "invalid_response" });
+    expect(generateContent).toHaveBeenCalledTimes(1);
+  });
+
+  it("classifica como timeout o cancelamento pelo tempo máximo (AbortError do SDK)", async () => {
+    vi.spyOn(AbortSignal, "timeout").mockImplementation(() =>
+      AbortSignal.abort(new DOMException("timed out", "TimeoutError")),
+    );
+    generateContent.mockRejectedValue(
+      new DOMException("This operation was aborted", "AbortError"),
+    );
+
+    await expect(call()).rejects.toMatchObject({ code: "timeout" });
+    expect(generateContent).toHaveBeenCalledTimes(2);
+  });
+
+  it("AbortError sem o tempo esgotado continua como indisponibilidade", async () => {
+    vi.useFakeTimers();
+    try {
+      generateContent.mockRejectedValue(
+        new DOMException("This operation was aborted", "AbortError"),
+      );
+      const result = call();
+      const assertion = expect(result).rejects.toMatchObject({
+        code: "unavailable",
+      });
+      await vi.advanceTimersByTimeAsync(5_000);
+      await assertion;
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("só a Extração limita o raciocínio do modelo", async () => {
+    const { runExtractionAgent } =
+      await import("@/lib/ai/agents/extraction-agent");
+    const { runStructuringAgent } =
+      await import("@/lib/ai/agents/structuring-agent");
+    generateContent.mockRejectedValue(
+      new ApiError({ message: "bad", status: 400 }),
+    );
+
+    await runExtractionAgent("texto").catch(() => {});
+    expect(generateContent.mock.calls[0][0].config.thinkingConfig).toEqual({
+      thinkingLevel: "LOW",
+    });
+
+    generateContent.mockClear();
+    await call().catch(() => {});
+    await runStructuringAgent("scrum", {} as never).catch(() => {});
+    for (const [request] of generateContent.mock.calls) {
+      expect(request.config).not.toHaveProperty("thinkingConfig");
+    }
+    expect(generateContent).toHaveBeenCalledTimes(4);
+  });
+});
