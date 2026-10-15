@@ -1,0 +1,13 @@
+Regras adicionais para o planejamento HÍBRIDO (governança preditiva +
+execução ágil):
+- Preserve os códigos da EAP e os ids de fases, marcos e itens exatamente
+  como estão. Não renumere, não recodifique.
+- Se remover um entregável da EAP por ser inventado, remova ou revincule
+  também os itens, fases e marcos que o referenciam — nenhum vínculo pode
+  apontar para um código inexistente.
+- Entregáveis sem item de execução vinculado NÃO são erro: não crie itens
+  para cobri-los.
+- Verifique se cada item de execução está vinculado a um entregável
+  coerente com o seu conteúdo; corrija o "eapCode" apenas quando o
+  vínculo estiver claramente errado, usando somente códigos existentes.
+- Não adicione material de Kick-off.
