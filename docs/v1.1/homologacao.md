@@ -6,7 +6,8 @@
 - **Base de comparação:** `main` @ `607e1f1` (v1.0.2, em produção).
 - **Situação:** **homologação aprovada** pelo responsável pelo produto em
   15/10/2026 (seção 12). Publicada como `v1.1.0` e `v1.1.1`; **Híbrido
-  ativado em produção** em 15/10/2026 (seção 14), com verificações
+  ativado em produção** em 15/10/2026 (seção 14). Validação funcional do
+  Cascata + Scrum em produção concluída (seção 15); demais verificações
   pendentes.
 
 ## 1. Testes automatizados
@@ -388,10 +389,57 @@ cache de build.
 - Leitura automatizada da página pública: descrição do site com "Scrum,
   Kanban, Cascata ou Híbrido" e card "Planejamento Híbrido" presentes.
 
-**Pendente em produção:**
+**Verificações em produção:**
 
-- [ ] Geração completa do Híbrido (Cascata + Scrum e Cascata + Kanban),
-      com a cota debitando exatamente 1.
-- [ ] Exportações do Híbrido: PDF (impressão), Excel e Markdown abertos e
-      conferidos.
+- [x] Geração completa do **Cascata + Scrum** (seção 15).
+- [ ] Geração completa do **Cascata + Kanban**.
+- [ ] Cota debitando exatamente 1 por geração do Híbrido.
+- [ ] Exportações do Híbrido: Excel e PDF (impressão) conferidos. O
+      Markdown do Cascata + Scrum foi exportado e usado na investigação da
+      seção 15, mas não foi conferido formalmente.
 - [ ] Responsividade em mobile (página inicial, assistente e resultado).
+
+## 15. Validação funcional em produção e acompanhamento da rastreabilidade
+
+**Encerramento.** Validação funcional do **Cascata + Scrum** em produção
+concluída pelo responsável em 15/10/2026, com a especificação completa do
+produto: TAP, EAP, cronograma macro, backlog, planejamento de Sprints e
+matriz de rastreabilidade gerados.
+
+| Geração em produção | Entregáveis da EAP com história | Pontos de atenção |
+| --- | --- | --- |
+| 1ª (exportada em Markdown e investigada) | 18 de 21 | 3: EAP 1.2, 2.3 e 3.3 |
+| 2ª (validação final) | 12 de 14 | 2, **aceitos como pontos de revisão**, sem correção imediata |
+
+**Investigação da 1ª geração.** A Extração preservou os requisitos dos
+três entregáveis; a matriz se comportou corretamente (só reconhece
+vínculos declarados, por desenho). As lacunas nasceram na Estruturação:
+
+| Alerta | Classificação | Causa |
+| --- | --- | --- |
+| 1.2 Documentação de Configuração e Repositório (README.md e .env.example) | Lacuna real | Nenhuma história cobre README nem `.env.example` (seções 98 e 100 da especificação); a US-01 trata só dos documentos em `/docs` |
+| 2.3 Segurança Backend, Sanitização de Logs e Gestão de Secrets | Lacuna real, com cobertura parcial espalhada | Fragmentos nos critérios da US-02, US-09 e US-18; sem história para headers, rate limiting, sanitização de entradas e tratamento seguro de erros (seção 77) |
+| 3.3 Interface de Ingestão (/app/new) e Feedback Visual | Falso positivo de cobertura | Trabalho coberto pela US-07 (vinculada ao 4.2) e pela US-15 (feedback de progresso, vinculada ao 3.4). A EAP separou interface e validação em folhas diferentes, e cada história admite um único vínculo |
+
+Nas duas gerações locais anteriores com a mesma especificação, os 5
+pontos de atenção eram histórias agrupadas vinculadas a um subentregável
+vizinho. As causas variam entre gerações.
+
+**Correção candidata, não publicada.** Regras na instrução da
+Estruturação do Híbrido (EAP por funcionalidade, não por camada técnica;
+cobertura de cada folha com trabalho descrito nos dados, sem espalhar o
+trabalho de uma folha em itens de outra). Implementada e testada
+localmente na branch `fix/v1.1.2-hybrid-coverage` (186 testes; só as duas
+instruções do Híbrido mudam), **sem commit e sem validação real com a
+IA**. Alternativa estrutural registrada: mais de um vínculo por item
+(`eapCodes`).
+
+**Acompanhamento.**
+
+- Os pontos de atenção são revisão, não erro: o usuário decide se o
+  entregável não tem trabalho de execução ou se falta item no backlog.
+- Reavaliar a correção candidata se os pontos de atenção se tornarem
+  frequentes ou se houver falsos positivos recorrentes como o do 3.3.
+- Antes de publicá-la: validação real (especificação completa × 2
+  variantes × 3 execuções), com auditoria de cada alerta restante e de
+  cada item novo.
