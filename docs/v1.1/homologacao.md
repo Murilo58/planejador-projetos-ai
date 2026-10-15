@@ -428,10 +428,11 @@ vizinho. As causas variam entre gerações.
 **Correção candidata, não publicada.** Regras na instrução da
 Estruturação do Híbrido (EAP por funcionalidade, não por camada técnica;
 cobertura de cada folha com trabalho descrito nos dados, sem espalhar o
-trabalho de uma folha em itens de outra). Implementada e testada
-localmente na branch `fix/v1.1.2-hybrid-coverage` (186 testes; só as duas
-instruções do Híbrido mudam), **sem commit e sem validação real com a
-IA**. Alternativa estrutural registrada: mais de um vínculo por item
+trabalho de uma folha em itens de outra). Implementada na branch
+`fix/v1.1.2-hybrid-coverage` (commit `df718b0`, atualizada com a `main` em
+`80e4f29`; 186 testes; só as duas instruções do Híbrido mudam).
+**Validada com a IA real e não recomendada na forma atual** (abaixo).
+Alternativa estrutural registrada: mais de um vínculo por item
 (`eapCodes`).
 
 **Acompanhamento.**
@@ -440,6 +441,46 @@ IA**. Alternativa estrutural registrada: mais de um vínculo por item
   entregável não tem trabalho de execução ou se falta item no backlog.
 - Reavaliar a correção candidata se os pontos de atenção se tornarem
   frequentes ou se houver falsos positivos recorrentes como o do 3.3.
-- Antes de publicá-la: validação real (especificação completa × 2
-  variantes × 3 execuções), com auditoria de cada alerta restante e de
-  cada item novo.
+- Não abrir PR da correção candidata na forma atual; a branch permanece
+  no GitHub como referência, sem merge.
+- Se o tema for retomado, cada caminho exige nova validação real: tempo
+  maior só na estruturação do Híbrido (com `maxDuration` maior) e/ou regra
+  de cobertura que reforce a regra dos 100% da EAP, proibindo remover
+  entregáveis descritos nos dados para alinhar com o backlog.
+
+**Validação real da correção candidata** (15/10/2026, ambiente local,
+especificação completa do produto, uma extração e 3 execuções por
+variante; 13 chamadas):
+
+| Execução | Resultado | Tempo | Folhas com item | Itens | Alertas |
+| --- | --- | --- | --- | --- | --- |
+| Cascata + Scrum 1 | **Falhou**: tempo esgotado nas 2 tentativas da estruturação | ~120 s | — | — | — |
+| Cascata + Scrum 2 | Passou | 106 s | 17/17 | 17 | 0 |
+| Cascata + Scrum 3 | Passou | 83 s | 14/14 | 14 | 0 |
+| Cascata + Kanban 1 | Passou | 66 s | 14/14 | 14 | 0 |
+| Cascata + Kanban 2 | Passou | 80 s | 20/20 | 20 | 0 |
+| Cascata + Kanban 3 | **Falhou**: tempo esgotado nas 2 tentativas da estruturação | ~120 s | — | — | — |
+
+- **Melhorias:** README e `.env.example` com item próprio em 3 das 4
+  execuções que passaram (na 4ª, num item de documentação que os cita);
+  segurança (seções 77 e 78) com item em folha própria em 3 das 4;
+  interface e validação sem sobreposição. Sem problemas de integridade.
+- **Exatamente um item por folha** nas 4 execuções: o modelo passou a
+  ajustar a EAP ao backlog, e a cobertura de 100% vem em parte disso.
+- **Omissão silenciosa** no Cascata + Scrum 3: a EAP não tem entregável de
+  segurança, testes, deploy nem sessionStorage, e nenhuma história trata
+  de sanitização, secrets ou rate limiting, embora estejam na
+  especificação. Com o prompt atual, lacunas assim aparecem como pontos
+  de atenção; com a correção, somem sem aviso.
+- **Nome sem base:** no Cascata + Kanban 1, o entregável 6.2 cita
+  "Auditoria", termo ausente da especificação.
+- **Tempo:** 4 das 8 chamadas de estruturação estouraram os 60 s (as que
+  passaram levaram de 29 a 52 s), contra nenhuma nas execuções
+  registradas com o prompt atual e a mesma especificação. A Extração e
+  as consolidações tiveram tempos normais. Em produção, cerca de 1 em 3
+  gerações do Híbrido falharia após ~2 minutos, consumindo 1 da cota.
+
+**Conclusão:** a correção elimina os falsos positivos e as lacunas
+visíveis, mas troca alertas legítimos por omissões silenciosas e aumenta
+muito a chance de falha por tempo. O comportamento atual em produção, com
+as lacunas exibidas como pontos de revisão, é mais seguro.
