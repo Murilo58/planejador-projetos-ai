@@ -1,3 +1,4 @@
+import { AI_CONFIG } from "@/lib/ai/config";
 import { generateStructured } from "@/lib/ai/generate-structured";
 import {
   buildExtractionPrompt,
@@ -17,5 +18,6 @@ export async function runExtractionAgent(
     schema: extractionSchema,
     systemInstruction: EXTRACTION_SYSTEM_INSTRUCTION,
     prompt: buildExtractionPrompt(specificationText),
+    thinkingLevel: AI_CONFIG.extractionThinkingLevel,
   });
 }

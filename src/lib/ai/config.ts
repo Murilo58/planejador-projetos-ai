@@ -1,3 +1,5 @@
+import { ThinkingLevel } from "@google/genai";
+
 /**
  * Configuração centralizada da IA (spec §79): modelo, temperatura e
  * limites num módulo único — o nome do modelo não deve se espalhar pelo
@@ -23,6 +25,16 @@ export const AI_CONFIG = {
    * continuam com `maxOutputTokens`.
    */
   hybridMaxOutputTokens: 16_384,
+  /**
+   * Nível de raciocínio da Extração, comum a todos os frameworks. A etapa
+   * transcreve e classifica o que está no texto — pouco ganha com
+   * raciocínio longo, que conta dentro de `maxOutputTokens`. Com uma
+   * especificação perto do limite de entrada (~100 mil caracteres), o
+   * raciocínio padrão consumiu 3.740 dos 8.192 tokens e a resposta saiu
+   * cortada, em 57 s (teste de robustez da v1.1). As demais etapas seguem
+   * com o raciocínio padrão do modelo.
+   */
+  extractionThinkingLevel: ThinkingLevel.LOW,
   /** Tempo máximo por chamada à IA antes de desistir (RF-081/FE-07). */
   timeoutMs: 60_000,
   /** Tentativas por etapa em caso de resposta fora do contrato (RF-034/RNF-029). */

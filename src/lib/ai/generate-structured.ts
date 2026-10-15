@@ -1,4 +1,4 @@
-import { ApiError } from "@google/genai";
+import { ApiError, FinishReason, type ThinkingLevel } from "@google/genai";
 import { z } from "zod";
 
 import { AI_CONFIG } from "@/lib/ai/config";
@@ -18,6 +18,27 @@ interface GenerateStructuredParams<T> {
    * Planejamento Híbrido informa um teto maior (`hybridMaxOutputTokens`).
    */
   maxOutputTokens?: number;
+  /**
+   * Limita o raciocínio do modelo (`thinkingConfig`). Omitido, nada é
+   * enviado e vale o padrão do modelo — o caso de todas as etapas, exceto
+   * a Extração (`AI_CONFIG.extractionThinkingLevel`).
+   */
+  thinkingLevel?: ThinkingLevel;
+}
+
+/**
+ * Resposta cortada pelo teto de tokens (`finishReason: MAX_TOKENS`). Não
+ * vale nova tentativa: com a mesma entrada e o mesmo teto, a resposta
+ * tende a ser cortada de novo, e a segunda chamada só consumiria o tempo
+ * da etapa.
+ */
+class TruncatedResponseError extends AiGenerationError {
+  constructor() {
+    super(
+      "invalid_response",
+      "A resposta da IA excedeu o limite de tamanho e foi cortada.",
+    );
+  }
 }
 
 /**
@@ -34,11 +55,13 @@ export async function generateStructured<T>({
   prompt,
   schema,
   maxOutputTokens = AI_CONFIG.maxOutputTokens,
+  thinkingLevel,
 }: GenerateStructuredParams<T>): Promise<T> {
   const responseJsonSchema = z.toJSONSchema(schema);
   let lastError: unknown;
 
   for (let attempt = 1; attempt <= AI_CONFIG.maxAttemptsPerStage; attempt++) {
+    const abortSignal = AbortSignal.timeout(AI_CONFIG.timeoutMs);
     try {
       const response = await getAiClient().models.generateContent({
         model: AI_CONFIG.model,
@@ -49,7 +72,8 @@ export async function generateStructured<T>({
           maxOutputTokens,
           responseMimeType: "application/json",
           responseJsonSchema,
-          abortSignal: AbortSignal.timeout(AI_CONFIG.timeoutMs),
+          abortSignal,
+          ...(thinkingLevel ? { thinkingConfig: { thinkingLevel } } : {}),
         },
       });
 
@@ -59,6 +83,10 @@ export async function generateStructured<T>({
           "invalid_response",
           `Conteúdo bloqueado pela IA (${blockReason}).`,
         );
+      }
+
+      if (response.candidates?.[0]?.finishReason === FinishReason.MAX_TOKENS) {
+        throw new TruncatedResponseError();
       }
 
       const text = response.text;
@@ -91,10 +119,19 @@ export async function generateStructured<T>({
 
       logAiEvent("stage_succeeded", { stage, attempt });
       return result.data;
-    } catch (error) {
+    } catch (caught) {
+      // O SDK rejeita o cancelamento pelo tempo máximo como `AbortError`
+      // genérico, não como `TimeoutError`: é o próprio sinal que diz se o
+      // tempo esgotou.
+      const error =
+        abortSignal.aborted && !(caught instanceof AiGenerationError)
+          ? asTimeout(caught)
+          : caught;
       lastError = error;
       const classified = classifyError(error);
-      const isLastAttempt = attempt >= AI_CONFIG.maxAttemptsPerStage;
+      const isLastAttempt =
+        attempt >= AI_CONFIG.maxAttemptsPerStage ||
+        error instanceof TruncatedResponseError;
       const retryDelayMs =
         !isLastAttempt && isTransientUnavailability(error)
           ? randomRetryDelayMs()
@@ -153,18 +190,18 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function asTimeout(cause: unknown): AiGenerationError {
+  return new AiGenerationError("timeout", "A geração excedeu o tempo limite.", {
+    cause,
+  });
+}
+
 function classifyError(error: unknown): AiGenerationError {
   if (error instanceof AiGenerationError) {
     return error;
   }
   if (error instanceof Error && error.name === "TimeoutError") {
-    return new AiGenerationError(
-      "timeout",
-      "A geração excedeu o tempo limite.",
-      {
-        cause: error,
-      },
-    );
+    return asTimeout(error);
   }
   return new AiGenerationError(
     "unavailable",
