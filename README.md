@@ -314,7 +314,7 @@ npm run test          # roda a suíte uma vez
 npm run test:watch    # modo watch
 ```
 
-174 testes em 16 arquivos. Além do que já existia na v1.0 — descrito a
+175 testes em 16 arquivos. Além do que já existia na v1.0 — descrito a
 seguir —, a v1.1 adicionou: snapshots do contrato de IA (schemas,
 instruções e configuração) dos 3 frameworks e do Híbrido, snapshots
 "golden" das exportações (Markdown byte a byte e Excel com abas, valores e

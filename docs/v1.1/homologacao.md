@@ -1,7 +1,7 @@
 # v1.1 — Relatório consolidado de homologação
 
 - **Data:** 15/10/2026
-- **Branch / commit avaliado:** `release/v1.1` @ `c246822`, mais os commits
+- **Branch / commit avaliado:** `release/v1.1` @ `45c4c0d`, mais os commits
   de documentação.
 - **Base de comparação:** `main` @ `607e1f1` (v1.0.2, em produção).
 - **Situação:** verificações automatizadas e locais **concluídas**;
@@ -11,12 +11,12 @@
 
 ## 1. Testes automatizados
 
-**174 testes em 16 arquivos, todos aprovados**, além de `tsc --noEmit`,
+**175 testes em 16 arquivos, todos aprovados**, além de `tsc --noEmit`,
 ESLint e `next build` sem erros, executados localmente a cada fase.
 
 | Área | Arquivo(s) | O que garante |
 | --- | --- | --- |
-| Contrato de IA dos 3 frameworks | `ai-contract.baseline.test.ts` | JSON Schemas, instruções, prompts e `AI_CONFIG` congelados. Scrum e Kanban idênticos à v1.0.2; Extração e Cascata alterados só pela correção da seção 6 |
+| Contrato de IA dos 3 frameworks | `ai-contract.baseline.test.ts` | JSON Schemas, instruções, prompts e `AI_CONFIG` congelados. Scrum e Kanban idênticos à v1.0.2; Extração e Cascata alterados só pelas correções das seções 6 e 7 |
 | Contrato de IA do Híbrido | `hybrid-contract.test.ts` | Schemas e instruções do Híbrido congelados, compatíveis com o Gemini (sem `$ref`/`oneOf`); instruções exigem rastreabilidade e proíbem Kick-off e invenção; regras de critérios de sucesso; contrato unificado aceita as 5 variantes e rejeita mistura de artefatos |
 | Domínio do Híbrido | `schemas/hybrid.test.ts`, `traceability.test.ts` | Integridade referencial (ids, códigos EAP, duplicidades) e os 6 tipos de ponto de atenção |
 | Pipeline (actions) | `pipeline.actions.test.ts` | Flag desligada bloqueia IA, cota e sessão; cota cobrada uma vez; revalidação a cada etapa; Scrum e Kanban recebem os mesmos dados da v1.0.2; extrações anteriores à correção continuam aceitas |
@@ -49,7 +49,7 @@ e uma amostra estatisticamente relevante (uma execução por cenário).
 | Verificação | Resultado |
 | --- | --- |
 | Prompts, schemas e agentes de Scrum e Kanban | **Inalterados** desde a v1.0.2 (verificado por `git diff` e pelos snapshots de contrato). Os dados extraídos que eles recebem são os mesmos da v1.0.2 (seção 6) |
-| Extração e Cascata | Alterados **somente** pela correção autorizada dos critérios de sucesso (seção 6); snapshots atualizados conscientemente |
+| Extração e Cascata | Alterados **somente** pelas correções autorizadas dos critérios de sucesso e do escopo do TAP (seções 6 e 7); snapshots atualizados conscientemente |
 | Actions `runExtractionStep` / `runStructuringStep` / `runConsolidationStep` | Mesma assinatura e comportamento; a consolidação valida com `classicResultSchema`, idêntico ao contrato da v1.0 |
 | Telas de resultado dos 3 frameworks | HTML renderizado **idêntico byte a byte** antes e depois das fases 4, 5 e 6 (4 fixtures golden) |
 | Assistente com a flag desligada | Seleção de framework e confirmação com HTML idêntico ao da v1.0.2 |
@@ -155,20 +155,95 @@ tinha categoria para critérios de sucesso ou de conclusão do projeto.
 - **Pertinência:** a classificação depende do modelo; um documento
   ambíguo pode gerar falso positivo ou falso negativo.
 
-## 7. Preview
+## 7. Correção durante a homologação: escopo resumido do TAP
+
+**Achado.** Com a especificação completa do produto em Cascata + Scrum, o
+TAP passou a exibir "Escopo resumido: Não identificado na
+especificação.", enquanto os critérios de sucesso vinham preenchidos. Na
+versão anterior, era o contrário. A mesma falha já estava numa execução
+da validação da seção 6 e não havia sido notada.
+
+**Investigação.**
+
+- **Extração:** não é a causa. A comparação antes e depois da seção 6
+  mostra objetivo, requisitos, entregas e restrições preservados (só
+  variação normal). A mesma extração gerou escopo em Cascata e em
+  Cascata + Kanban.
+- **Experimento** (mesma extração, 5 execuções por grupo):
+
+  | Grupo | Escopo "Não identificado" |
+  | --- | --- |
+  | Prompt da seção 6 (Estruturação + Consolidação) | 2 de 5, sempre já na Estruturação |
+  | Controle: mesmo prompt **sem** a regra de critérios de sucesso | 1 de 5 |
+
+- **Etapa:** Estruturação. A Consolidação devolveu o escopo inalterado em
+  todas as execuções.
+- **Causa:** o escopo não tinha fonte explícita. A extração não tem campo
+  "escopo", e a instrução dizia apenas para escrever "Não identificado"
+  quando a informação não existisse. O modelo às vezes concluía que não
+  havia escopo, mesmo com objetivo, requisitos e entregas disponíveis.
+  O problema é anterior à regra de critérios de sucesso, como mostra o
+  controle; a contribuição da regra não foi descartada.
+
+**Correção** (commit `45c4c0d`), nas instruções da Cascata, de
+Cascata + Scrum e de Cascata + Kanban:
+
+- O escopo resumido é sintetizado a partir do objetivo, dos requisitos,
+  das entregas e das restrições de escopo.
+- "Não identificado na especificação." só quando esses dados não
+  permitirem descrever o escopo.
+- Os critérios de sucesso nunca são usados para compor o escopo.
+- A restrição da regra de critérios vale só para os critérios: requisitos
+  e entregas continuam sendo a base do escopo e da EAP.
+- **Sem alteração:** Extração, `successCriteria`, Consolidação, Scrum,
+  Kanban, schemas, matriz de rastreabilidade, telas e exportações.
+
+**Testes.**
+
+- 1 teste novo de contrato (fonte do escopo, "Não identificado"
+  condicional, proibição de usar critérios, restrição limitada e ordem
+  das regras nas três instruções).
+- 3 snapshots de instrução atualizados conscientemente: Cascata e as duas
+  do Híbrido. Os demais snapshots e as exportações golden ficaram
+  inalterados.
+- Suíte com 175 testes, typecheck, lint e build aprovados.
+
+**Validação real** (26 chamadas, todas válidas na primeira tentativa;
+mesma extração do experimento):
+
+| Cenário | Escopo preenchido | Critérios de sucesso | Escopo cita a seção 106 ou termos dos critérios? |
+| --- | --- | --- | --- |
+| Cascata + Scrum, 5× | **5/5** (antes: 3/5) | sempre preenchidos (25 ou agrupados em 10) | não |
+| Cascata, 3× | **3/3** | sempre preenchidos (25, 10 ou 11) | não |
+| Cascata + Kanban, 3× | **3/3** | sempre preenchidos (25 ou 9) | não |
+| Controle negativo: Cascata, 2×, sem objetivo, requisitos, entregas nem restrições, mas com 2 critérios | **"Não identificado" 2/2** | 2/2 preservados | não usou os critérios como escopo |
+
+Em todas as execuções, os critérios mantiveram a referência à seção de
+origem, sem números ou metas acrescentados.
+
+**Riscos residuais.**
+
+- A falha era intermitente: 0 em 11 execuções após a correção reduz
+  muito a probabilidade, mas não a elimina. O checklist da seção 9 inclui
+  a conferência do escopo no Preview.
+- Os critérios alternam entre a lista completa e itens agrupados. As duas
+  formas são permitidas, mas a apresentação fica menos uniforme.
+
+## 8. Preview
 
 | Deploy | Commit | Status |
 | --- | --- | --- |
 | Vercel (Preview) | `587ae8f` | Concluído com sucesso |
 | Vercel (Preview) | `23927e9` | Concluído com sucesso |
 | Vercel (Preview) | `ed6d89e` | Concluído com sucesso |
-| Vercel (Preview) | `c246822` | Pendente (aguarda push autorizado) |
+| Vercel (Preview) | `522941b` (inclui `c246822`) | Concluído com sucesso |
+| Vercel (Preview) | push com `45c4c0d` e este relatório | Enviado após este registro |
 
 A configuração de `HYBRID_PLANNING_ENABLED=true` no ambiente Preview é
 feita no painel da Vercel. Ela **ainda não foi confirmada neste
 relatório** (ver seção 5).
 
-## 8. Checklist da homologação manual (Preview, flag ligada)
+## 9. Checklist da homologação manual (Preview, flag ligada)
 
 Preencher antes do merge:
 
@@ -179,10 +254,12 @@ Preencher antes do merge:
 - [ ] Geração real com **Cascata + Kanban**.
 - [ ] Geração real com uma especificação **perto do limite** (~100 mil
       caracteres).
-- [ ] TAP com critérios de sucesso: especificação completa do produto em
-      Cascata e no Híbrido mostra os critérios da seção 106; uma
-      especificação sem critérios mantém "Não identificado na
-      especificação.".
+- [ ] TAP com a especificação completa do produto em Cascata, Cascata +
+      Scrum e Cascata + Kanban: **escopo resumido preenchido** e
+      **critérios de sucesso** da seção 106 presentes; o escopo não usa os
+      critérios.
+- [ ] TAP com uma especificação sem critérios: critérios "Não
+      identificado na especificação." e escopo preenchido.
 - [ ] Resultado: matriz de rastreabilidade e pontos de atenção legíveis;
       layout em desktop e mobile.
 - [ ] Exportações do Híbrido: PDF (impressão), Excel e Markdown abertos e
@@ -191,26 +268,26 @@ Preencher antes do merge:
       cores de prioridade no Excel do Scrum.
 - [ ] Cota: cada geração do Híbrido debita exatamente 1.
 
-## 9. Riscos e limitações conhecidas
+## 10. Riscos e limitações conhecidas
 
 - **Especificação perto do limite não validada**: a especificação completa
   do produto (~36 mil caracteres) passou nas duas variantes, mas nenhuma
   perto de 100 mil. Há risco de latência e de tokens acima do previsto.
   Mitigações: o teto de 16.384 tokens, o `maxDuration` de 150 s por
   etapa e a nova tentativa controlada.
-- **Amostra pequena** de gerações reais (uma execução por cenário, fora a
-  PoC).
+- **Amostra pequena** de gerações reais (uma a cinco execuções por
+  cenário, fora a PoC).
 - **Pontos de atenção**: agora observados com dados reais (4 e 1 na
   especificação completa), mas ainda em amostra pequena.
-- **Consolidação sem efeito estrutural** observado nas primeiras
-  validações, a um custo de 21–41 s por geração. É a primeira candidata a
-  otimização.
-- **Critérios de sucesso**: ver os riscos residuais da seção 6.
+- **Consolidação sem efeito estrutural** observado nas validações, a um
+  custo de 21–41 s por geração. É a primeira candidata a otimização.
+- **Critérios de sucesso e escopo**: ver os riscos residuais das seções 6
+  e 7.
 - **Produção**: o Híbrido permanece desligado (variável ausente) até
   decisão explícita.
 
-## 10. Recomendação
+## 11. Recomendação
 
 Liberar o merge em `main` **somente após** o preenchimento do checklist da
-seção 8. O deploy de produção deve ocorrer com a flag desligada; ligá-la
+seção 9. O deploy de produção deve ocorrer com a flag desligada; ligá-la
 fica para uma decisão separada.

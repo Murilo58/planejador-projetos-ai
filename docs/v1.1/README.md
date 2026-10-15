@@ -123,6 +123,7 @@ e fazer redeploy — sem rollback de código.
 | — | `587ae8f` | Correção: cores de prioridade cobertas pela zebra no Excel (pré-existente) |
 | — | `23927e9` | Cards nas telas iniciais |
 | — | `c246822` | Correção: critérios de sucesso do projeto reconhecidos na Extração e usados no TAP |
+| — | `45c4c0d` | Correção: escopo resumido do TAP com fonte explícita |
 
 ## Melhorias candidatas (pós-v1.1)
 
