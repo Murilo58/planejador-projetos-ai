@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Download, FileSpreadsheet, Printer } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 import { buildExcelExport } from "@/lib/export/to-excel";
 import { buildMarkdownExport } from "@/lib/export/to-markdown";
 
@@ -18,7 +18,7 @@ import { buildMarkdownExport } from "@/lib/export/to-markdown";
  * numa API de desenho — a opção mais simples que ainda produz um PDF com
  * hierarquia visual adequada (RF-054).
  */
-export function ExportActions({ result }: { result: ConsolidatedResult }) {
+export function ExportActions({ result }: { result: ClassicResult }) {
   const [error, setError] = useState<string | null>(null);
   const [isExportingExcel, setIsExportingExcel] = useState(false);
 
@@ -72,9 +72,7 @@ export function ExportActions({ result }: { result: ConsolidatedResult }) {
       setError(null);
     } catch {
       // FE-12: falha de exportação.
-      setError(
-        "Não foi possível exportar o arquivo Excel. Tente novamente.",
-      );
+      setError("Não foi possível exportar o arquivo Excel. Tente novamente.");
     } finally {
       setIsExportingExcel(false);
     }

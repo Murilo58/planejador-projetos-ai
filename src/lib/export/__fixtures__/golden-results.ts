@@ -1,4 +1,4 @@
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 
 /**
  * Resultados de referência para os testes "golden" das exportações
@@ -15,7 +15,7 @@ import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
 
 const GENERATED_AT = "2026-10-09T12:00:00.000Z";
 
-export const goldenScrum: ConsolidatedResult = {
+export const goldenScrum: ClassicResult = {
   framework: "scrum",
   generatedAt: GENERATED_AT,
   data: {
@@ -59,7 +59,7 @@ export const goldenScrum: ConsolidatedResult = {
   notes: ["Nenhum ajuste necessário.", "Backlog confirmado."],
 };
 
-export const goldenKanban: ConsolidatedResult = {
+export const goldenKanban: ClassicResult = {
   framework: "kanban",
   generatedAt: GENERATED_AT,
   data: {
@@ -109,7 +109,7 @@ export const goldenKanban: ConsolidatedResult = {
   notes: [],
 };
 
-export const goldenCascata: ConsolidatedResult = {
+export const goldenCascata: ClassicResult = {
   framework: "cascata",
   generatedAt: GENERATED_AT,
   data: {
@@ -154,11 +154,11 @@ export const goldenCascata: ConsolidatedResult = {
 };
 
 /** Cascata com o Kick-off sem papéis — ramo "Não identificado" do Kick-off. */
-export const goldenCascataWithoutRoles: ConsolidatedResult = {
+export const goldenCascataWithoutRoles: ClassicResult = {
   ...goldenCascata,
   data: {
     ...(goldenCascata.data as Extract<
-      ConsolidatedResult,
+      ClassicResult,
       { framework: "cascata" }
     >["data"]),
     kickoff: {
@@ -169,7 +169,7 @@ export const goldenCascataWithoutRoles: ConsolidatedResult = {
       rolesAndResponsibilities: [],
     },
   },
-} as ConsolidatedResult;
+} as ClassicResult;
 
 export const GOLDEN_RESULTS = {
   scrum: goldenScrum,

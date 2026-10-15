@@ -1,4 +1,4 @@
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 
 import { addCascataSheets } from "./excel/cascata-sheet";
 import { addKanbanSheets } from "./excel/kanban-sheet";
@@ -30,7 +30,7 @@ import { addSummarySheet, excelFilename } from "./excel/shared";
  * em "Exportar Excel", nunca no carregamento inicial da página.
  */
 export async function buildExcelExport(
-  result: ConsolidatedResult,
+  result: ClassicResult,
 ): Promise<{ filename: string; buffer: ArrayBuffer }> {
   const ExcelJS = (await import("exceljs/dist/exceljs.min.js")).default;
   const workbook = new ExcelJS.Workbook();

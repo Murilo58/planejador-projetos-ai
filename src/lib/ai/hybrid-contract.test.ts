@@ -14,6 +14,12 @@ import {
 } from "@/lib/ai/schemas/hybrid";
 import { hybridResultSchema } from "@/lib/ai/schemas/hybrid-result";
 import {
+  classicResultSchema,
+  consolidatedResultSchema,
+  isClassicResult,
+} from "@/lib/ai/schemas/result";
+import { GOLDEN_RESULTS } from "@/lib/export/__fixtures__/golden-results";
+import {
   hybridKanban,
   hybridScrum,
 } from "@/lib/hybrid/__fixtures__/hybrid-packages";
@@ -122,7 +128,7 @@ describe("hybridResultSchema", () => {
     ).toBe(false);
   });
 
-  it("não aceita os frameworks atuais (contratos separados até a Fase 5)", () => {
+  it("não aceita os frameworks atuais", () => {
     expect(
       hybridResultSchema.safeParse({
         framework: "scrum",
@@ -131,5 +137,55 @@ describe("hybridResultSchema", () => {
         notes: [],
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("consolidatedResultSchema com o Híbrido (Fase 5)", () => {
+  const base = { generatedAt: "2026-10-14T12:00:00.000Z", notes: [] };
+  const hybridScrumResult = {
+    ...base,
+    framework: "hibrido-scrum",
+    data: hybridScrum,
+  };
+
+  it("aceita as duas variantes e os três frameworks atuais", () => {
+    expect(consolidatedResultSchema.safeParse(hybridScrumResult).success).toBe(
+      true,
+    );
+    expect(
+      consolidatedResultSchema.safeParse({
+        ...base,
+        framework: "hibrido-kanban",
+        data: hybridKanban,
+      }).success,
+    ).toBe(true);
+    for (const result of Object.values(GOLDEN_RESULTS)) {
+      expect(consolidatedResultSchema.safeParse(result).success).toBe(true);
+    }
+  });
+
+  it("nunca mistura artefatos: Híbrido com dados de outro framework é rejeitado", () => {
+    expect(
+      consolidatedResultSchema.safeParse({
+        ...base,
+        framework: "hibrido-scrum",
+        data: GOLDEN_RESULTS.scrum.data,
+      }).success,
+    ).toBe(false);
+    expect(
+      consolidatedResultSchema.safeParse({
+        ...base,
+        framework: "scrum",
+        data: hybridScrum,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("o contrato clássico (exportações e consolidação atuais) não aceita o Híbrido", () => {
+    expect(classicResultSchema.safeParse(hybridScrumResult).success).toBe(
+      false,
+    );
+    const parsed = consolidatedResultSchema.parse(hybridScrumResult);
+    expect(isClassicResult(parsed)).toBe(false);
   });
 });

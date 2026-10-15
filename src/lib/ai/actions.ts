@@ -14,8 +14,8 @@ import {
   type ExtractionResult,
 } from "@/lib/ai/schemas/extraction";
 import {
-  consolidatedResultSchema,
-  type ConsolidatedResult,
+  classicResultSchema,
+  type ClassicResult,
 } from "@/lib/ai/schemas/result";
 import { kanbanOutputSchema } from "@/lib/ai/schemas/kanban";
 import { scrumOutputSchema } from "@/lib/ai/schemas/scrum";
@@ -250,7 +250,7 @@ export async function runConsolidationStep(
   extraction: ExtractionResult,
   structuring: StructuringResult,
   generationId: string,
-): Promise<StageResult<ConsolidatedResult>> {
+): Promise<StageResult<ClassicResult>> {
   const userId = await requireUserId();
   if (!userId) {
     return SESSION_EXPIRED_RESULT;
@@ -344,7 +344,7 @@ export async function runConsolidationStep(
       }
     }
 
-    const result = consolidatedResultSchema.safeParse({
+    const result = classicResultSchema.safeParse({
       framework,
       generatedAt: new Date().toISOString(),
       data: consolidated.data,

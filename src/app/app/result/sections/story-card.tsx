@@ -7,10 +7,13 @@ import type { ScrumOutput } from "@/lib/ai/schemas/scrum";
 export function StoryCard({
   position,
   story,
+  reference,
 }: {
   /** Posição no backlog, a partir de 1 (a ordem é a prioridade). */
   position: number;
   story: ScrumOutput["backlog"][number];
+  /** Id e vínculo com a EAP (Planejamento Híbrido); omitido no Scrum. */
+  reference?: string;
 }) {
   return (
     <Card className="p-5 print:break-inside-avoid">
@@ -20,6 +23,11 @@ export function StoryCard({
             {position}
           </span>
           <div className="flex-1">
+            {reference ? (
+              <p className="text-primary mb-1 text-xs font-semibold">
+                {reference}
+              </p>
+            ) : null}
             <div className="flex flex-wrap items-start justify-between gap-2">
               <h3 className="text-foreground font-semibold">{story.title}</h3>
               <div className="flex shrink-0 gap-1.5">

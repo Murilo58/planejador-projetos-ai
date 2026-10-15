@@ -32,6 +32,38 @@ export const HYBRID_LABEL: Record<HybridFrameworkId, string> = {
   "hibrido-kanban": "Híbrido — Cascata + Kanban",
 };
 
+export interface HybridFrameworkInfo {
+  id: HybridFrameworkId;
+  name: string;
+  tagline: string;
+  description: string;
+}
+
+/**
+ * Opções exibidas na seleção de framework (somente com a feature flag
+ * ligada). Kick-off fora do escopo da v1.1 — não prometido aqui.
+ */
+export const HYBRID_FRAMEWORKS: HybridFrameworkInfo[] = [
+  {
+    id: "hibrido-scrum",
+    name: HYBRID_LABEL["hibrido-scrum"],
+    tagline: "Governança preditiva com execução em Sprints",
+    description:
+      "Gera TAP, EAP, cronograma macro com fases e marcos e backlog Scrum com cada história vinculada à EAP, além da matriz de rastreabilidade.",
+  },
+  {
+    id: "hibrido-kanban",
+    name: HYBRID_LABEL["hibrido-kanban"],
+    tagline: "Governança preditiva com fluxo contínuo",
+    description:
+      "Gera TAP, EAP, cronograma macro com fases e marcos e quadro Kanban com cada item vinculado à EAP, além da matriz de rastreabilidade.",
+  },
+];
+
+export function isHybridFrameworkId(id: string): id is HybridFrameworkId {
+  return (HYBRID_FRAMEWORK_IDS as readonly string[]).includes(id);
+}
+
 /** Mesma entrada validada dos demais frameworks, com o id do Híbrido. */
 export const hybridSpecificationInputSchema = specificationInputSchema.extend({
   framework: hybridFrameworkIdSchema,

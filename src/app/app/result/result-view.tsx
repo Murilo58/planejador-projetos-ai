@@ -5,7 +5,11 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import {
+  isClassicResult,
+  type ConsolidatedResult,
+} from "@/lib/ai/schemas/result";
+import { HYBRID_LABEL } from "@/lib/hybrid/frameworks";
 import { loadResultFromSession } from "@/lib/result/storage";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +17,7 @@ import { ExportActions } from "./export-actions";
 import { ResultHeader } from "./result-header";
 import { ValidationNotes } from "./validation-notes";
 import { CascataResult } from "./sections/cascata-result";
+import { HybridResult } from "./sections/hybrid-result";
 import { KanbanResult } from "./sections/kanban-result";
 import { ScrumResult } from "./sections/scrum-result";
 
@@ -20,6 +25,7 @@ const FRAMEWORK_LABEL: Record<ConsolidatedResult["framework"], string> = {
   scrum: "Scrum",
   kanban: "Kanban",
   cascata: "Cascata",
+  ...HYBRID_LABEL,
 };
 
 /**
@@ -77,9 +83,10 @@ export function ResultView() {
   // mantém TAP/EAP/Cronograma na largura de leitura (max-w-3xl) por
   // dentro — ver cascata-result.tsx; só o Kick-off usa o espaço extra.
   // Scrum continua exatamente como antes: Container no seu max-w-6xl
-  // padrão, com o `max-w-3xl` interno abaixo.
-  const isWideLayout =
-    result.framework === "kanban" || result.framework === "cascata";
+  // padrão, com o `max-w-3xl` interno abaixo. O Híbrido segue o modelo
+  // da Cascata: textos na largura de leitura e o espaço extra para o
+  // quadro Kanban e a matriz de rastreabilidade (hybrid-result.tsx).
+  const isWideLayout = result.framework !== "scrum";
 
   return (
     <Container
@@ -94,7 +101,11 @@ export function ResultView() {
         <ResultHeader
           frameworkLabel={FRAMEWORK_LABEL[result.framework]}
           generatedAt={result.generatedAt}
-          actions={<ExportActions result={result} />}
+          // Exportações do Híbrido chegam na Fase 6 da v1.1; até lá, só
+          // os três frameworks atuais exibem as ações.
+          actions={
+            isClassicResult(result) ? <ExportActions result={result} /> : null
+          }
         />
 
         {result.framework === "scrum" ? (
@@ -105,6 +116,12 @@ export function ResultView() {
         ) : null}
         {result.framework === "cascata" ? (
           <CascataResult data={result.data} />
+        ) : null}
+        {result.framework === "hibrido-scrum" ? (
+          <HybridResult pkg={{ variant: "scrum", data: result.data }} />
+        ) : null}
+        {result.framework === "hibrido-kanban" ? (
+          <HybridResult pkg={{ variant: "kanban", data: result.data }} />
         ) : null}
 
         <ValidationNotes notes={result.notes} />

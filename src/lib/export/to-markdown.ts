@@ -1,4 +1,4 @@
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 import type { ScrumOutput } from "@/lib/ai/schemas/scrum";
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
@@ -27,7 +27,7 @@ import {
  * à IA, nenhum dado novo. Nunca inclui prompt, nome interno de agente ou
  * informação técnica da API (RF-058).
  */
-export function buildMarkdownExport(result: ConsolidatedResult): {
+export function buildMarkdownExport(result: ClassicResult): {
   filename: string;
   content: string;
 } {

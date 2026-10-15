@@ -8,10 +8,9 @@ import {
 /**
  * Resultado final de uma geração híbrida, no mesmo formato dos demais
  * (`consolidatedResultSchema`): framework, data de geração, pacote e
- * observações da validação. Fica separado de `consolidatedResultSchema`
- * até a integração da tela de resultado e das exportações (Fases 5 e 6),
- * para que o contrato atual de Scrum, Kanban e Cascata — e todo código
- * que o consome — não mude antes disso.
+ * observações da validação. Compõe `consolidatedResultSchema`
+ * (`result.ts`) ao lado do contrato de Scrum, Kanban e Cascata, que
+ * permanece inalterado (`classicResultSchema`).
  *
  * A matriz de rastreabilidade não é armazenada: é sempre recalculada a
  * partir do pacote (`buildTraceabilityMatrix`), para nunca divergir dele.

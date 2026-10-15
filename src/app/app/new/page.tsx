@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { AppHeader } from "@/components/layout/app-header";
 import { Container } from "@/components/layout/container";
+import { isHybridPlanningEnabled } from "@/lib/hybrid/frameworks";
 
 import { NewPlanningWizard } from "./new-planning-wizard";
 
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
  * soma das três. Pior caso real por etapa: 60s × 2 tentativas + até 5s
  * de espera entre elas = 125s (`AI_CONFIG` em `src/lib/ai/config.ts`);
  * 150s dá ~20% de folga sem depender do padrão implícito da plataforma
- * (hoje 300s no Hobby/Pro).
+ * (hoje 300s no Hobby/Pro). As etapas do Planejamento Híbrido seguem o
+ * mesmo teto por tentativa (`AI_CONFIG.timeoutMs`), então o mesmo limite
+ * vale para elas.
  */
 export const maxDuration = 150;
 
@@ -39,7 +42,7 @@ export default async function NewPlanningPage() {
             </p>
           </div>
 
-          <NewPlanningWizard />
+          <NewPlanningWizard hybridEnabled={isHybridPlanningEnabled()} />
         </Container>
       </main>
     </>

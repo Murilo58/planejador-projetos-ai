@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import { describe, expect, it } from "vitest";
 
-import { consolidatedResultSchema } from "@/lib/ai/schemas/result";
+import { classicResultSchema } from "@/lib/ai/schemas/result";
 import { GOLDEN_RESULTS } from "@/lib/export/__fixtures__/golden-results";
 import { buildExcelExport } from "@/lib/export/to-excel";
 import { buildMarkdownExport } from "@/lib/export/to-markdown";
@@ -27,7 +27,7 @@ describe.each(Object.entries(GOLDEN_RESULTS))(
   "exportações golden — %s",
   (name, result) => {
     it("o resultado de referência continua válido no contrato atual", () => {
-      expect(consolidatedResultSchema.safeParse(result).success).toBe(true);
+      expect(classicResultSchema.safeParse(result).success).toBe(true);
     });
 
     it("Markdown idêntico ao homologado", async () => {

@@ -4,14 +4,20 @@ import { PriorityBadge } from "@/components/results/priority-badge";
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 
 type Column = KanbanOutput["columns"][number];
-type Item = KanbanOutput["items"][number];
+/**
+ * `reference` (id do item e vínculo com a EAP) só existe no Planejamento
+ * Híbrido; no Kanban, nada é exibido no lugar.
+ */
+export type KanbanBoardItem = KanbanOutput["items"][number] & {
+  reference?: string;
+};
 
 export function KanbanColumnCard({
   column,
   items,
 }: {
   column: Column;
-  items: Item[];
+  items: KanbanBoardItem[];
 }) {
   return (
     // Sem `break-inside-avoid` na coluna inteira de propósito: uma coluna
@@ -48,6 +54,11 @@ export function KanbanColumnCard({
                 key={item.title}
                 className="border-border bg-card rounded-lg border p-3 print:break-inside-avoid"
               >
+                {item.reference ? (
+                  <p className="text-primary mb-1 text-xs font-semibold">
+                    {item.reference}
+                  </p>
+                ) : null}
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-foreground text-sm font-medium">
                     {item.title}
