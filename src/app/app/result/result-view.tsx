@@ -10,6 +10,8 @@ import { loadResultFromSession } from "@/lib/result/storage";
 import { cn } from "@/lib/utils";
 
 import { ExportActions } from "./export-actions";
+import { ResultHeader } from "./result-header";
+import { ValidationNotes } from "./validation-notes";
 import { CascataResult } from "./sections/cascata-result";
 import { KanbanResult } from "./sections/kanban-result";
 import { ScrumResult } from "./sections/scrum-result";
@@ -89,20 +91,11 @@ export function ResultView() {
           !isWideLayout && "mx-auto w-full max-w-3xl",
         )}
       >
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-              {FRAMEWORK_LABEL[result.framework]}
-            </p>
-            <h1 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
-              Resultado do planejamento
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              Gerado em {new Date(result.generatedAt).toLocaleString("pt-BR")}
-            </p>
-          </div>
-          <ExportActions result={result} />
-        </div>
+        <ResultHeader
+          frameworkLabel={FRAMEWORK_LABEL[result.framework]}
+          generatedAt={result.generatedAt}
+          actions={<ExportActions result={result} />}
+        />
 
         {result.framework === "scrum" ? (
           <ScrumResult data={result.data} />
@@ -114,18 +107,7 @@ export function ResultView() {
           <CascataResult data={result.data} />
         ) : null}
 
-        {result.notes.length > 0 ? (
-          <details className="border-border bg-muted/40 rounded-lg border p-4 text-sm print:hidden">
-            <summary className="text-foreground cursor-pointer font-medium">
-              Observações da validação ({result.notes.length})
-            </summary>
-            <ul className="text-muted-foreground mt-2 list-disc space-y-1 pl-5">
-              {result.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          </details>
-        ) : null}
+        <ValidationNotes notes={result.notes} />
       </div>
     </Container>
   );

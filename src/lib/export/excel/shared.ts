@@ -38,6 +38,13 @@ export const PRIORITY_STYLES: Record<
 
 export const NOT_IDENTIFIED = "Não identificado na especificação.";
 
+/** Lista em uma única célula, um "• item" por linha. */
+export function listOrNotIdentified(items: string[]) {
+  return items.length > 0
+    ? items.map((item) => `• ${item}`).join("\n")
+    : NOT_IDENTIFIED;
+}
+
 export function frameworkLabel(framework: ConsolidatedResult["framework"]) {
   return (
     FRAMEWORKS.find((item) => item.id === framework)?.name ?? framework

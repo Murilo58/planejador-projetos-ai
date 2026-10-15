@@ -19,11 +19,14 @@ import {
  * cada atividade, não entidades próprias (ver proposta aprovada).
  */
 export function addKanbanSheets(workbook: Workbook, data: KanbanOutput) {
-  addBoardSheet(workbook, data);
+  addBoardSheet(workbook, data.columns);
   addItemsSheet(workbook, data);
 }
 
-function addBoardSheet(workbook: Workbook, data: KanbanOutput) {
+export function addBoardSheet(
+  workbook: Workbook,
+  columns: KanbanOutput["columns"],
+) {
   const sheet = workbook.addWorksheet("Quadro Inicial");
   sheet.columns = [
     { header: "Coluna (status inicial)", key: "name", width: 26 },
@@ -32,7 +35,7 @@ function addBoardSheet(workbook: Workbook, data: KanbanOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
-  data.columns.forEach((column) => {
+  columns.forEach((column) => {
     const row = sheet.addRow({
       name: column.name,
       wipLimit: column.wipLimit,

@@ -4,6 +4,16 @@ import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
 import { FRAMEWORKS } from "@/lib/frameworks";
 
+import {
+  backlogToMarkdown,
+  eapToMarkdown,
+  firstSprintToMarkdown,
+  kanbanBoardToMarkdown,
+  listSection,
+  sprintsToMarkdown,
+  tapToMarkdown,
+} from "./markdown/sections";
+
 /**
  * Exportação para texto (RF-055 / PRD OQ-002).
  *
@@ -47,89 +57,25 @@ export function buildMarkdownExport(result: ConsolidatedResult): {
 }
 
 function scrumToMarkdown(data: ScrumOutput): string[] {
-  const lines: string[] = ["## Backlog priorizado", ""];
-
-  data.backlog.forEach((story, index) => {
-    lines.push(`### ${index + 1}. ${story.title}`);
-    lines.push("");
-    lines.push(story.statement);
-    lines.push("");
-    lines.push(
-      `Valor de negócio: ${story.businessValue} · Complexidade: ${story.complexity}`,
-    );
-    lines.push("");
-    lines.push("Critérios de aceite:");
-    story.acceptanceCriteria.forEach((criterion) => {
-      lines.push(`- ${criterion}`);
-    });
-    lines.push("");
-    lines.push(`Justificativa da prioridade: ${story.priorityJustification}`);
-    lines.push("");
-  });
-
-  lines.push("## Primeira Sprint sugerida", "");
-  data.firstSprint.selectedStoryTitles.forEach((title) => {
-    lines.push(`- ${title}`);
-  });
-  lines.push("", data.firstSprint.rationale, "");
-
-  lines.push("## Cronograma macro", "");
-  data.macroSchedule.sprints.forEach((sprint) => {
-    lines.push(`### ${sprint.name}`, "", sprint.focus, "");
-    if (sprint.dependencies.length > 0) {
-      lines.push(`Dependências: ${sprint.dependencies.join(", ")}`, "");
-    }
-  });
-
-  return lines;
+  return [
+    ...backlogToMarkdown(data.backlog),
+    ...firstSprintToMarkdown(
+      data.firstSprint.selectedStoryTitles,
+      data.firstSprint.rationale,
+    ),
+    ...sprintsToMarkdown(data.macroSchedule.sprints),
+  ];
 }
 
 function kanbanToMarkdown(data: KanbanOutput): string[] {
-  const lines: string[] = ["## Quadro Kanban", ""];
-
-  data.columns.forEach((column) => {
-    const items = data.items.filter((item) => item.column === column.name);
-    lines.push(`### ${column.name}`, "");
-    lines.push(`WIP: ${column.wipLimit} — ${column.wipJustification}`, "");
-
-    if (items.length === 0) {
-      lines.push("_Nenhum item nesta coluna._", "");
-      return;
-    }
-
-    items.forEach((item) => {
-      lines.push(
-        `- **${item.title}** (${item.type}, prioridade ${item.priority})`,
-      );
-      lines.push(`  ${item.description}`);
-      if (item.dependency) lines.push(`  Dependência: ${item.dependency}`);
-      if (item.note) lines.push(`  Obs.: ${item.note}`);
-    });
-    lines.push("");
-  });
-
-  return lines;
+  return kanbanBoardToMarkdown(data.columns, data.items);
 }
 
 function cascataToMarkdown(data: WaterfallOutput): string[] {
-  const lines: string[] = [];
-
-  lines.push("## TAP — Termo de Abertura do Projeto", "");
-  lines.push(`**Objetivo:** ${data.tap.objective}`, "");
-  lines.push(`**Escopo resumido:** ${data.tap.scopeSummary}`, "");
-  lines.push(...listSection("Stakeholders", data.tap.stakeholders));
-  lines.push(...listSection("Critérios de sucesso", data.tap.successCriteria));
-  lines.push(...listSection("Premissas", data.tap.assumptions));
-  lines.push(...listSection("Restrições", data.tap.constraints));
-
-  lines.push("## EAP — Estrutura Analítica do Projeto", "");
-  data.eap.deliverables.forEach((deliverable) => {
-    lines.push(`- ${deliverable.name}`);
-    deliverable.subDeliverables?.forEach((sub) => {
-      lines.push(`  - ${sub.name}`);
-    });
-  });
-  lines.push("");
+  const lines: string[] = [
+    ...tapToMarkdown(data.tap),
+    ...eapToMarkdown(data.eap.deliverables),
+  ];
 
   lines.push("## Cronograma macro", "");
   data.schedule.phases.forEach((phase) => {
@@ -158,11 +104,4 @@ function cascataToMarkdown(data: WaterfallOutput): string[] {
   }
 
   return lines;
-}
-
-function listSection(title: string, items: string[]): string[] {
-  if (items.length === 0) {
-    return [`**${title}:** Não identificado na especificação.`, ""];
-  }
-  return [`**${title}:**`, ...items.map((item) => `- ${item}`), ""];
 }
