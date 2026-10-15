@@ -144,6 +144,32 @@ describe("critérios de sucesso do projeto (v1.1)", () => {
       expect(instruction).not.toContain("successCriteria");
     }
   });
+
+  it("o escopo do TAP tem fonte explícita e nunca vem dos critérios de sucesso", () => {
+    for (const instruction of [
+      WATERFALL_SYSTEM_INSTRUCTION,
+      HYBRID_SCRUM_SYSTEM_INSTRUCTION,
+      HYBRID_KANBAN_SYSTEM_INSTRUCTION,
+    ]) {
+      const flat = instruction.replace(/\s+/g, " ");
+      expect(flat).toContain(
+        "a partir do objetivo, dos requisitos, das entregas e das restrições de escopo presentes nos dados extraídos",
+      );
+      expect(flat).toContain(
+        'Escreva "Não identificado na especificação." somente se esses dados não permitirem descrever o escopo',
+      );
+      expect(flat).toContain(
+        "Não use os critérios de sucesso para compor o escopo",
+      );
+      expect(flat).toContain(
+        "Essa restrição vale só para os critérios de sucesso: requisitos e entregas continuam sendo a base do escopo e da EAP",
+      );
+      // A regra do escopo vem antes da regra dos critérios.
+      expect(flat.indexOf("Escopo resumido do TAP")).toBeLessThan(
+        flat.indexOf("Critérios de sucesso do TAP"),
+      );
+    }
+  });
 });
 
 describe("hybridResultSchema", () => {
