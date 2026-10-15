@@ -60,6 +60,18 @@ export const HYBRID_FRAMEWORKS: HybridFrameworkInfo[] = [
   },
 ];
 
+/**
+ * Apresentação do Planejamento Híbrido como um todo (as duas variantes),
+ * nas telas iniciais — landing page e painel —, ao lado dos três
+ * frameworks. Exibida somente com a feature flag ligada.
+ */
+export const HYBRID_PLANNING_OVERVIEW = {
+  name: "Planejamento Híbrido",
+  tagline: "Governança preditiva com execução ágil",
+  description:
+    "Combina Cascata + Scrum ou Cascata + Kanban, vinculando os itens de execução aos entregáveis da EAP.",
+} as const;
+
 export function isHybridFrameworkId(id: string): id is HybridFrameworkId {
   return (HYBRID_FRAMEWORK_IDS as readonly string[]).includes(id);
 }
