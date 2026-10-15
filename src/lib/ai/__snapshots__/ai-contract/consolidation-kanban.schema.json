@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome da coluna. Usar a estrutura padrão (Backlog, A Fazer, Em Andamento, Revisão, Concluído) salvo quando a especificação justificar claramente outro fluxo."
+              },
+              "wipLimit": {
+                "type": "string",
+                "description": "Limite de WIP sugerido para a coluna, como texto curto (ex.: \"3\"), ou uma breve explicação de por que não se aplica limite a esta coluna (ex.: \"Sem limite — coluna de entrada\")."
+              },
+              "wipJustification": {
+                "type": "string",
+                "description": "Justificativa do limite de WIP (ou de não haver limite). Nunca afirmar que é matematicamente ideal sem dados históricos; não assumir tamanho de equipe."
+              }
+            },
+            "required": [
+              "name",
+              "wipLimit",
+              "wipJustification"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "items": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string",
+                "description": "Descrição do item, derivada da especificação."
+              },
+              "type": {
+                "type": "string",
+                "description": "Classificação do item (ex.: funcionalidade, melhoria, tarefa técnica)."
+              },
+              "priority": {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "media",
+                  "baixa"
+                ]
+              },
+              "column": {
+                "type": "string",
+                "description": "Nome da coluna à qual o item pertence."
+              },
+              "dependency": {
+                "description": "Dependência relevante, apenas se presente na especificação.",
+                "type": "string"
+              },
+              "note": {
+                "description": "Observação relevante, apenas se presente na especificação.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "description",
+              "type",
+              "priority",
+              "column"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "columns",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Observações curtas sobre o que foi ajustado, removido ou confirmado durante a consolidação."
+    }
+  },
+  "required": [
+    "data",
+    "notes"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,99 @@
+Especificação técnica a ser analisada (delimitada por aspas triplas):
+
+"""
+Especificação de exemplo.
+"""
+
+=====
+
+Dados extraídos da especificação original (JSON):
+
+{
+  "title": "Portal",
+  "objective": "Lançar o portal.",
+  "requirements": [
+    "Login"
+  ],
+  "deliverables": [
+    "Portal"
+  ],
+  "stakeholders": [],
+  "assumptions": [],
+  "constraints": [],
+  "dependencies": [],
+  "deadlines": [],
+  "milestones": [],
+  "additionalRelevantInformation": []
+}
+
+=====
+
+Dados extraídos da especificação original (JSON):
+
+{
+  "title": "Portal",
+  "objective": "Lançar o portal.",
+  "requirements": [
+    "Login"
+  ],
+  "deliverables": [
+    "Portal"
+  ],
+  "stakeholders": [],
+  "assumptions": [],
+  "constraints": [],
+  "dependencies": [],
+  "deadlines": [],
+  "milestones": [],
+  "additionalRelevantInformation": []
+}
+
+=====
+
+Dados extraídos da especificação original (JSON):
+
+{
+  "title": "Portal",
+  "objective": "Lançar o portal.",
+  "requirements": [
+    "Login"
+  ],
+  "deliverables": [
+    "Portal"
+  ],
+  "stakeholders": [],
+  "assumptions": [],
+  "constraints": [],
+  "dependencies": [],
+  "deadlines": [],
+  "milestones": [],
+  "additionalRelevantInformation": []
+}
+
+=====
+
+Framework: Scrum
+
+Dados extraídos da especificação original (JSON):
+{
+  "title": "Portal",
+  "objective": "Lançar o portal.",
+  "requirements": [
+    "Login"
+  ],
+  "deliverables": [
+    "Portal"
+  ],
+  "stakeholders": [],
+  "assumptions": [],
+  "constraints": [],
+  "dependencies": [],
+  "deadlines": [],
+  "milestones": [],
+  "additionalRelevantInformation": []
+}
+
+Pacote estruturado a ser validado e consolidado (JSON):
+{
+  "exemplo": true
+}

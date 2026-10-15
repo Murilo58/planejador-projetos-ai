@@ -1,0 +1,512 @@
+[
+  {
+    "name": "Resumo",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A12:B12",
+      "A1:B1"
+    ],
+    "columnWidths": [
+      28,
+      70
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          },
+          {
+            "address": "B1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Framework",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Scrum",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Data de geração",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "09/10/2026, 09:00:00",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Itens no backlog",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "2",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Sprints no planejamento macro",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B6",
+            "value": "2",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Observações da validação",
+            "bold": true,
+            "color": "FF111827"
+          }
+        ]
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "address": "A9",
+            "value": ""
+          },
+          {
+            "address": "B9",
+            "value": "Nenhum ajuste necessário.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 10,
+        "cells": [
+          {
+            "address": "A10",
+            "value": ""
+          },
+          {
+            "address": "B10",
+            "value": "Backlog confirmado.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 12,
+        "cells": [
+          {
+            "address": "A12",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          },
+          {
+            "address": "B12",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Product Backlog",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:G1",
+    "merges": [],
+    "columnWidths": [
+      6,
+      28,
+      45,
+      50,
+      16,
+      16,
+      45
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "#",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Título",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "História",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "D1",
+            "value": "Critérios de aceite",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "E1",
+            "value": "Valor de negócio",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "F1",
+            "value": "Complexidade",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "G1",
+            "value": "Justificativa da prioridade",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": 1,
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "Login",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "Como usuário, quero entrar, para acessar o sistema.",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D2",
+            "value": "• Credenciais inválidas mostram erro\n• Login válido redireciona ao painel",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E2",
+            "value": "Alta",
+            "bold": true,
+            "color": "FF991B1B",
+            "fill": "FFFEE2E2",
+            "wrap": true
+          },
+          {
+            "address": "F2",
+            "value": "Baixa",
+            "bold": true,
+            "color": "FF6B7280",
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "G2",
+            "value": "Pré-requisito para o restante do fluxo.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": 2,
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Relatório mensal",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "Como gestor, quero um relatório mensal, para acompanhar o uso.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "D3",
+            "value": "• Relatório lista os acessos do mês",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "E3",
+            "value": "Média",
+            "bold": true,
+            "color": "FF92400E",
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "F3",
+            "value": "Alta",
+            "bold": true,
+            "color": "FF991B1B",
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "G3",
+            "value": "Depende dos dados de acesso já registrados.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sprint Inicial",
+    "views": [],
+    "autoFilter": null,
+    "merges": [],
+    "columnWidths": [
+      45
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "História selecionada",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Login",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Justificativa da escolha",
+            "bold": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Base do fluxo, sem assumir velocidade do time.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Planejamento Macro",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:C1",
+    "merges": [],
+    "columnWidths": [
+      20,
+      45,
+      40
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Sprint",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Foco",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Dependências",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Sprint 1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "Autenticação",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Sprint 2",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Relatórios",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "• Login concluído\n• Registro de acessos",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  }
+]

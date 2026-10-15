@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "Título do projeto, se identificável na especificação.",
+      "type": "string"
+    },
+    "objective": {
+      "description": "Objetivo geral do projeto, se identificável.",
+      "type": "string"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Requisitos e funcionalidades identificados no texto."
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Entregas identificadas."
+    },
+    "stakeholders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Stakeholders mencionados explicitamente no texto."
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Premissas identificadas."
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Restrições identificadas."
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Dependências identificadas."
+    },
+    "deadlines": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Prazos ou datas mencionados explicitamente no texto, em formato livre."
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Marcos identificados no texto."
+    },
+    "additionalRelevantInformation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Outras informações relevantes ao planejamento que não se encaixem nas categorias acima."
+    }
+  },
+  "required": [
+    "requirements",
+    "deliverables",
+    "stakeholders",
+    "assumptions",
+    "constraints",
+    "dependencies",
+    "deadlines",
+    "milestones",
+    "additionalRelevantInformation"
+  ],
+  "additionalProperties": false
+}

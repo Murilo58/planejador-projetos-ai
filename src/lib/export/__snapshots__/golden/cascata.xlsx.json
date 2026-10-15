@@ -1,0 +1,610 @@
+[
+  {
+    "name": "Resumo",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A11:B11",
+      "A1:B1"
+    ],
+    "columnWidths": [
+      28,
+      70
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          },
+          {
+            "address": "B1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Framework",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Cascata",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Data de geração",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "09/10/2026, 09:00:00",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Entregáveis da EAP",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "2",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Fases do cronograma",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B6",
+            "value": "2",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Observações da validação",
+            "bold": true,
+            "color": "FF111827"
+          }
+        ]
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "address": "A9",
+            "value": ""
+          },
+          {
+            "address": "B9",
+            "value": "TAP ajustado: premissa sem fonte removida.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 11,
+        "cells": [
+          {
+            "address": "A11",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          },
+          {
+            "address": "B11",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TAP",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A1:B1"
+    ],
+    "columnWidths": [
+      24,
+      65
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Termo de Abertura do Projeto",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          },
+          {
+            "address": "B1",
+            "value": "Termo de Abertura do Projeto",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Objetivo",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Lançar o novo portal.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Escopo resumido",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "Portal público com autenticação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Stakeholders",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "• Patrocinador\n• Equipe de atendimento",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Critérios de sucesso",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B6",
+            "value": "• Disponibilidade de 99%",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "address": "A7",
+            "value": "Premissas",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B7",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Restrições",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B8",
+            "value": "• Orçamento aprovado para o exercício",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "EAP",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:B1",
+    "merges": [],
+    "columnWidths": [
+      40,
+      55
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Entregável",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Subentregáveis",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Infraestrutura",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "• Banco de dados\n• Servidor",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Portal",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cronograma Macro",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:C1",
+    "merges": [],
+    "columnWidths": [
+      26,
+      45,
+      40
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Fase",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Marcos",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Dependências",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Fase 1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "• Kick-off",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Fase 2",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "• Infraestrutura entregue",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Kick-off",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A1:B1",
+      "A7:B7"
+    ],
+    "columnWidths": [
+      24,
+      65
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Kick-off do Portal",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          },
+          {
+            "address": "B1",
+            "value": "Kick-off do Portal",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Objetivo",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Alinhar o time.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Escopo",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "Visão geral do projeto.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Principais marcos",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "• Início em Fase 1",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "address": "A7",
+            "value": "Papéis e responsabilidades",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B7",
+            "value": "Papéis e responsabilidades",
+            "bold": true,
+            "color": "FF111827"
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Papel",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B8",
+            "value": "Responsabilidade",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "address": "A9",
+            "value": "Gerente de Projeto",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B9",
+            "value": "Coordenação geral.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  }
+]
