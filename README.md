@@ -69,12 +69,16 @@ Estado atual:
       `GEMINI_API_KEY` permanece deliberadamente compartilhada por ora
       (ver "Melhorias futuras"). Manutenção encerrada — próximo ciclo de
       trabalho é a v1.1.
-- [ ] **Etapa 9** — manutenção v1.0.2 (branch `hotfix/v1.0.2`, em
-      validação): nova tentativa com espera de 2–5s com jitter quando a
-      IA falha por indisponibilidade transitória (503, 429, 5xx ou
-      rede). Antes, a segunda tentativa era imediata e caía no mesmo
-      pico de demanda — problema observado na prova de conceito da v1.1
-      (`docs/v1.1/poc-fase0.md`, branch `poc/v1.1-hybrid`).
+- [x] **Etapa 9** — manutenção v1.0.2, concluída e publicada: nova
+      tentativa com espera de 2–5s com jitter quando a IA falha por
+      indisponibilidade transitória (503, 429, 5xx ou rede). Antes, a
+      segunda tentativa era imediata e caía no mesmo pico de demanda —
+      problema observado na prova de conceito da v1.1
+      (`docs/v1.1/poc-fase0.md`, branch `poc/v1.1-hybrid`). Coberta por
+      testes automatizados (cliente simulado e SDK real com HTTP 503
+      simulado), homologada manualmente no Preview nos 3 frameworks e
+      nas 3 exportações, tag `v1.0.2` e merge em `main`. Próximo ciclo:
+      v1.1 (Planejamento Híbrido).
 
 ## Arquitetura
 
