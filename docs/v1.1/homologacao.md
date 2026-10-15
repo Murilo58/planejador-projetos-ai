@@ -270,8 +270,9 @@ item a item**.
 - [ ] Card no painel e assistente com as duas combinações (implícitos na
       geração, não citados).
 - [ ] Layout em mobile.
-- [ ] Geração real com uma especificação **perto do limite** (~100 mil
-      caracteres).
+- [x] Geração real com uma especificação **perto do limite** (~100 mil
+      caracteres): validada localmente após a correção da seção 13, não no
+      Preview.
 - [ ] TAP com uma especificação sem critérios: critérios "Não
       identificado na especificação." e escopo preenchido.
 - [ ] Matriz de rastreabilidade e pontos de atenção conferidos na tela.
@@ -284,11 +285,11 @@ item a item**.
 
 ## 10. Riscos e limitações conhecidas
 
-- **Especificação perto do limite não validada**: a especificação completa
-  do produto (~36 mil caracteres) passou nas duas variantes, mas nenhuma
-  perto de 100 mil. Há risco de latência e de tokens acima do previsto.
-  Mitigações: o teto de 16.384 tokens, o `maxDuration` de 150 s por
-  etapa e a nova tentativa controlada.
+- **Especificação perto do limite**: validada após a correção da seção
+  13, mas a estruturação do Híbrido fica perto do tempo máximo de 60 s
+  por chamada. Se as duas tentativas estourarem, a etapa falha em ~120 s e
+  a geração consome 1 da cota. Mitigação possível: tempo maior só nessa
+  etapa, com `maxDuration` de 300 s.
 - **Amostra pequena** de gerações reais (uma a cinco execuções por
   cenário, fora a PoC).
 - **Pontos de atenção**: agora observados com dados reais (4 e 1 na
@@ -325,3 +326,42 @@ seção 9.
 - **Ressalvas:** riscos da seção 10 e itens não confirmados da seção 9.
 - **Pendente de autorização:** merge em `main`, tag `v1.1.0` e deploy de
   produção.
+
+## 13. Pós-homologação: especificação perto do limite (v1.1.1)
+
+**Achado.** Com uma especificação de 99.775 caracteres (o PRD do produto
+mais as seções 79 a 107 da especificação completa), a geração falhou na
+**Extração**, etapa comum a todos os frameworks:
+
+- 1ª tentativa (57 s): resposta cortada pelo teto de 8.192 tokens, dos
+  quais 3.740 foram de raciocínio do modelo; JSON incompleto.
+- 2ª tentativa: cancelada pelo tempo máximo de 60 s e exibida como "Não
+  foi possível se comunicar com o serviço de IA".
+
+**Correção** (branch `fix/v1.1.1-extraction-limits`):
+
+- A Extração pede raciocínio baixo (`thinkingLevel: LOW`). As demais
+  etapas enviam a mesma requisição de antes.
+- Resposta cortada pelo teto de tokens falha na hora, sem repetir a mesma
+  chamada.
+- Cancelamento pelo tempo máximo é classificado como "timeout".
+- 4 testes novos (183 no total); com o código anterior, 3 deles falham.
+  Prompts, schemas e snapshots de contrato inalterados.
+
+**Validação real** (12 chamadas, ambiente local):
+
+| Cenário | Resultado |
+| --- | --- |
+| ~100 mil caracteres — Extração | OK em 38 s, sem tokens de raciocínio (antes: falha em 117 s) |
+| ~100 mil — Cascata + Scrum | OK; estruturação em 107 s (1ª tentativa esgotou os 60 s, 2ª concluiu em 47 s); consolidação em 48 s |
+| ~100 mil — Cascata + Kanban | OK; estruturação em 45 s, consolidação em 40 s |
+| ~100 mil — artefatos | Contrato final válido, sem problemas de integridade; escopo resumido preenchido, sem usar os critérios; critérios agrupados (18 e 10) com a seção de origem; rastreabilidade 12/12 e 15/15 itens; exportações Markdown e Excel geradas |
+| Especificação média — Extração | 10 s (antes: 17 s); os 3 critérios de sucesso idênticos |
+| Especificação média — Cascata, Scrum, Kanban | Concluídos; TAP com os mesmos critérios e escopo; Scrum com 10 histórias; Kanban com 7 itens (antes: 13), em execução única |
+
+**Riscos residuais.**
+
+- A estruturação do Híbrido com especificações muito grandes fica perto
+  do tempo máximo por chamada (seção 10).
+- A redução de itens no Kanban da especificação média pode ser variação
+  do modelo, mas não foi descartada com uma única execução.
