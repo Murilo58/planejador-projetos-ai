@@ -1,9 +1,9 @@
-import type { Workbook } from "exceljs";
+import type { Cell, Workbook } from "exceljs";
 
 import type { ScrumOutput } from "@/lib/ai/schemas/scrum";
 
 import {
-  applyPriorityStyle,
+  applyHighlightsAfterZebra,
   applyZebraStripes,
   freezeAndFilter,
   styleHeaderRow,
@@ -42,6 +42,7 @@ function addBacklogSheet(workbook: Workbook, data: ScrumOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
+  const highlights: Array<[Cell, string]> = [];
   data.backlog.forEach((story, index) => {
     const row = sheet.addRow({
       order: index + 1,
@@ -62,14 +63,15 @@ function addBacklogSheet(workbook: Workbook, data: ScrumOutput) {
 
     const businessValueCell = row.getCell("businessValue");
     businessValueCell.value = labelFor(story.businessValue);
-    applyPriorityStyle(businessValueCell, story.businessValue);
+    highlights.push([businessValueCell, story.businessValue]);
 
     const complexityCell = row.getCell("complexity");
     complexityCell.value = labelFor(story.complexity);
-    applyPriorityStyle(complexityCell, story.complexity);
+    highlights.push([complexityCell, story.complexity]);
   });
 
   applyZebraStripes(sheet, 2, sheet.rowCount);
+  applyHighlightsAfterZebra(highlights);
   freezeAndFilter(sheet, "G", sheet.rowCount);
 }
 

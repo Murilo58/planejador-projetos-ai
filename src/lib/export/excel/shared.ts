@@ -92,9 +92,9 @@ export function applyZebraStripes(
 }
 
 /**
- * Destaque visual de prioridade (alta/média/baixa) numa célula — aplicado
- * depois do zebra para que a cor de prioridade sempre prevaleça sobre a
- * linha alternada.
+ * Destaque visual de prioridade (alta/média/baixa) numa célula. Deve ser
+ * aplicado DEPOIS do zebra (`applyHighlightsAfterZebra`), senão o fundo
+ * da linha alternada cobre a cor da prioridade.
  */
 export function applyPriorityStyle(cell: Cell, level: string) {
   const style = PRIORITY_STYLES[level as PriorityLevel];
@@ -106,6 +106,17 @@ export function applyPriorityStyle(cell: Cell, level: string) {
     fgColor: { argb: style.fill },
   };
   cell.alignment = { vertical: "top", horizontal: "left", wrapText: true };
+}
+
+/**
+ * Aplica os destaques de prioridade/atenção coletados durante o
+ * preenchimento — chamar logo após `applyZebraStripes`, para que a cor
+ * semântica nunca seja coberta pela linha alternada.
+ */
+export function applyHighlightsAfterZebra(highlights: Array<[Cell, string]>) {
+  for (const [cell, level] of highlights) {
+    applyPriorityStyle(cell, level);
+  }
 }
 
 /** Congela a primeira linha (cabeçalho) e habilita o filtro na faixa dada. */

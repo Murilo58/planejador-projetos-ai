@@ -17,7 +17,7 @@ import { addTapSheet } from "./governance-sheets";
 import { addBoardSheet } from "./kanban-sheet";
 import { addFirstSprintSheet } from "./scrum-sheet";
 import {
-  applyPriorityStyle,
+  applyHighlightsAfterZebra,
   applyZebraStripes,
   freezeAndFilter,
   listOrNotIdentified,
@@ -63,16 +63,6 @@ export function addHybridSheets(
 
   addTraceabilitySheet(workbook, matrix, pkg.variant);
   addAttentionPointsSheet(workbook, matrix);
-}
-
-/**
- * Destaques (prioridade, "Sem vínculo") aplicados só DEPOIS do zebra, para
- * que a cor semântica nunca seja coberta pela linha alternada.
- */
-function applyHighlightsAfterZebra(highlights: Array<[Cell, string]>) {
-  for (const [cell, level] of highlights) {
-    applyPriorityStyle(cell, level);
-  }
 }
 
 function wrapRow(sheet: Worksheet, values: Record<string, unknown>) {

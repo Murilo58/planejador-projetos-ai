@@ -1,9 +1,9 @@
-import type { Workbook } from "exceljs";
+import type { Cell, Workbook } from "exceljs";
 
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 
 import {
-  applyPriorityStyle,
+  applyHighlightsAfterZebra,
   applyZebraStripes,
   freezeAndFilter,
   NOT_IDENTIFIED,
@@ -63,6 +63,7 @@ function addItemsSheet(workbook: Workbook, data: KanbanOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
+  const highlights: Array<[Cell, string]> = [];
   data.items.forEach((item) => {
     const row = sheet.addRow({
       title: item.title,
@@ -79,10 +80,11 @@ function addItemsSheet(workbook: Workbook, data: KanbanOutput) {
 
     const priorityCell = row.getCell("priority");
     priorityCell.value = labelFor(item.priority);
-    applyPriorityStyle(priorityCell, item.priority);
+    highlights.push([priorityCell, item.priority]);
   });
 
   applyZebraStripes(sheet, 2, sheet.rowCount);
+  applyHighlightsAfterZebra(highlights);
   freezeAndFilter(sheet, "G", sheet.rowCount);
 }
 

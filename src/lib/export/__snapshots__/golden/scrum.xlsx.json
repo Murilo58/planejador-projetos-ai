@@ -333,7 +333,7 @@
             "value": "Média",
             "bold": true,
             "color": "FF92400E",
-            "fill": "FFF1F2F6",
+            "fill": "FFFEF3C7",
             "wrap": true
           },
           {
@@ -341,7 +341,7 @@
             "value": "Alta",
             "bold": true,
             "color": "FF991B1B",
-            "fill": "FFF1F2F6",
+            "fill": "FFFEE2E2",
             "wrap": true
           },
           {
