@@ -10,7 +10,8 @@ import {
 import { AiGenerationError, type AiErrorCode } from "@/lib/ai/errors";
 import { logAiEvent } from "@/lib/ai/log";
 import {
-  extractionSchema,
+  extractionRoundTripSchema,
+  omitSuccessCriteria,
   type ExtractionResult,
 } from "@/lib/ai/schemas/extraction";
 import {
@@ -214,7 +215,7 @@ export async function runStructuringStep(
   }
 
   const parsedGenerationId = generationIdSchema.safeParse(generationId);
-  const parsedExtraction = extractionSchema.safeParse(extraction);
+  const parsedExtraction = extractionRoundTripSchema.safeParse(extraction);
   if (!parsedGenerationId.success || !parsedExtraction.success) {
     return {
       success: false,
@@ -257,7 +258,7 @@ export async function runConsolidationStep(
   }
 
   const parsedGenerationId = generationIdSchema.safeParse(generationId);
-  const parsedExtraction = extractionSchema.safeParse(extraction);
+  const parsedExtraction = extractionRoundTripSchema.safeParse(extraction);
   if (
     !parsedGenerationId.success ||
     !parsedExtraction.success ||
@@ -297,7 +298,8 @@ export async function runConsolidationStep(
           frameworkLabel: "Scrum",
           stage: "consolidation_scrum",
           dataSchema: scrumOutputSchema,
-          extraction: parsedExtraction.data,
+          // Sem TAP: mesmos dados extraídos da v1.0.2 (ver omitSuccessCriteria).
+          extraction: omitSuccessCriteria(parsedExtraction.data),
           structuredOutput: parsedStructuring.data,
         });
         break;
@@ -317,7 +319,8 @@ export async function runConsolidationStep(
           frameworkLabel: "Kanban",
           stage: "consolidation_kanban",
           dataSchema: kanbanOutputSchema,
-          extraction: parsedExtraction.data,
+          // Sem TAP: mesmos dados extraídos da v1.0.2 (ver omitSuccessCriteria).
+          extraction: omitSuccessCriteria(parsedExtraction.data),
           structuredOutput: parsedStructuring.data,
         });
         break;
@@ -442,7 +445,7 @@ export async function runHybridStructuringStep(
 
   const parsedFramework = hybridFrameworkIdSchema.safeParse(framework);
   const parsedGenerationId = generationIdSchema.safeParse(generationId);
-  const parsedExtraction = extractionSchema.safeParse(extraction);
+  const parsedExtraction = extractionRoundTripSchema.safeParse(extraction);
   if (
     !parsedFramework.success ||
     !parsedGenerationId.success ||
@@ -499,7 +502,7 @@ export async function runHybridConsolidationStep(
 
   const parsedFramework = hybridFrameworkIdSchema.safeParse(framework);
   const parsedGenerationId = generationIdSchema.safeParse(generationId);
-  const parsedExtraction = extractionSchema.safeParse(extraction);
+  const parsedExtraction = extractionRoundTripSchema.safeParse(extraction);
   if (
     !parsedFramework.success ||
     !parsedGenerationId.success ||

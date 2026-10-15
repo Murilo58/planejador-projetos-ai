@@ -17,6 +17,12 @@ Camada de GOVERNANÇA PREDITIVA:
 - TAP: quando uma informação não existir nos dados, escreva exatamente
   "Não identificado na especificação." nos campos de texto (objetivo,
   escopo resumido) e retorne lista vazia nas listas.
+- Critérios de sucesso do TAP vêm somente de "successCriteria" dos dados
+  extraídos. Você pode agrupar itens relacionados num mesmo critério,
+  preservando as expressões de verificação e a referência à seção de
+  origem, sem acrescentar metas, números ou condições. Não converta
+  requisitos, entregas ou critérios de aceite de histórias em critérios de
+  sucesso. Sem itens em "successCriteria", retorne lista vazia.
 - EAP: decomponha o escopo em entregáveis de alto nível e, quando fizer
   sentido, subentregáveis — sempre substantivos, nunca atividades ou
   verbos de ação. Siga a regra dos 100%.

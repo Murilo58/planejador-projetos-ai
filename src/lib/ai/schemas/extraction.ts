@@ -31,6 +31,11 @@ export const extractionSchema = z.object({
       "Prazos ou datas mencionados explicitamente no texto, em formato livre.",
     ),
   milestones: z.array(z.string()).describe("Marcos identificados no texto."),
+  successCriteria: z
+    .array(z.string())
+    .describe(
+      "Critérios de sucesso do projeto: condições explícitas para considerar o projeto ou o produto concluído, aceito ou bem-sucedido (ex.: critérios de sucesso, condições de conclusão, critérios de aceitação do projeto, Definição de Pronto do produto/MVP). Nunca critérios de aceite de histórias, funcionalidades ou tarefas individuais. Lista vazia se o texto não os trouxer.",
+    ),
   additionalRelevantInformation: z
     .array(z.string())
     .describe(
@@ -39,3 +44,33 @@ export const extractionSchema = z.object({
 });
 
 export type ExtractionResult = z.infer<typeof extractionSchema>;
+
+/**
+ * Revalidação da extração que volta do navegador entre as etapas
+ * (RNF-001). Aceita também o formato anterior a `successCriteria` (v1.1)
+ * — ausente vira lista vazia —, para que uma geração iniciada antes do
+ * deploy não falhe na etapa seguinte. O schema enviado à IA
+ * (`extractionSchema`) continua exigindo o campo.
+ */
+export const extractionRoundTripSchema = extractionSchema.extend({
+  successCriteria: extractionSchema.shape.successCriteria.default([]),
+});
+
+/** Extração como os prompts a recebem: com ou sem `successCriteria`. */
+export type ExtractionPromptInput = Omit<ExtractionResult, "successCriteria"> &
+  Partial<Pick<ExtractionResult, "successCriteria">>;
+
+/**
+ * A extração sem `successCriteria`, para os frameworks sem TAP (Scrum e
+ * Kanban): os dados que eles recebem permanecem exatamente os da v1.0.2,
+ * e um critério de conclusão do projeto nunca vira história ou item por
+ * engano. A mesma informação continua nas demais categorias (requisitos,
+ * entregas…), como pede a instrução de extração.
+ */
+export function omitSuccessCriteria(
+  extraction: ExtractionResult,
+): Omit<ExtractionResult, "successCriteria"> {
+  return Object.fromEntries(
+    Object.entries(extraction).filter(([key]) => key !== "successCriteria"),
+  ) as Omit<ExtractionResult, "successCriteria">;
+}

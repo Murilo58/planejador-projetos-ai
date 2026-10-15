@@ -19,6 +19,23 @@ Regras obrigatórias, sem exceção:
   lista vazia para ela — nunca invente itens para preenchê-la.
 - Extraia prazos e datas apenas quando mencionados explicitamente no texto;
   não infira ou projete cronogramas.
+- Em "successCriteria", registre as condições explícitas para considerar o
+  projeto ou o produto concluído, aceito ou bem-sucedido, mesmo que a
+  seção não se chame "critérios de sucesso" — por exemplo: condições de
+  conclusão, critérios de aceitação do projeto ou Definição de Pronto
+  (Definition of Done) do produto ou do MVP como um todo.
+- Nesses critérios, preserve o sentido e as expressões de verificação do
+  texto ("funcionando", "aprovado", "validado", "atualizado",
+  "publicado"…), sem reduzi-los à funcionalidade correspondente e sem
+  criar metas, números ou condições que não estejam no texto. Quando o
+  texto indicar a seção de origem (número ou título), registre-a ao final
+  do item, entre parênteses — ex.: "(seção 106)".
+- Não registre em "successCriteria" critérios de aceite de histórias,
+  funcionalidades ou tarefas individuais, nem a Definition of Done de
+  itens de trabalho.
+- Uma informação registrada em "successCriteria" continua também na
+  categoria a que pertence (ex.: um requisito ou uma entrega) — não a
+  remova das demais categorias.
 - Responda exclusivamente em JSON, aderente ao schema fornecido. Não
   inclua texto fora do JSON.
 `.trim();

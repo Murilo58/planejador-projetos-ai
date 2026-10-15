@@ -118,6 +118,9 @@ describe("contrato com a IA — instruções e prompts", () => {
     dependencies: [],
     deadlines: [],
     milestones: [],
+    // Presente de propósito: Scrum e Kanban não podem recebê-lo (os
+    // prompts deles permanecem os da v1.0.2); Cascata e Consolidação sim.
+    successCriteria: ["Portal publicado e validado (seção 9)"],
     additionalRelevantInformation: [],
   };
 

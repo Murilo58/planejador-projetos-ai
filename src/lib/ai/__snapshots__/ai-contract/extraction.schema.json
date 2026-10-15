@@ -66,6 +66,13 @@
       },
       "description": "Marcos identificados no texto."
     },
+    "successCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Critérios de sucesso do projeto: condições explícitas para considerar o projeto ou o produto concluído, aceito ou bem-sucedido (ex.: critérios de sucesso, condições de conclusão, critérios de aceitação do projeto, Definição de Pronto do produto/MVP). Nunca critérios de aceite de histórias, funcionalidades ou tarefas individuais. Lista vazia se o texto não os trouxer."
+    },
     "additionalRelevantInformation": {
       "type": "array",
       "items": {
@@ -83,6 +90,7 @@
     "dependencies",
     "deadlines",
     "milestones",
+    "successCriteria",
     "additionalRelevantInformation"
   ],
   "additionalProperties": false

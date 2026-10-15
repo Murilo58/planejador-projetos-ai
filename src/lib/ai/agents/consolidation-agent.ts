@@ -6,7 +6,7 @@ import {
   CONSOLIDATION_SYSTEM_INSTRUCTION,
 } from "@/lib/ai/prompts/consolidation";
 import { createConsolidationSchema } from "@/lib/ai/schemas/consolidation";
-import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import type { ExtractionPromptInput } from "@/lib/ai/schemas/extraction";
 
 /**
  * Agente 3 — Consolidação (PRD §24).
@@ -28,7 +28,7 @@ export async function runConsolidationAgent<T extends z.ZodType>({
   frameworkLabel: string;
   stage: string;
   dataSchema: T;
-  extraction: ExtractionResult;
+  extraction: ExtractionPromptInput;
   structuredOutput: z.infer<T>;
   /**
    * Regras extras ANEXADAS à instrução de consolidação (nunca a

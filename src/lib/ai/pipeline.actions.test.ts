@@ -73,6 +73,7 @@ const extraction: ExtractionResult = {
   dependencies: [],
   deadlines: [],
   milestones: [],
+  successCriteria: [],
   additionalRelevantInformation: [],
 };
 
@@ -405,6 +406,75 @@ describe("regressão — pipeline atual de Scrum, Kanban e Cascata", () => {
     expect(lastCall().systemInstruction).toBe(CONSOLIDATION_SYSTEM_INSTRUCTION);
     expect(lastCall().stage).toBe("consolidation_scrum");
     expect(lastCall().maxOutputTokens).toBeUndefined();
+  });
+
+  describe("critérios de sucesso do projeto (successCriteria)", () => {
+    const withCriteria: ExtractionResult = {
+      ...extraction,
+      successCriteria: ["Build de produção aprovado (seção 106)"],
+    };
+    const legacyExtraction = Object.fromEntries(
+      Object.entries(extraction).filter(([key]) => key !== "successCriteria"),
+    ) as never;
+
+    it.each([
+      ["scrum", scrumData],
+      ["kanban", { columns: hybridKanban.columns, items: hybridKanban.items }],
+    ] as const)(
+      "%s: estruturação e consolidação recebem os dados extraídos da v1.0.2, sem o campo",
+      async (framework, data) => {
+        mocks.generateStructured.mockResolvedValueOnce(data);
+        await runStructuringStep(framework, withCriteria, GENERATION_ID);
+        expect(lastCall().prompt).not.toContain("successCriteria");
+
+        mocks.generateStructured.mockResolvedValueOnce({ data, notes: [] });
+        await runConsolidationStep(
+          framework,
+          withCriteria,
+          { framework, data: data as never },
+          GENERATION_ID,
+        );
+        expect(lastCall().stage).toBe(`consolidation_${framework}`);
+        expect(lastCall().prompt).not.toContain("successCriteria");
+      },
+    );
+
+    it("Cascata e Híbrido recebem os critérios na estruturação do TAP", async () => {
+      mocks.generateStructured.mockResolvedValueOnce({});
+      await runStructuringStep("cascata", withCriteria, GENERATION_ID);
+      expect(lastCall().prompt).toContain(
+        "Build de produção aprovado (seção 106)",
+      );
+
+      mocks.generateStructured.mockResolvedValueOnce(hybridScrum);
+      await runHybridStructuringStep(
+        "hibrido-scrum",
+        withCriteria,
+        GENERATION_ID,
+      );
+      expect(lastCall().prompt).toContain(
+        "Build de produção aprovado (seção 106)",
+      );
+    });
+
+    it("aceita, entre as etapas, uma extração anterior ao campo (geração iniciada antes do deploy)", async () => {
+      mocks.generateStructured.mockResolvedValueOnce(scrumData);
+      const result = await runStructuringStep(
+        "scrum",
+        legacyExtraction,
+        GENERATION_ID,
+      );
+      expect(result.success).toBe(true);
+
+      mocks.generateStructured.mockResolvedValueOnce(hybridScrum);
+      const hybrid = await runHybridStructuringStep(
+        "hibrido-scrum",
+        legacyExtraction,
+        GENERATION_ID,
+      );
+      expect(hybrid.success).toBe(true);
+      expect(lastCall().prompt).toContain('"successCriteria": []');
+    });
   });
 
   it("a flag do Híbrido não afeta os frameworks atuais", async () => {

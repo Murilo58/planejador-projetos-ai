@@ -7,6 +7,10 @@ import {
   HYBRID_KANBAN_SYSTEM_INSTRUCTION,
   HYBRID_SCRUM_SYSTEM_INSTRUCTION,
 } from "@/lib/ai/prompts/hybrid";
+import { EXTRACTION_SYSTEM_INSTRUCTION } from "@/lib/ai/prompts/extraction";
+import { KANBAN_SYSTEM_INSTRUCTION } from "@/lib/ai/prompts/kanban";
+import { SCRUM_SYSTEM_INSTRUCTION } from "@/lib/ai/prompts/scrum";
+import { WATERFALL_SYSTEM_INSTRUCTION } from "@/lib/ai/prompts/waterfall";
 import { createConsolidationSchema } from "@/lib/ai/schemas/consolidation";
 import {
   hybridKanbanOutputSchema,
@@ -92,12 +96,53 @@ describe("contrato do Híbrido com a IA", () => {
       dependencies: [],
       deadlines: [],
       milestones: [],
+      successCriteria: [],
       additionalRelevantInformation: [],
     });
     expect(
       prompt.startsWith("Dados extraídos da especificação original (JSON):"),
     ).toBe(true);
     expect(prompt).toContain('"Agendamento"');
+  });
+});
+
+describe("critérios de sucesso do projeto (v1.1)", () => {
+  it("a extração reconhece equivalentes e exclui critérios de itens individuais", () => {
+    for (const fragment of [
+      'Em "successCriteria"',
+      "Definição de Pronto",
+      "expressões de verificação",
+      "criar metas, números ou condições que não estejam no texto",
+      "seção de origem",
+      'Não registre em "successCriteria" critérios de aceite de histórias',
+      "remova das demais categorias",
+    ]) {
+      expect(EXTRACTION_SYSTEM_INSTRUCTION).toContain(fragment);
+    }
+  });
+
+  it("Cascata e as duas variantes do Híbrido só usam successCriteria no TAP", () => {
+    for (const instruction of [
+      WATERFALL_SYSTEM_INSTRUCTION,
+      HYBRID_SCRUM_SYSTEM_INSTRUCTION,
+      HYBRID_KANBAN_SYSTEM_INSTRUCTION,
+    ]) {
+      expect(instruction).toContain(
+        'Critérios de sucesso do TAP vêm somente de "successCriteria"',
+      );
+      expect(instruction).toContain(
+        'Sem itens em "successCriteria", retorne lista vazia.',
+      );
+    }
+  });
+
+  it("Scrum e Kanban não recebem a regra (não têm TAP)", () => {
+    for (const instruction of [
+      SCRUM_SYSTEM_INSTRUCTION,
+      KANBAN_SYSTEM_INSTRUCTION,
+    ]) {
+      expect(instruction).not.toContain("successCriteria");
+    }
   });
 });
 

@@ -67,6 +67,9 @@ Dados extraídos da especificação original (JSON):
   "dependencies": [],
   "deadlines": [],
   "milestones": [],
+  "successCriteria": [
+    "Portal publicado e validado (seção 9)"
+  ],
   "additionalRelevantInformation": []
 }
 
@@ -90,6 +93,9 @@ Dados extraídos da especificação original (JSON):
   "dependencies": [],
   "deadlines": [],
   "milestones": [],
+  "successCriteria": [
+    "Portal publicado e validado (seção 9)"
+  ],
   "additionalRelevantInformation": []
 }
 
