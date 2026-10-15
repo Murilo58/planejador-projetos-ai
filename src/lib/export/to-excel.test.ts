@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import { describe, expect, it } from "vitest";
 
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 import { buildExcelExport } from "@/lib/export/to-excel";
 
 /**
@@ -13,7 +13,7 @@ import { buildExcelExport } from "@/lib/export/to-excel";
  * "não lançou erro".
  */
 
-const scrumResult: ConsolidatedResult = {
+const scrumResult: ClassicResult = {
   framework: "scrum",
   generatedAt: "2026-10-09T12:00:00.000Z",
   data: {
@@ -41,7 +41,7 @@ const scrumResult: ConsolidatedResult = {
   notes: ["Nenhum ajuste necessário."],
 };
 
-const kanbanResult: ConsolidatedResult = {
+const kanbanResult: ClassicResult = {
   framework: "kanban",
   generatedAt: "2026-10-09T12:00:00.000Z",
   data: {
@@ -70,7 +70,7 @@ const kanbanResult: ConsolidatedResult = {
   notes: [],
 };
 
-const cascataResult: ConsolidatedResult = {
+const cascataResult: ClassicResult = {
   framework: "cascata",
   generatedAt: "2026-10-09T12:00:00.000Z",
   data: {

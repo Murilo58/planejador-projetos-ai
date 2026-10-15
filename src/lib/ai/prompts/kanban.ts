@@ -1,4 +1,7 @@
-import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import {
+  omitSuccessCriteria,
+  type ExtractionResult,
+} from "@/lib/ai/schemas/extraction";
 
 /**
  * Prompt do Agente de Estruturação para Kanban (PRD §11.2 / spec §32-35).
@@ -33,6 +36,6 @@ export function buildKanbanPrompt(extraction: ExtractionResult): string {
   return [
     "Dados extraídos da especificação original (JSON):",
     "",
-    JSON.stringify(extraction, null, 2),
+    JSON.stringify(omitSuccessCriteria(extraction), null, 2),
   ].join("\n");
 }

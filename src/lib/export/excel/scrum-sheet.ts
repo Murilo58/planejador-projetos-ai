@@ -1,9 +1,9 @@
-import type { Workbook } from "exceljs";
+import type { Cell, Workbook } from "exceljs";
 
 import type { ScrumOutput } from "@/lib/ai/schemas/scrum";
 
 import {
-  applyPriorityStyle,
+  applyHighlightsAfterZebra,
   applyZebraStripes,
   freezeAndFilter,
   styleHeaderRow,
@@ -17,8 +17,12 @@ import {
  */
 export function addScrumSheets(workbook: Workbook, data: ScrumOutput) {
   addBacklogSheet(workbook, data);
-  addFirstSprintSheet(workbook, data);
-  addMacroScheduleSheet(workbook, data);
+  addFirstSprintSheet(
+    workbook,
+    data.firstSprint.selectedStoryTitles,
+    data.firstSprint.rationale,
+  );
+  addMacroScheduleSheet(workbook, data.macroSchedule.sprints);
 }
 
 function addBacklogSheet(workbook: Workbook, data: ScrumOutput) {
@@ -38,6 +42,7 @@ function addBacklogSheet(workbook: Workbook, data: ScrumOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
+  const highlights: Array<[Cell, string]> = [];
   data.backlog.forEach((story, index) => {
     const row = sheet.addRow({
       order: index + 1,
@@ -58,25 +63,30 @@ function addBacklogSheet(workbook: Workbook, data: ScrumOutput) {
 
     const businessValueCell = row.getCell("businessValue");
     businessValueCell.value = labelFor(story.businessValue);
-    applyPriorityStyle(businessValueCell, story.businessValue);
+    highlights.push([businessValueCell, story.businessValue]);
 
     const complexityCell = row.getCell("complexity");
     complexityCell.value = labelFor(story.complexity);
-    applyPriorityStyle(complexityCell, story.complexity);
+    highlights.push([complexityCell, story.complexity]);
   });
 
   applyZebraStripes(sheet, 2, sheet.rowCount);
+  applyHighlightsAfterZebra(highlights);
   freezeAndFilter(sheet, "G", sheet.rowCount);
 }
 
-function addFirstSprintSheet(workbook: Workbook, data: ScrumOutput) {
+export function addFirstSprintSheet(
+  workbook: Workbook,
+  storyTitles: string[],
+  rationale: string,
+) {
   const sheet = workbook.addWorksheet("Sprint Inicial");
   sheet.columns = [
     { header: "História selecionada", key: "title", width: 45 },
   ];
   styleHeaderRow(sheet.getRow(1));
 
-  data.firstSprint.selectedStoryTitles.forEach((title) => {
+  storyTitles.forEach((title) => {
     sheet.addRow({ title }).getCell(1).alignment = WRAP_TOP_ALIGNMENT;
   });
   applyZebraStripes(sheet, 2, sheet.rowCount);
@@ -84,11 +94,14 @@ function addFirstSprintSheet(workbook: Workbook, data: ScrumOutput) {
   sheet.addRow([]);
   const rationaleHeader = sheet.addRow(["Justificativa da escolha"]);
   rationaleHeader.getCell(1).font = { bold: true };
-  const rationaleRow = sheet.addRow([data.firstSprint.rationale]);
+  const rationaleRow = sheet.addRow([rationale]);
   rationaleRow.getCell(1).alignment = WRAP_TOP_ALIGNMENT;
 }
 
-function addMacroScheduleSheet(workbook: Workbook, data: ScrumOutput) {
+export function addMacroScheduleSheet(
+  workbook: Workbook,
+  sprints: ScrumOutput["macroSchedule"]["sprints"],
+) {
   const sheet = workbook.addWorksheet("Planejamento Macro");
   sheet.columns = [
     { header: "Sprint", key: "name", width: 20 },
@@ -97,7 +110,7 @@ function addMacroScheduleSheet(workbook: Workbook, data: ScrumOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
-  data.macroSchedule.sprints.forEach((sprint) => {
+  sprints.forEach((sprint) => {
     const row = sheet.addRow({
       name: sprint.name,
       focus: sprint.focus,

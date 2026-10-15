@@ -1,0 +1,1440 @@
+[
+  {
+    "name": "Resumo",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A10:B10",
+      "A1:B1"
+    ],
+    "columnWidths": [
+      28,
+      70
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          },
+          {
+            "address": "B1",
+            "value": "Planejamento gerado por Planejador de Projetos AI",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 14
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Framework",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Híbrido — Cascata + Scrum",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Data de geração",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "09/10/2026, 09:00:00",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Entregáveis da EAP (folhas)",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "3",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Histórias",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B6",
+            "value": "2",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "address": "A7",
+            "value": "Entregáveis com itens vinculados",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B7",
+            "value": "1 de 3",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Pontos de atenção",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B8",
+            "value": "6",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 10,
+        "cells": [
+          {
+            "address": "A10",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          },
+          {
+            "address": "B10",
+            "value": "Planilha gerada automaticamente a partir do resultado já processado — nenhuma informação foi adicionada além do que consta na especificação original.",
+            "italic": true,
+            "color": "FF6B7280"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TAP",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 0
+      }
+    ],
+    "autoFilter": null,
+    "merges": [
+      "A1:B1"
+    ],
+    "columnWidths": [
+      24,
+      65
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Termo de Abertura do Projeto",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          },
+          {
+            "address": "B1",
+            "value": "Termo de Abertura do Projeto",
+            "bold": true,
+            "color": "FF4F46E5",
+            "size": 13
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Objetivo",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B3",
+            "value": "Permitir o agendamento online de consultas.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Escopo resumido",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B4",
+            "value": "Agendamento online, agendas por unidade e relatórios.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Stakeholders",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B5",
+            "value": "• Diretoria da clínica\n• Recepcionistas",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Critérios de sucesso",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B6",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "address": "A7",
+            "value": "Premissas",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B7",
+            "value": "• Serviço de e-mail já contratado",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 8,
+        "cells": [
+          {
+            "address": "A8",
+            "value": "Restrições",
+            "bold": true,
+            "color": "FF111827"
+          },
+          {
+            "address": "B8",
+            "value": "• Atender à LGPD",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "EAP",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:C1",
+    "merges": [],
+    "columnWidths": [
+      10,
+      50,
+      16
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Código",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Entregável",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Nível",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "1",
+            "bold": true,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "Módulo de agendamento",
+            "bold": true,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "Entregável",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "1.1",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Agenda por profissional",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "Subentregável",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "1.2",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B4",
+            "value": "Agendamento online",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C4",
+            "value": "Subentregável",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "2",
+            "bold": true,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B5",
+            "value": "Relatório de faltas",
+            "bold": true,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C5",
+            "value": "Entregável",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cronograma Macro",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:E1",
+    "merges": [],
+    "columnWidths": [
+      8,
+      30,
+      20,
+      45,
+      40
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Fase",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Nome",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Entregáveis (EAP)",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "D1",
+            "value": "Marcos",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "E1",
+            "value": "Dependências",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "F1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "Construção",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D2",
+            "value": "• M1 Homologação na unidade Centro (EAP 1.2)",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E2",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "F2",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "Implantação",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "2",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "D3",
+            "value": "• M2 Produção nas três unidades (EAP 1, 2)",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "E3",
+            "value": "• Construção concluída",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "F3",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B4",
+            "value": "Operação assistida",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C4",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D4",
+            "value": "• M3 Encerramento",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E4",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Product Backlog",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:I1",
+    "merges": [],
+    "columnWidths": [
+      6,
+      null,
+      28,
+      28,
+      45,
+      50,
+      16,
+      16,
+      45
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "#",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "ID",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "EAP",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "D1",
+            "value": "Título",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "E1",
+            "value": "História",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "F1",
+            "value": "Critérios de aceite",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "G1",
+            "value": "Valor de negócio",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "H1",
+            "value": "Complexidade",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "I1",
+            "value": "Justificativa da prioridade",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": 1,
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "US-02",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "1 Módulo de agendamento",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D2",
+            "value": "Agendar consulta online",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E2",
+            "value": "Como recepcionista, quero agendar consulta online, para atender melhor.",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "F2",
+            "value": "• Critério verificável derivado da especificação",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "G2",
+            "value": "Alta",
+            "bold": true,
+            "color": "FF991B1B",
+            "fill": "FFFEE2E2",
+            "wrap": true
+          },
+          {
+            "address": "H2",
+            "value": "Média",
+            "bold": true,
+            "color": "FF92400E",
+            "fill": "FFFEF3C7",
+            "wrap": true
+          },
+          {
+            "address": "I2",
+            "value": "Base para as demais funcionalidades.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": 2,
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "US-03",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "2 Relatório de faltas",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "D3",
+            "value": "Gerar relatório | faltas",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "E3",
+            "value": "Como recepcionista, quero gerar relatório de faltas, para atender melhor.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "F3",
+            "value": "• Critério verificável derivado da especificação",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "G3",
+            "value": "Alta",
+            "bold": true,
+            "color": "FF991B1B",
+            "fill": "FFFEE2E2",
+            "wrap": true
+          },
+          {
+            "address": "H3",
+            "value": "Média",
+            "bold": true,
+            "color": "FF92400E",
+            "fill": "FFFEF3C7",
+            "wrap": true
+          },
+          {
+            "address": "I3",
+            "value": "Base para as demais funcionalidades.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sprint Inicial",
+    "views": [],
+    "autoFilter": null,
+    "merges": [],
+    "columnWidths": [
+      45
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "História selecionada",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "US-02 · Agendar consulta online",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Justificativa da escolha",
+            "bold": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "A agenda é pré-requisito do agendamento.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Planejamento Macro",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:D1",
+    "merges": [],
+    "columnWidths": [
+      20,
+      45,
+      24,
+      40
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Sprint",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Foco",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Histórias",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "D1",
+            "value": "Dependências",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Sprint 1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "Agenda",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "US-02",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D2",
+            "value": "Não identificado na especificação.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Rastreabilidade",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:G1",
+    "merges": [],
+    "columnWidths": [
+      8,
+      32,
+      32,
+      28,
+      32,
+      40,
+      22
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "EAP",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Entregável",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Subentregável",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "D1",
+            "value": "Fases",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "E1",
+            "value": "Marcos",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "F1",
+            "value": "Histórias",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "G1",
+            "value": "Situação",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "1.1",
+            "bold": true,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "1 Módulo de agendamento",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "Agenda por profissional",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D2",
+            "value": "• F1 Construção",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E2",
+            "value": "• M2 Produção nas três unidades",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "F2",
+            "value": "Sem vínculo — revisar",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "G2",
+            "value": "Sem vínculo — revisar",
+            "bold": true,
+            "color": "FF92400E",
+            "fill": "FFFEF3C7",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "1.2",
+            "bold": true,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "1 Módulo de agendamento",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "Agendamento online",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "D3",
+            "value": "• F1 Construção",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "E3",
+            "value": "• M1 Homologação na unidade Centro\n• M2 Produção nas três unidades",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "F3",
+            "value": "Sem vínculo — revisar",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "G3",
+            "value": "Sem vínculo — revisar",
+            "bold": true,
+            "color": "FF92400E",
+            "fill": "FFFEF3C7",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "2",
+            "bold": true,
+            "wrap": true
+          },
+          {
+            "address": "B4",
+            "value": "2 Relatório de faltas",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C4",
+            "value": "—",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "D4",
+            "value": "• F2 Implantação",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "E4",
+            "value": "• M2 Produção nas três unidades",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "F4",
+            "value": "• US-03 Gerar relatório | faltas",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "G4",
+            "value": "Vinculado",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Pontos de Atenção",
+    "views": [
+      {
+        "state": "frozen",
+        "ySplit": 1
+      }
+    ],
+    "autoFilter": "A1:C1",
+    "merges": [],
+    "columnWidths": [
+      26,
+      12,
+      80
+    ],
+    "rows": [
+      {
+        "row": 1,
+        "height": 22,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "Tipo",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "B1",
+            "value": "Referência",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          },
+          {
+            "address": "C1",
+            "value": "Descrição",
+            "bold": true,
+            "color": "FFFFFFFF",
+            "fill": "FF4F46E5",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 2,
+        "cells": [
+          {
+            "address": "A2",
+            "value": "Entregável sem item",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B2",
+            "value": "1.1",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C2",
+            "value": "1.1 Agenda por profissional: nenhum item de execução vinculado. Revise se é esperado (ex.: entregável documental) ou se falta trabalho no backlog.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 3,
+        "cells": [
+          {
+            "address": "A3",
+            "value": "Entregável sem item",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B3",
+            "value": "1.2",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C3",
+            "value": "1.2 Agendamento online: nenhum item de execução vinculado. Revise se é esperado (ex.: entregável documental) ou se falta trabalho no backlog.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 4,
+        "cells": [
+          {
+            "address": "A4",
+            "value": "Vínculo pouco preciso",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B4",
+            "value": "US-02",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C4",
+            "value": "US-02 está vinculado ao entregável 1 Módulo de agendamento, e não a um de seus subentregáveis — vínculo menos preciso.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 5,
+        "cells": [
+          {
+            "address": "A5",
+            "value": "Fase sem entregável",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B5",
+            "value": "F3",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C5",
+            "value": "Fase F3 Operação assistida: não produz nenhum entregável da EAP.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 6,
+        "cells": [
+          {
+            "address": "A6",
+            "value": "Marco sem entregável",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "B6",
+            "value": "M3",
+            "size": 11,
+            "wrap": true
+          },
+          {
+            "address": "C6",
+            "value": "Marco M3 Encerramento: não está associado a nenhum entregável da EAP.",
+            "size": 11,
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 7,
+        "cells": [
+          {
+            "address": "A7",
+            "value": "História fora das Sprints",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "B7",
+            "value": "US-03",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          },
+          {
+            "address": "C7",
+            "value": "US-03 Gerar relatório | faltas: não está prevista em nenhuma Sprint do cronograma macro.",
+            "size": 11,
+            "fill": "FFF1F2F6",
+            "wrap": true
+          }
+        ]
+      },
+      {
+        "row": 9,
+        "cells": [
+          {
+            "address": "A9",
+            "value": "Lacunas de vínculo a revisar — não são erros. Um entregável documental, por exemplo, pode legitimamente não ter item ágil.",
+            "italic": true
+          }
+        ]
+      }
+    ]
+  }
+]

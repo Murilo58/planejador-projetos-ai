@@ -13,6 +13,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FRAMEWORKS } from "@/lib/frameworks";
+import {
+  HYBRID_PLANNING_OVERVIEW,
+  isHybridPlanningEnabled,
+} from "@/lib/hybrid/frameworks";
 
 export const metadata: Metadata = {
   title: "Painel — Planejador de Projetos AI",
@@ -62,6 +66,21 @@ export default async function DashboardPage() {
                 </CardHeader>
               </Card>
             ))}
+            {/* Planejamento Híbrido (v1.1), só com a feature flag ligada:
+                linha inteira abaixo dos três frameworks. */}
+            {isHybridPlanningEnabled() ? (
+              <Card className="sm:col-span-3">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    {HYBRID_PLANNING_OVERVIEW.name}
+                  </CardTitle>
+                  <CardDescription className="text-sm leading-relaxed">
+                    {HYBRID_PLANNING_OVERVIEW.tagline}.{" "}
+                    {HYBRID_PLANNING_OVERVIEW.description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : null}
           </div>
         </Container>
       </main>

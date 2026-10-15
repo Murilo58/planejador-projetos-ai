@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { getPlanningCopy } from "@/lib/planning-copy";
+
 /**
  * Layout compartilhado por /login e /register — RF-010: a tela de
  * autenticação não pode ser apenas "logo + formulário branco centralizado".
@@ -47,7 +49,7 @@ export function AuthShell({
         </p>
 
         <p className="relative text-sm text-white/50">
-          Scrum, Kanban ou Cascata — a escolha do framework é sempre sua.
+          {getPlanningCopy().authTagline}
         </p>
       </div>
 

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "backlog": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Título curto da história."
+              },
+              "statement": {
+                "type": "string",
+                "description": "Formato \"Como [perfil], quero [necessidade], para [benefício]\" quando um perfil puder ser identificado com segurança; caso contrário, uma formulação adequada sem inventar stakeholder."
+              },
+              "acceptanceCriteria": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Critérios objetivos, verificáveis e derivados da especificação."
+              },
+              "businessValue": {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "media",
+                  "baixa"
+                ],
+                "description": "Valor de negócio estimado."
+              },
+              "complexity": {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "media",
+                  "baixa"
+                ],
+                "description": "Complexidade estimada."
+              },
+              "priorityJustification": {
+                "type": "string",
+                "description": "Justificativa da priorização (valor de negócio × complexidade), sem falsa precisão."
+              }
+            },
+            "required": [
+              "title",
+              "statement",
+              "acceptanceCriteria",
+              "businessValue",
+              "complexity",
+              "priorityJustification"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Backlog priorizado — a ordem dos itens no array representa a ordem de prioridade."
+        },
+        "firstSprint": {
+          "type": "object",
+          "properties": {
+            "selectedStoryTitles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Títulos das histórias do backlog selecionadas para a primeira Sprint."
+            },
+            "rationale": {
+              "type": "string",
+              "description": "Razão da escolha dos itens da primeira Sprint, sem assumir velocidade, story points, capacidade ou quantidade de desenvolvedores."
+            }
+          },
+          "required": [
+            "selectedStoryTitles",
+            "rationale"
+          ],
+          "additionalProperties": false
+        },
+        "macroSchedule": {
+          "type": "object",
+          "properties": {
+            "sprints": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Ex.: \"Sprint 1\"."
+                  },
+                  "focus": {
+                    "type": "string",
+                    "description": "Foco principal da Sprint."
+                  },
+                  "dependencies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Dependências relevantes, sem inventar datas ou duração."
+                  }
+                },
+                "required": [
+                  "name",
+                  "focus",
+                  "dependencies"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "sprints"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "backlog",
+        "firstSprint",
+        "macroSchedule"
+      ],
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Observações curtas sobre o que foi ajustado, removido ou confirmado durante a consolidação."
+    }
+  },
+  "required": [
+    "data",
+    "notes"
+  ],
+  "additionalProperties": false
+}

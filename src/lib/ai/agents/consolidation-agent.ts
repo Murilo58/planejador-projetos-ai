@@ -6,7 +6,7 @@ import {
   CONSOLIDATION_SYSTEM_INSTRUCTION,
 } from "@/lib/ai/prompts/consolidation";
 import { createConsolidationSchema } from "@/lib/ai/schemas/consolidation";
-import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import type { ExtractionPromptInput } from "@/lib/ai/schemas/extraction";
 
 /**
  * Agente 3 — Consolidação (PRD §24).
@@ -22,14 +22,26 @@ export async function runConsolidationAgent<T extends z.ZodType>({
   dataSchema,
   extraction,
   structuredOutput,
+  additionalInstruction,
+  maxOutputTokens,
 }: {
   frameworkLabel: string;
   stage: string;
   dataSchema: T;
-  extraction: ExtractionResult;
+  extraction: ExtractionPromptInput;
   structuredOutput: z.infer<T>;
+  /**
+   * Regras extras ANEXADAS à instrução de consolidação (nunca a
+   * substituem) — usado apenas pelo Planejamento Híbrido. Omitido, a
+   * instrução enviada é exatamente `CONSOLIDATION_SYSTEM_INSTRUCTION`.
+   */
+  additionalInstruction?: string;
+  maxOutputTokens?: number;
 }): Promise<{ data: z.infer<T>; notes: string[] }> {
   const schema = createConsolidationSchema(dataSchema);
+  const systemInstruction = additionalInstruction
+    ? `${CONSOLIDATION_SYSTEM_INSTRUCTION}\n\n${additionalInstruction}`
+    : CONSOLIDATION_SYSTEM_INSTRUCTION;
 
   // `z.infer` sobre um schema construído a partir de T genérico não reduz
   // para o tipo simples abaixo (limitação de inferência do Zod sobre
@@ -38,12 +50,13 @@ export async function runConsolidationAgent<T extends z.ZodType>({
   const result = await generateStructured({
     stage,
     schema,
-    systemInstruction: CONSOLIDATION_SYSTEM_INSTRUCTION,
+    systemInstruction,
     prompt: buildConsolidationPrompt({
       frameworkLabel,
       extraction,
       structuredOutput,
     }),
+    maxOutputTokens,
   });
 
   return result as { data: z.infer<T>; notes: string[] };

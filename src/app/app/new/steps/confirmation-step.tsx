@@ -5,7 +5,10 @@ import { FileText, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { FRAMEWORKS, type FrameworkId } from "@/lib/frameworks";
+import {
+  getPlanningFrameworkInfo,
+  type PlanningFrameworkId,
+} from "@/lib/planning-frameworks";
 
 import {
   GenerationProgress,
@@ -16,7 +19,7 @@ interface ConfirmationStepProps {
   sourceType: "text" | "pdf";
   fileName: string | null;
   text: string;
-  framework: FrameworkId;
+  framework: PlanningFrameworkId;
   generationStage: GenerationStage | null;
   generationError: string | null;
   onBack: () => void;
@@ -33,7 +36,7 @@ export function ConfirmationStep({
   onBack,
   onGenerate,
 }: ConfirmationStepProps) {
-  const frameworkInfo = FRAMEWORKS.find((item) => item.id === framework);
+  const frameworkInfo = getPlanningFrameworkInfo(framework);
   const charCount = text.trim().length;
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
   const isGenerating = generationStage !== null;

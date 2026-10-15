@@ -14,6 +14,15 @@ export const AI_CONFIG = {
   model: process.env.GEMINI_MODEL?.trim() || "gemini-flash-latest",
   temperature: 0.3,
   maxOutputTokens: 8192,
+  /**
+   * Teto de saída das etapas do Planejamento Híbrido (estruturação e
+   * consolidação), que produzem governança + execução numa só resposta.
+   * Na PoC da v1.1 a maior resposta chegou a 6.685 tokens e um pico de
+   * raciocínio levou uma chamada a 8.209 — acima dos 8.192 dos demais
+   * frameworks (docs/v1.1/poc-fase0.md). Scrum, Kanban e Cascata
+   * continuam com `maxOutputTokens`.
+   */
+  hybridMaxOutputTokens: 16_384,
   /** Tempo máximo por chamada à IA antes de desistir (RF-081/FE-07). */
   timeoutMs: 60_000,
   /** Tentativas por etapa em caso de resposta fora do contrato (RF-034/RNF-029). */

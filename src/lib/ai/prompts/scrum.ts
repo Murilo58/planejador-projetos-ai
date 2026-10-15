@@ -1,4 +1,7 @@
-import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import {
+  omitSuccessCriteria,
+  type ExtractionResult,
+} from "@/lib/ai/schemas/extraction";
 
 /**
  * Prompt do Agente de Estruturação para Scrum (PRD §11.1 / spec §26-31).
@@ -37,6 +40,6 @@ export function buildScrumPrompt(extraction: ExtractionResult): string {
   return [
     "Dados extraídos da especificação original (JSON):",
     "",
-    JSON.stringify(extraction, null, 2),
+    JSON.stringify(omitSuccessCriteria(extraction), null, 2),
   ].join("\n");
 }

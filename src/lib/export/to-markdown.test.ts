@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { buildMarkdownExport } from "@/lib/export/to-markdown";
-import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import type { ClassicResult } from "@/lib/ai/schemas/result";
 
-const scrumResult: ConsolidatedResult = {
+const scrumResult: ClassicResult = {
   framework: "scrum",
   generatedAt: "2026-10-09T12:00:00.000Z",
   data: {

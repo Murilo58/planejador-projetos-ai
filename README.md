@@ -1,14 +1,19 @@
 # Planejador de Projetos AI
 
-**v1.0.1** — homologada e publicada em produção:
+**v1.0.2** — publicada em produção:
 [planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br).
+**v1.1** (Planejamento Híbrido) — em homologação na branch `release/v1.1`,
+atrás de feature flag e desligada em produção.
 
 Aplicação web que recebe uma especificação técnica de projeto (PDF ou texto)
 e utiliza Inteligência Artificial para gerar os artefatos iniciais de gestão
 de projetos correspondentes ao framework escolhido manualmente pelo usuário:
-**Scrum**, **Kanban** ou **Cascata**.
+**Scrum**, **Kanban** ou **Cascata** — e, a partir da v1.1, o
+**Planejamento Híbrido** (Cascata + Scrum ou Cascata + Kanban), quando
+habilitado.
 
 > Documentação de produto completa em [`docs/PRD.md`](docs/PRD.md).
+> Documentação técnica da v1.1 em [`docs/v1.1/`](docs/v1.1/README.md).
 
 ## Problema e solução
 
@@ -25,7 +30,7 @@ método utilizar.
 
 ## Status do projeto
 
-**Versão 1.0.1 — homologada e publicada em produção** em
+**Versão 1.0.2 em produção** em
 [planejador.orizonprojects.com.br](https://planejador.orizonprojects.com.br),
 via Vercel, com banco de produção dedicado no Neon (separado do ambiente de
 desenvolvimento, e agora também do ambiente de Preview — ver Etapa 8).
@@ -79,6 +84,17 @@ Estado atual:
       simulado), homologada manualmente no Preview nos 3 frameworks e
       nas 3 exportações, tag `v1.0.2` e merge em `main`. Próximo ciclo:
       v1.1 (Planejamento Híbrido).
+- [ ] **Etapa 10** — v1.1, **Planejamento Híbrido**, implementada na branch
+      `release/v1.1` e **em homologação no Preview**. Governança
+      preditiva (TAP, EAP codificada, fases e marcos) integrada à
+      execução ágil (Scrum ou Kanban), com rastreabilidade obrigatória
+      entre a EAP e cada item ágil e lacunas exibidas como pontos de
+      atenção. Inclui assistente, tela de resultado, exportações
+      (Markdown, Excel, PDF) e cards nas telas iniciais, tudo atrás da
+      feature flag `HYBRID_PLANNING_ENABLED` (desligada em produção).
+      Kick-off fora do escopo. Scrum, Kanban e Cascata preservados,
+      com contrato de IA e exportações congelados em snapshots. Detalhes
+      e relatório de homologação em [`docs/v1.1/`](docs/v1.1/README.md).
 
 ## Arquitetura
 
@@ -117,6 +133,15 @@ documento, EAP como hierarquia de caixas, cronograma em timeline e
 Kick-off como um filminho de slides. Nunca JSON bruto (RF-048); campos
 ausentes seguem marcados como "Não identificado na especificação."
 (RF-052).
+
+O **Planejamento Híbrido** (v1.1) usa o mesmo pipeline de 3 etapas, em
+Server Actions próprias que verificam a feature flag no servidor. A
+estruturação gera governança e execução numa **única chamada**; a
+integridade dos vínculos com a EAP é validada em código, e a matriz de
+rastreabilidade é sempre recalculada a partir do pacote
+(`src/lib/hybrid/`). A tela de resultado reaproveita as seções da Cascata
+e de Scrum/Kanban. Decisões e arquitetura em
+[`docs/v1.1/README.md`](docs/v1.1/README.md).
 
 ### Decisões técnicas registradas
 
@@ -289,7 +314,16 @@ npm run test          # roda a suíte uma vez
 npm run test:watch    # modo watch
 ```
 
-52 testes em 8 arquivos, cobrindo (spec §94): validação da entrada
+179 testes em 17 arquivos. Além do que já existia na v1.0 — descrito a
+seguir —, a v1.1 adicionou: snapshots do contrato de IA (schemas,
+instruções e configuração) dos 3 frameworks e do Híbrido, snapshots
+"golden" das exportações (Markdown byte a byte e Excel com abas, valores e
+estilos), testes de domínio do Híbrido (integridade e rastreabilidade),
+das Server Actions com a IA simulada (feature flag, cota e revalidação)
+e dos textos de apresentação com a flag ligada e desligada.
+Atualizar um snapshot é uma decisão consciente, nunca rotina.
+
+Da v1.0, cobrindo (spec §94): validação da entrada
 (`specificationInputSchema`), hashing de senha, os 4 schemas da IA
 (extração + os 3 frameworks + o envelope consolidado, incluindo a rejeição
 de frameworks cruzados), a geração dos arquivos de exportação em
@@ -342,6 +376,7 @@ Copie `.env.example` para `.env.local` e preencha:
 | `AUTH_SECRET` | Assina/criptografa o cookie de sessão | `npx auth secret`, ou gere 32+ bytes aleatórios |
 | `GEMINI_API_KEY` | Autentica as chamadas à IA (server-side apenas) | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
 | `GEMINI_MODEL` | Opcional — fixa um modelo específico | Padrão: `gemini-flash-latest` |
+| `HYBRID_PLANNING_ENABLED` | Opcional — habilita o Planejamento Híbrido (v1.1) | Só `"true"` habilita; ausente = desligado |
 
 Depois de configurar, crie a tabela `User` no Neon:
 
@@ -375,7 +410,7 @@ executado ainda; é um guia para quando o deploy for de fato realizado.
 
 ### Variáveis de ambiente necessárias
 
-As mesmas 5 variáveis da seção anterior, cadastradas em *Project
+As mesmas variáveis da seção anterior, cadastradas em *Project
 Settings → Environment Variables* no painel da Vercel — nenhuma delas
 vem de um arquivo versionado (`.env*` está no `.gitignore`, exceto o
 modelo `.env.example`, sem valores reais):
@@ -387,6 +422,7 @@ modelo `.env.example`, sem valores reais):
 | `AUTH_SECRET` | Production, Preview, Development | Gere um valor **próprio para produção**, diferente do usado em desenvolvimento local (`npx auth secret`) |
 | `GEMINI_API_KEY` | Production, Preview, Development | Chave de produção da API Gemini — considere uma chave dedicada, separada da usada em desenvolvimento, para poder revogar/monitorar uso isoladamente |
 | `GEMINI_MODEL` | Opcional | Só se quiser fixar um modelo específico em vez do padrão (`gemini-flash-latest`) |
+| `HYBRID_PLANNING_ENABLED` | Preview (homologação) | `true` habilita o Híbrido. **Não cadastrar em Production** até decisão de liberar; vale a partir do próximo deploy (a landing page lê no build) |
 
 Nenhum valor real é citado aqui de propósito — preencha diretamente no
 painel da Vercel, nunca em um arquivo do repositório.
@@ -498,7 +534,7 @@ src/
     marketing/          # seções da landing page
     results/            # Timeline e PriorityBadge, compartilhados entre frameworks
   lib/
-    ai/                 # os 3 agentes, prompts, schemas Zod, cliente Gemini
+    ai/                 # os 3 agentes, prompts, schemas Zod, cliente Gemini (inclui o Híbrido)
     auth/               # hashing de senha, schemas Zod, server actions
     db/                 # cliente Prisma (singleton + driver adapter)
     export/             # geração dos arquivos de exportação (Markdown, Excel)
@@ -506,7 +542,9 @@ src/
     rate-limit/          # cota de gerações e proteção de login/cadastro
     result/             # persistência do resultado em sessionStorage
     specification/      # limites e schema de validação da entrada
+    hybrid/             # Planejamento Híbrido: catálogo, feature flag, rastreabilidade
     frameworks.ts       # catálogo dos 3 frameworks suportados
+    planning-frameworks.ts  # frameworks + variantes do Híbrido, para o assistente
   generated/prisma/     # Prisma Client gerado (não versionado)
 
 prisma/
@@ -514,6 +552,7 @@ prisma/
 
 docs/
   PRD.md                # Product Requirements Document
+  v1.1/                 # Planejamento Híbrido: arquitetura, PoC, validação e homologação
 ```
 
 ## Privacidade
@@ -529,14 +568,11 @@ apenas o necessário para autenticação (email + hash da senha). Detalhes em
 Itens avaliados e deliberadamente **fora** do escopo da v1.0.0 — não
 implementados, apenas registrados para priorização futura:
 
-- **Planejamento Híbrido (Ágil + Preditivo)** — um quarto "framework" que
-  combina elementos de Scrum/Kanban com as fases e marcos da Cascata, para
-  projetos que precisam de um cronograma macro preditivo (fases, marcos,
-  dependências) junto com execução iterativa (backlog, sprints ou fluxo
-  contínuo) dentro de cada fase. Não avaliado em profundidade ainda —
-  exigiria um novo schema de IA, um novo agente de estruturação (ou
-  adaptação dos três atuais) e uma nova apresentação visual própria;
-  provavelmente o maior item de esforço do roadmap.
+- **Planejamento Híbrido — evolução pós-v1.1** — implementado na v1.1
+  (ver Etapa 10). Candidatos: otimizar ou dispensar a consolidação no
+  Híbrido (sem efeito estrutural observado, 21–41 s por geração), Kick-off
+  do Híbrido e revisão da relação item ↔ EAP com especificações maiores
+  (ver [`docs/v1.1/README.md`](docs/v1.1/README.md)).
 - **Recuperação de senha por e-mail** — depende de integrar um serviço
   transacional de e-mail (PRD, OQ-001), ainda não avaliado.
 - **Região das Vercel Functions em São Paulo** — hoje em `iad1`
@@ -607,6 +643,10 @@ revisado por código:
   continua pendente.
 - **Recuperação de senha por e-mail não foi implementada** — ver
   "Melhorias futuras".
+- **v1.1 (Planejamento Híbrido)**: validado com a IA real em especificações
+  pequena e média (4 gerações); a especificação grande e a homologação
+  manual no Preview estão pendentes — ver
+  [`docs/v1.1/homologacao.md`](docs/v1.1/homologacao.md).
 - **Nenhum teste de carga foi executado** — ver "Melhorias futuras".
   Auditoria de acessibilidade automatizada (Lighthouse, 4 páginas
   públicas, 100/100) e navegação por teclado nos fluxos principais

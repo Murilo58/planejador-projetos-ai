@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "tap": {
+          "type": "object",
+          "properties": {
+            "objective": {
+              "type": "string",
+              "description": "Objetivo do projeto. Usar exatamente \"Não identificado na especificação.\" quando a informação não existir no texto."
+            },
+            "scopeSummary": {
+              "type": "string",
+              "description": "Escopo resumido do projeto. Usar exatamente \"Não identificado na especificação.\" quando a informação não existir no texto."
+            },
+            "stakeholders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Stakeholders identificados na especificação."
+            },
+            "successCriteria": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Critérios de sucesso identificados na especificação."
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Premissas identificadas."
+            },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Restrições identificadas."
+            }
+          },
+          "required": [
+            "objective",
+            "scopeSummary",
+            "stakeholders",
+            "successCriteria",
+            "assumptions",
+            "constraints"
+          ],
+          "additionalProperties": false
+        },
+        "eap": {
+          "type": "object",
+          "properties": {
+            "deliverables": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Código do entregável de alto nível: \"1\", \"2\", \"3\"… Único em toda a EAP."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do entregável de alto nível (substantivo, não uma atividade/verbo de ação)."
+                  },
+                  "subDeliverables": {
+                    "description": "Subentregáveis que, juntos, representam totalmente este entregável (regra dos 100%).",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "description": "Código do subentregável: código do entregável pai + \".\" + sequência (\"1.1\", \"1.2\", \"2.1\"…). Único em toda a EAP."
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do subentregável (substantivo, não uma atividade/verbo de ação)."
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "name"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "code",
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "deliverables"
+          ],
+          "additionalProperties": false
+        },
+        "schedule": {
+          "type": "object",
+          "properties": {
+            "phases": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Identificador da fase: \"F1\", \"F2\"… Único."
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "eapCodes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Códigos da EAP produzidos (total ou parcialmente) nesta fase. Somente códigos existentes na EAP."
+                  },
+                  "milestones": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Identificador do marco: \"M1\", \"M2\"… Único em todo o cronograma."
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nome do marco, derivado da especificação."
+                        },
+                        "eapCodes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Códigos da EAP cuja conclusão caracteriza este marco. Somente códigos existentes na EAP."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "eapCodes"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "dependencies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Dependências relevantes entre fases, sem detalhamento operacional de tarefas."
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "eapCodes",
+                  "milestones",
+                  "dependencies"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Fases e marcos, em sequência lógica. Usar datas apenas se identificadas na especificação; nunca inventar calendário."
+            }
+          },
+          "required": [
+            "phases"
+          ],
+          "additionalProperties": false
+        },
+        "backlog": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Identificador da história: \"US-01\", \"US-02\"… Único."
+              },
+              "eapCode": {
+                "type": "string",
+                "description": "Código da EAP ao qual este item está vinculado — preferir o nó mais específico (subentregável). Somente códigos existentes na EAP."
+              },
+              "title": {
+                "type": "string",
+                "description": "Título curto da história."
+              },
+              "statement": {
+                "type": "string",
+                "description": "Formato \"Como [perfil], quero [necessidade], para [benefício]\" quando um perfil puder ser identificado com segurança; caso contrário, uma formulação adequada sem inventar stakeholder."
+              },
+              "acceptanceCriteria": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Critérios objetivos, verificáveis e derivados da especificação."
+              },
+              "businessValue": {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "media",
+                  "baixa"
+                ],
+                "description": "Valor de negócio estimado."
+              },
+              "complexity": {
+                "type": "string",
+                "enum": [
+                  "alta",
+                  "media",
+                  "baixa"
+                ],
+                "description": "Complexidade estimada."
+              },
+              "priorityJustification": {
+                "type": "string",
+                "description": "Justificativa da priorização (valor de negócio × complexidade), sem falsa precisão."
+              }
+            },
+            "required": [
+              "id",
+              "eapCode",
+              "title",
+              "statement",
+              "acceptanceCriteria",
+              "businessValue",
+              "complexity",
+              "priorityJustification"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Backlog priorizado — a ordem dos itens no array representa a ordem de prioridade."
+        },
+        "firstSprint": {
+          "type": "object",
+          "properties": {
+            "selectedStoryIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Ids das histórias do backlog selecionadas para a primeira Sprint."
+            },
+            "rationale": {
+              "type": "string",
+              "description": "Razão da escolha dos itens da primeira Sprint, sem assumir velocidade, story points, capacidade ou quantidade de desenvolvedores."
+            }
+          },
+          "required": [
+            "selectedStoryIds",
+            "rationale"
+          ],
+          "additionalProperties": false
+        },
+        "macroSchedule": {
+          "type": "object",
+          "properties": {
+            "sprints": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Ex.: \"Sprint 1\"."
+                  },
+                  "focus": {
+                    "type": "string",
+                    "description": "Foco principal da Sprint."
+                  },
+                  "storyIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Ids das histórias previstas para esta Sprint."
+                  },
+                  "dependencies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Dependências relevantes, sem inventar datas ou duração."
+                  }
+                },
+                "required": [
+                  "name",
+                  "focus",
+                  "storyIds",
+                  "dependencies"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "sprints"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "tap",
+        "eap",
+        "schedule",
+        "backlog",
+        "firstSprint",
+        "macroSchedule"
+      ],
+      "additionalProperties": false
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Observações curtas sobre o que foi ajustado, removido ou confirmado durante a consolidação."
+    }
+  },
+  "required": [
+    "data",
+    "notes"
+  ],
+  "additionalProperties": false
+}

@@ -1,4 +1,13 @@
-import type { EapDeliverable } from "@/lib/ai/schemas/waterfall";
+/**
+ * Entregável como a EAP o exibe. O código ("1", "1.2") só existe no
+ * Planejamento Híbrido, onde ancora a rastreabilidade; na Cascata ele não
+ * vem, e nada é exibido no lugar.
+ */
+interface EapNode {
+  code?: string;
+  name: string;
+  subDeliverables?: Array<{ code?: string; name: string }>;
+}
 
 /**
  * Hierarquia visual da EAP (RF-051): cada entregável de alto nível é uma
@@ -6,7 +15,7 @@ import type { EapDeliverable } from "@/lib/ai/schemas/waterfall";
  * contêiner comunica a relação pai-filho sem precisar de uma biblioteca
  * de diagramação.
  */
-export function EapBoard({ deliverables }: { deliverables: EapDeliverable[] }) {
+export function EapBoard({ deliverables }: { deliverables: EapNode[] }) {
   return (
     // Impressão usa Flexbox, não Grid, pelo mesmo motivo já diagnosticado
     // no Material de Kick-off: `break-inside: avoid` (e a própria
@@ -21,7 +30,10 @@ export function EapBoard({ deliverables }: { deliverables: EapDeliverable[] }) {
           key={deliverable.name}
           className="border-border bg-muted/30 rounded-lg border p-4 print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid"
         >
-          <p className="text-foreground font-medium">{deliverable.name}</p>
+          <p className="text-foreground font-medium">
+            <EapCode code={deliverable.code} />
+            {deliverable.name}
+          </p>
           {deliverable.subDeliverables &&
           deliverable.subDeliverables.length > 0 ? (
             <ul className="mt-3 flex flex-col gap-1.5">
@@ -30,6 +42,7 @@ export function EapBoard({ deliverables }: { deliverables: EapDeliverable[] }) {
                   key={sub.name}
                   className="bg-card text-muted-foreground ring-border rounded-md px-2.5 py-1.5 text-sm ring-1"
                 >
+                  <EapCode code={sub.code} />
                   {sub.name}
                 </li>
               ))}
@@ -39,4 +52,12 @@ export function EapBoard({ deliverables }: { deliverables: EapDeliverable[] }) {
       ))}
     </div>
   );
+}
+
+function EapCode({ code }: { code?: string }) {
+  return code ? (
+    <span className="text-primary mr-1.5 font-semibold tabular-nums">
+      {code}
+    </span>
+  ) : null;
 }

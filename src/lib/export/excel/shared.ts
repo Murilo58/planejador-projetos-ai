@@ -1,10 +1,10 @@
 import type { Cell, Row, Workbook, Worksheet } from "exceljs";
 
 import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
-import { FRAMEWORKS } from "@/lib/frameworks";
+import { getPlanningFrameworkInfo } from "@/lib/planning-frameworks";
 
 /**
- * Estilo compartilhado entre as planilhas dos 3 frameworks — paleta
+ * Estilo compartilhado entre as planilhas de todos os frameworks — paleta
  * replicada de `src/app/globals.css` (tokens claros) para que o arquivo
  * exportado mantenha a identidade visual do Planejador de Projetos AI.
  * ExcelJS usa ARGB (8 dígitos hex, sem "#"); por isso os tokens são
@@ -38,10 +38,15 @@ export const PRIORITY_STYLES: Record<
 
 export const NOT_IDENTIFIED = "Não identificado na especificação.";
 
+/** Lista em uma única célula, um "• item" por linha. */
+export function listOrNotIdentified(items: string[]) {
+  return items.length > 0
+    ? items.map((item) => `• ${item}`).join("\n")
+    : NOT_IDENTIFIED;
+}
+
 export function frameworkLabel(framework: ConsolidatedResult["framework"]) {
-  return (
-    FRAMEWORKS.find((item) => item.id === framework)?.name ?? framework
-  );
+  return getPlanningFrameworkInfo(framework)?.name ?? framework;
 }
 
 /** Nome de arquivo consistente com `to-markdown.ts` (apenas a extensão muda). */
@@ -87,9 +92,9 @@ export function applyZebraStripes(
 }
 
 /**
- * Destaque visual de prioridade (alta/média/baixa) numa célula — aplicado
- * depois do zebra para que a cor de prioridade sempre prevaleça sobre a
- * linha alternada.
+ * Destaque visual de prioridade (alta/média/baixa) numa célula. Deve ser
+ * aplicado DEPOIS do zebra (`applyHighlightsAfterZebra`), senão o fundo
+ * da linha alternada cobre a cor da prioridade.
  */
 export function applyPriorityStyle(cell: Cell, level: string) {
   const style = PRIORITY_STYLES[level as PriorityLevel];
@@ -101,6 +106,17 @@ export function applyPriorityStyle(cell: Cell, level: string) {
     fgColor: { argb: style.fill },
   };
   cell.alignment = { vertical: "top", horizontal: "left", wrapText: true };
+}
+
+/**
+ * Aplica os destaques de prioridade/atenção coletados durante o
+ * preenchimento — chamar logo após `applyZebraStripes`, para que a cor
+ * semântica nunca seja coberta pela linha alternada.
+ */
+export function applyHighlightsAfterZebra(highlights: Array<[Cell, string]>) {
+  for (const [cell, level] of highlights) {
+    applyPriorityStyle(cell, level);
+  }
 }
 
 /** Congela a primeira linha (cabeçalho) e habilita o filtro na faixa dada. */

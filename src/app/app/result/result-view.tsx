@@ -6,11 +6,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import { HYBRID_LABEL } from "@/lib/hybrid/frameworks";
 import { loadResultFromSession } from "@/lib/result/storage";
 import { cn } from "@/lib/utils";
 
 import { ExportActions } from "./export-actions";
+import { ResultHeader } from "./result-header";
+import { ValidationNotes } from "./validation-notes";
 import { CascataResult } from "./sections/cascata-result";
+import { HybridResult } from "./sections/hybrid-result";
 import { KanbanResult } from "./sections/kanban-result";
 import { ScrumResult } from "./sections/scrum-result";
 
@@ -18,6 +22,7 @@ const FRAMEWORK_LABEL: Record<ConsolidatedResult["framework"], string> = {
   scrum: "Scrum",
   kanban: "Kanban",
   cascata: "Cascata",
+  ...HYBRID_LABEL,
 };
 
 /**
@@ -75,9 +80,10 @@ export function ResultView() {
   // mantém TAP/EAP/Cronograma na largura de leitura (max-w-3xl) por
   // dentro — ver cascata-result.tsx; só o Kick-off usa o espaço extra.
   // Scrum continua exatamente como antes: Container no seu max-w-6xl
-  // padrão, com o `max-w-3xl` interno abaixo.
-  const isWideLayout =
-    result.framework === "kanban" || result.framework === "cascata";
+  // padrão, com o `max-w-3xl` interno abaixo. O Híbrido segue o modelo
+  // da Cascata: textos na largura de leitura e o espaço extra para o
+  // quadro Kanban e a matriz de rastreabilidade (hybrid-result.tsx).
+  const isWideLayout = result.framework !== "scrum";
 
   return (
     <Container
@@ -89,20 +95,11 @@ export function ResultView() {
           !isWideLayout && "mx-auto w-full max-w-3xl",
         )}
       >
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-              {FRAMEWORK_LABEL[result.framework]}
-            </p>
-            <h1 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
-              Resultado do planejamento
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              Gerado em {new Date(result.generatedAt).toLocaleString("pt-BR")}
-            </p>
-          </div>
-          <ExportActions result={result} />
-        </div>
+        <ResultHeader
+          frameworkLabel={FRAMEWORK_LABEL[result.framework]}
+          generatedAt={result.generatedAt}
+          actions={<ExportActions result={result} />}
+        />
 
         {result.framework === "scrum" ? (
           <ScrumResult data={result.data} />
@@ -113,19 +110,14 @@ export function ResultView() {
         {result.framework === "cascata" ? (
           <CascataResult data={result.data} />
         ) : null}
-
-        {result.notes.length > 0 ? (
-          <details className="border-border bg-muted/40 rounded-lg border p-4 text-sm print:hidden">
-            <summary className="text-foreground cursor-pointer font-medium">
-              Observações da validação ({result.notes.length})
-            </summary>
-            <ul className="text-muted-foreground mt-2 list-disc space-y-1 pl-5">
-              {result.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          </details>
+        {result.framework === "hibrido-scrum" ? (
+          <HybridResult pkg={{ variant: "scrum", data: result.data }} />
         ) : null}
+        {result.framework === "hibrido-kanban" ? (
+          <HybridResult pkg={{ variant: "kanban", data: result.data }} />
+        ) : null}
+
+        <ValidationNotes notes={result.notes} />
       </div>
     </Container>
   );

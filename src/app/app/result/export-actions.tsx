@@ -72,9 +72,7 @@ export function ExportActions({ result }: { result: ConsolidatedResult }) {
       setError(null);
     } catch {
       // FE-12: falha de exportação.
-      setError(
-        "Não foi possível exportar o arquivo Excel. Tente novamente.",
-      );
+      setError("Não foi possível exportar o arquivo Excel. Tente novamente.");
     } finally {
       setIsExportingExcel(false);
     }

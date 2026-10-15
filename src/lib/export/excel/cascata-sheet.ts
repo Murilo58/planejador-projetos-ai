@@ -2,10 +2,12 @@ import type { Workbook } from "exceljs";
 
 import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
 
+import { addEapSheet, addTapSheet } from "./governance-sheets";
 import {
   applyZebraStripes,
   EXCEL_COLORS,
   freezeAndFilter,
+  listOrNotIdentified,
   NOT_IDENTIFIED,
   styleHeaderRow,
   WRAP_TOP_ALIGNMENT,
@@ -19,74 +21,10 @@ import {
  * atributos de cada fase, não entidades próprias (ver proposta aprovada).
  */
 export function addCascataSheets(workbook: Workbook, data: WaterfallOutput) {
-  addTapSheet(workbook, data);
-  addEapSheet(workbook, data);
+  addTapSheet(workbook, data.tap);
+  addEapSheet(workbook, data.eap.deliverables);
   addScheduleSheet(workbook, data);
   addKickoffSheet(workbook, data);
-}
-
-function listOrNotIdentified(items: string[]) {
-  return items.length > 0
-    ? items.map((item) => `• ${item}`).join("\n")
-    : NOT_IDENTIFIED;
-}
-
-function addTapSheet(workbook: Workbook, data: WaterfallOutput) {
-  const sheet = workbook.addWorksheet("TAP", {
-    views: [{ state: "frozen", ySplit: 0 }],
-  });
-  sheet.columns = [
-    { key: "label", width: 24 },
-    { key: "value", width: 65 },
-  ];
-
-  const header = sheet.addRow(["Termo de Abertura do Projeto"]);
-  header.getCell(1).font = { bold: true, size: 13, color: { argb: EXCEL_COLORS.primary } };
-  sheet.mergeCells(header.number, 1, header.number, 2);
-  sheet.addRow([]);
-
-  const rows: Array<[string, string]> = [
-    ["Objetivo", data.tap.objective],
-    ["Escopo resumido", data.tap.scopeSummary],
-    ["Stakeholders", listOrNotIdentified(data.tap.stakeholders)],
-    ["Critérios de sucesso", listOrNotIdentified(data.tap.successCriteria)],
-    ["Premissas", listOrNotIdentified(data.tap.assumptions)],
-    ["Restrições", listOrNotIdentified(data.tap.constraints)],
-  ];
-
-  rows.forEach(([label, value]) => {
-    const row = sheet.addRow([label, value]);
-    row.getCell(1).font = { bold: true, color: { argb: EXCEL_COLORS.foreground } };
-    row.getCell(1).alignment = { vertical: "top" };
-    row.getCell(2).alignment = WRAP_TOP_ALIGNMENT;
-  });
-}
-
-function addEapSheet(workbook: Workbook, data: WaterfallOutput) {
-  const sheet = workbook.addWorksheet("EAP");
-  sheet.columns = [
-    { header: "Entregável", key: "name", width: 40 },
-    { header: "Subentregáveis", key: "subDeliverables", width: 55 },
-  ];
-  styleHeaderRow(sheet.getRow(1));
-
-  data.eap.deliverables.forEach((deliverable) => {
-    const row = sheet.addRow({
-      name: deliverable.name,
-      subDeliverables:
-        deliverable.subDeliverables && deliverable.subDeliverables.length > 0
-          ? deliverable.subDeliverables
-              .map((sub) => `• ${sub.name}`)
-              .join("\n")
-          : NOT_IDENTIFIED,
-    });
-    row.eachCell({ includeEmpty: true }, (cell) => {
-      cell.alignment = WRAP_TOP_ALIGNMENT;
-    });
-  });
-
-  applyZebraStripes(sheet, 2, sheet.rowCount);
-  freezeAndFilter(sheet, "B", sheet.rowCount);
 }
 
 function addScheduleSheet(workbook: Workbook, data: WaterfallOutput) {

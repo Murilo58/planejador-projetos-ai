@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { extractionSchema } from "@/lib/ai/schemas/extraction";
+import {
+  extractionRoundTripSchema,
+  extractionSchema,
+  omitSuccessCriteria,
+} from "@/lib/ai/schemas/extraction";
 import { scrumOutputSchema } from "@/lib/ai/schemas/scrum";
 import { kanbanOutputSchema } from "@/lib/ai/schemas/kanban";
 import { waterfallOutputSchema } from "@/lib/ai/schemas/waterfall";
@@ -17,6 +21,7 @@ describe("extractionSchema", () => {
       dependencies: [],
       deadlines: [],
       milestones: [],
+      successCriteria: [],
       additionalRelevantInformation: [],
     });
     expect(result.success).toBe(true);
@@ -27,6 +32,48 @@ describe("extractionSchema", () => {
       requirements: [],
     });
     expect(result.success).toBe(false);
+  });
+});
+
+describe("successCriteria na extração (v1.1)", () => {
+  const legacy = {
+    requirements: ["Login com email e senha"],
+    deliverables: [],
+    stakeholders: [],
+    assumptions: [],
+    constraints: [],
+    dependencies: [],
+    deadlines: [],
+    milestones: [],
+    additionalRelevantInformation: [],
+  };
+
+  it("a IA continua obrigada a devolver o campo (lista vazia quando não houver)", () => {
+    expect(extractionSchema.safeParse(legacy).success).toBe(false);
+    expect(extractionSchema.shape.successCriteria.safeParse([]).success).toBe(
+      true,
+    );
+  });
+
+  it("a revalidação entre etapas aceita extrações anteriores, com lista vazia", () => {
+    const parsed = extractionRoundTripSchema.parse(legacy);
+    expect(parsed.successCriteria).toEqual([]);
+    expect(
+      extractionRoundTripSchema.parse({
+        ...legacy,
+        successCriteria: ["Build de produção aprovado (seção 106)"],
+      }).successCriteria,
+    ).toEqual(["Build de produção aprovado (seção 106)"]);
+  });
+
+  it("Scrum e Kanban recebem a extração sem o campo, na ordem original", () => {
+    const withCriteria = extractionRoundTripSchema.parse({
+      ...legacy,
+      successCriteria: ["Aplicação publicada (seção 106)"],
+    });
+    const stripped = omitSuccessCriteria(withCriteria);
+    expect(stripped).not.toHaveProperty("successCriteria");
+    expect(JSON.stringify(stripped)).toBe(JSON.stringify(legacy));
   });
 });
 

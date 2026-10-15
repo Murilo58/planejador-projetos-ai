@@ -4,3 +4,5 @@ docs
 *.md
 public
 package-lock.json
+# snapshots de teste: conteúdo gerado e comparado byte a byte
+**/__snapshots__

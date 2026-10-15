@@ -12,6 +12,12 @@ interface GenerateStructuredParams<T> {
   systemInstruction: string;
   prompt: string;
   schema: z.ZodType<T>;
+  /**
+   * Teto de tokens de saída (inclui o raciocínio do modelo). Omitido, vale
+   * `AI_CONFIG.maxOutputTokens` — o caso de Scrum, Kanban e Cascata. Só o
+   * Planejamento Híbrido informa um teto maior (`hybridMaxOutputTokens`).
+   */
+  maxOutputTokens?: number;
 }
 
 /**
@@ -27,6 +33,7 @@ export async function generateStructured<T>({
   systemInstruction,
   prompt,
   schema,
+  maxOutputTokens = AI_CONFIG.maxOutputTokens,
 }: GenerateStructuredParams<T>): Promise<T> {
   const responseJsonSchema = z.toJSONSchema(schema);
   let lastError: unknown;
@@ -39,7 +46,7 @@ export async function generateStructured<T>({
         config: {
           systemInstruction,
           temperature: AI_CONFIG.temperature,
-          maxOutputTokens: AI_CONFIG.maxOutputTokens,
+          maxOutputTokens,
           responseMimeType: "application/json",
           responseJsonSchema,
           abortSignal: AbortSignal.timeout(AI_CONFIG.timeoutMs),

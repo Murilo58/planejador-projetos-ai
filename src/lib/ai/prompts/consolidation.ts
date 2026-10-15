@@ -1,4 +1,4 @@
-import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import type { ExtractionPromptInput } from "@/lib/ai/schemas/extraction";
 
 /**
  * Prompt do Agente de Consolidação (PRD §24 / RF-031).
@@ -38,7 +38,7 @@ export function buildConsolidationPrompt({
   structuredOutput,
 }: {
   frameworkLabel: string;
-  extraction: ExtractionResult;
+  extraction: ExtractionPromptInput;
   structuredOutput: unknown;
 }): string {
   return [

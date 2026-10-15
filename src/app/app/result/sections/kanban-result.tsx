@@ -5,14 +5,18 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 
-import { KanbanColumnCard } from "./kanban-column-card";
+import { KanbanColumnCard, type KanbanBoardItem } from "./kanban-column-card";
 
 /**
  * Quadro Kanban (PRD §49/RF-050): no desktop, colunas horizontais lado a
  * lado; no mobile, uma coluna por vez via tabs — nunca um board inteiro
  * rolando horizontalmente na tela pequena.
  */
-export function KanbanResult({ data }: { data: KanbanOutput }) {
+export function KanbanResult({
+  data,
+}: {
+  data: { columns: KanbanOutput["columns"]; items: KanbanBoardItem[] };
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeColumn = data.columns[activeIndex];
 

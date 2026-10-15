@@ -1,9 +1,9 @@
-import type { Workbook } from "exceljs";
+import type { Cell, Workbook } from "exceljs";
 
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 
 import {
-  applyPriorityStyle,
+  applyHighlightsAfterZebra,
   applyZebraStripes,
   freezeAndFilter,
   NOT_IDENTIFIED,
@@ -19,11 +19,14 @@ import {
  * cada atividade, não entidades próprias (ver proposta aprovada).
  */
 export function addKanbanSheets(workbook: Workbook, data: KanbanOutput) {
-  addBoardSheet(workbook, data);
+  addBoardSheet(workbook, data.columns);
   addItemsSheet(workbook, data);
 }
 
-function addBoardSheet(workbook: Workbook, data: KanbanOutput) {
+export function addBoardSheet(
+  workbook: Workbook,
+  columns: KanbanOutput["columns"],
+) {
   const sheet = workbook.addWorksheet("Quadro Inicial");
   sheet.columns = [
     { header: "Coluna (status inicial)", key: "name", width: 26 },
@@ -32,7 +35,7 @@ function addBoardSheet(workbook: Workbook, data: KanbanOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
-  data.columns.forEach((column) => {
+  columns.forEach((column) => {
     const row = sheet.addRow({
       name: column.name,
       wipLimit: column.wipLimit,
@@ -60,6 +63,7 @@ function addItemsSheet(workbook: Workbook, data: KanbanOutput) {
   ];
   styleHeaderRow(sheet.getRow(1));
 
+  const highlights: Array<[Cell, string]> = [];
   data.items.forEach((item) => {
     const row = sheet.addRow({
       title: item.title,
@@ -76,10 +80,11 @@ function addItemsSheet(workbook: Workbook, data: KanbanOutput) {
 
     const priorityCell = row.getCell("priority");
     priorityCell.value = labelFor(item.priority);
-    applyPriorityStyle(priorityCell, item.priority);
+    highlights.push([priorityCell, item.priority]);
   });
 
   applyZebraStripes(sheet, 2, sheet.rowCount);
+  applyHighlightsAfterZebra(highlights);
   freezeAndFilter(sheet, "G", sheet.rowCount);
 }
 

@@ -7,13 +7,23 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   runConsolidationStep,
   runExtractionStep,
+  runHybridConsolidationStep,
+  runHybridExtractionStep,
+  runHybridStructuringStep,
   runStructuringStep,
 } from "@/lib/ai/actions";
+import type { ExtractionResult } from "@/lib/ai/schemas/extraction";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
 import type { FrameworkId } from "@/lib/frameworks";
+import {
+  isHybridFrameworkId,
+  type HybridFrameworkId,
+} from "@/lib/hybrid/frameworks";
 import {
   extractTextFromPdf,
   PdfTextExtractionError,
 } from "@/lib/pdf/extract-text";
+import type { PlanningFrameworkId } from "@/lib/planning-frameworks";
 import { saveResultToSession } from "@/lib/result/storage";
 import {
   ACCEPTED_FILE_TYPE,
@@ -31,7 +41,16 @@ import { SpecificationStep, type InputMode } from "./steps/specification-step";
 
 type Step = 1 | 2 | 3;
 
-export function NewPlanningWizard() {
+type StageOutcome<T> =
+  | { success: true; data: T }
+  | { success: false; code: string; message: string };
+
+export function NewPlanningWizard({
+  hybridEnabled,
+}: {
+  /** Feature flag do Planejamento Híbrido, avaliada no servidor. */
+  hybridEnabled: boolean;
+}) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
 
@@ -43,7 +62,7 @@ export function NewPlanningWizard() {
     null,
   );
 
-  const [framework, setFramework] = useState<FrameworkId | null>(null);
+  const [framework, setFramework] = useState<PlanningFrameworkId | null>(null);
   const [frameworkError, setFrameworkError] = useState<string | null>(null);
 
   const [generationStage, setGenerationStage] =
@@ -159,43 +178,22 @@ export function NewPlanningWizard() {
     // cobrada uma única vez, na Etapa 1, nunca nas Etapas 2 e 3.
     const generationId = crypto.randomUUID();
 
+    const input = {
+      sourceType: inputMode,
+      fileName: fileName ?? undefined,
+      text,
+      generationId,
+    };
+
     try {
-      const extraction = await runExtractionStep({
-        sourceType: inputMode,
-        fileName: fileName ?? undefined,
-        text,
-        framework,
-        generationId,
-      });
-      if (!extraction.success) {
-        handleStageFailure(extraction);
+      const consolidation = isHybridFrameworkId(framework)
+        ? await generateHybrid(framework, input)
+        : await generateClassic(framework, input);
+      if (!consolidation) {
         return;
       }
 
-      setGenerationStage("structuring");
-      const structuring = await runStructuringStep(
-        framework,
-        extraction.data,
-        generationId,
-      );
-      if (!structuring.success) {
-        handleStageFailure(structuring);
-        return;
-      }
-
-      setGenerationStage("consolidation");
-      const consolidation = await runConsolidationStep(
-        framework,
-        extraction.data,
-        structuring.data,
-        generationId,
-      );
-      if (!consolidation.success) {
-        handleStageFailure(consolidation);
-        return;
-      }
-
-      saveResultToSession(consolidation.data);
+      saveResultToSession(consolidation);
       router.push("/app/result");
     } catch {
       // FE-11: falha de rede ao chamar a Server Action (não um erro da
@@ -205,6 +203,79 @@ export function NewPlanningWizard() {
       );
       setGenerationStage(null);
     }
+  }
+
+  type GenerationInput = {
+    sourceType: InputMode;
+    fileName: string | undefined;
+    text: string;
+    generationId: string;
+  };
+
+  /**
+   * Devolve os dados de uma etapa bem-sucedida; numa falha, já a trata
+   * (mensagem inline ou redirecionamento) e devolve `null`.
+   */
+  function unwrap<T>(outcome: StageOutcome<T>): T | null {
+    if (!outcome.success) {
+      handleStageFailure(outcome);
+      return null;
+    }
+    return outcome.data;
+  }
+
+  async function generateClassic(
+    selected: FrameworkId,
+    input: GenerationInput,
+  ): Promise<ConsolidatedResult | null> {
+    const extraction = unwrap(
+      await runExtractionStep({ ...input, framework: selected }),
+    );
+    if (!extraction) return null;
+
+    setGenerationStage("structuring");
+    const structuring = unwrap(
+      await runStructuringStep(selected, extraction, input.generationId),
+    );
+    if (!structuring) return null;
+
+    setGenerationStage("consolidation");
+    return unwrap(
+      await runConsolidationStep(
+        selected,
+        extraction,
+        structuring,
+        input.generationId,
+      ),
+    );
+  }
+
+  // Planejamento Híbrido (v1.1): mesmas 3 etapas, em actions próprias
+  // que revalidam a feature flag no servidor.
+  async function generateHybrid(
+    selected: HybridFrameworkId,
+    input: GenerationInput,
+  ): Promise<ConsolidatedResult | null> {
+    const extraction: ExtractionResult | null = unwrap(
+      await runHybridExtractionStep({ ...input, framework: selected }),
+    );
+    if (!extraction) return null;
+
+    setGenerationStage("structuring");
+    const structuring = unwrap(
+      await runHybridStructuringStep(selected, extraction, input.generationId),
+    );
+    if (!structuring) return null;
+
+    setGenerationStage("consolidation");
+    return unwrap(
+      await runHybridConsolidationStep(
+        selected,
+        extraction,
+        structuring,
+        input.generationId,
+      ),
+    );
   }
 
   return (
@@ -234,6 +305,7 @@ export function NewPlanningWizard() {
           {step === 2 ? (
             <FrameworkStep
               framework={framework}
+              hybridEnabled={hybridEnabled}
               error={frameworkError}
               onSelect={(value) => {
                 setFramework(value);

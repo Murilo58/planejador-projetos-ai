@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "tap": {
+      "type": "object",
+      "properties": {
+        "objective": {
+          "type": "string",
+          "description": "Objetivo do projeto. Usar exatamente \"Não identificado na especificação.\" quando a informação não existir no texto."
+        },
+        "scopeSummary": {
+          "type": "string",
+          "description": "Escopo resumido do projeto. Usar exatamente \"Não identificado na especificação.\" quando a informação não existir no texto."
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Stakeholders identificados na especificação."
+        },
+        "successCriteria": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Critérios de sucesso identificados na especificação."
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Premissas identificadas."
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Restrições identificadas."
+        }
+      },
+      "required": [
+        "objective",
+        "scopeSummary",
+        "stakeholders",
+        "successCriteria",
+        "assumptions",
+        "constraints"
+      ],
+      "additionalProperties": false
+    },
+    "eap": {
+      "type": "object",
+      "properties": {
+        "deliverables": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Nome do entregável de alto nível (substantivo, não uma atividade/verbo de ação)."
+              },
+              "subDeliverables": {
+                "description": "Subentregáveis que, juntos, representam totalmente este entregável (regra dos 100%).",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Nome do subentregável (substantivo, não uma atividade/verbo de ação)."
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "deliverables"
+      ],
+      "additionalProperties": false
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "phases": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "milestones": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Dependências relevantes entre fases, sem detalhamento operacional de tarefas."
+              }
+            },
+            "required": [
+              "name",
+              "milestones",
+              "dependencies"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Fases e marcos, em sequência lógica. Usar datas apenas se identificadas na especificação; nunca inventar calendário."
+        }
+      },
+      "required": [
+        "phases"
+      ],
+      "additionalProperties": false
+    },
+    "kickoff": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "objective": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "keyMilestones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rolesAndResponsibilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string"
+              },
+              "responsibility": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "role",
+              "responsibility"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Papéis e responsabilidades identificados na especificação."
+        }
+      },
+      "required": [
+        "title",
+        "objective",
+        "scope",
+        "keyMilestones",
+        "rolesAndResponsibilities"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "tap",
+    "eap",
+    "schedule",
+    "kickoff"
+  ],
+  "additionalProperties": false
+}

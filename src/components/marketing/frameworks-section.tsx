@@ -7,8 +7,17 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FRAMEWORKS } from "@/lib/frameworks";
+import {
+  HYBRID_PLANNING_OVERVIEW,
+  isHybridPlanningEnabled,
+} from "@/lib/hybrid/frameworks";
 
 export function FrameworksSection() {
+  // Feature flag avaliada no servidor. Esta página é estática: o valor
+  // vale a partir do build — mudar a flag exige um novo deploy (o que já
+  // é o caso de qualquer variável de ambiente na Vercel).
+  const showHybrid = isHybridPlanningEnabled();
+
   return (
     <section id="frameworks" className="bg-muted/40 py-20 sm:py-28">
       <Container>
@@ -40,6 +49,25 @@ export function FrameworksSection() {
               </CardHeader>
             </Card>
           ))}
+          {/* Planejamento Híbrido (v1.1): linha inteira abaixo dos três
+              frameworks, sem alterar a grade deles. */}
+          {showHybrid ? (
+            <Card className="h-full sm:col-span-3">
+              <CardHeader>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <CardTitle className="text-xl">
+                    {HYBRID_PLANNING_OVERVIEW.name}
+                  </CardTitle>
+                  <Badge variant="secondary">
+                    {HYBRID_PLANNING_OVERVIEW.tagline}
+                  </Badge>
+                </div>
+                <CardDescription className="pt-2 text-sm leading-relaxed">
+                  {HYBRID_PLANNING_OVERVIEW.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          ) : null}
         </div>
       </Container>
     </section>

@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Timeline } from "@/components/results/timeline";
 import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
 
 import { EapBoard } from "../eap-board";
-import { FieldValue, ListField } from "../field-value";
+import { ResultSection } from "./result-section";
+import { TapCard } from "./tap-card";
+import { TimelineCard } from "./timeline-card";
 
 export function CascataResult({ data }: { data: WaterfallOutput }) {
   return (
@@ -16,91 +16,31 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
           espaço extra (ver result-view.tsx) existe apenas para o grid
           do Kick-off abaixo, não para estes três. */}
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
-        <section>
-          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
-            TAP — Termo de Abertura do Projeto
-          </h2>
-          <Card className="mt-4 overflow-hidden p-0">
-            <div className="border-border bg-muted/40 border-b px-5 py-3">
-              <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                Termo de Abertura do Projeto
-              </p>
-            </div>
-            <CardContent className="flex flex-col gap-4 p-5 text-sm">
-              <div>
-                <p className="text-foreground font-medium">Objetivo</p>
-                <FieldValue value={data.tap.objective} />
-              </div>
-              <div>
-                <p className="text-foreground font-medium">Escopo resumido</p>
-                <FieldValue value={data.tap.scopeSummary} />
-              </div>
-              <div className="bg-border h-px" />
-              {/* Impressão em Flexbox, não Grid — mesmo motivo do EapBoard
-                  e do Material de Kick-off: evita páginas com espaços
-                  vazios causadas pela fragmentação pouco confiável de
-                  CSS Grid multi-linha nos motores de impressão. */}
-              <div className="grid gap-4 sm:grid-cols-2 print:flex print:flex-wrap">
-                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
-                  <ListField
-                    label="Stakeholders"
-                    items={data.tap.stakeholders}
-                  />
-                </div>
-                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
-                  <ListField
-                    label="Critérios de sucesso"
-                    items={data.tap.successCriteria}
-                  />
-                </div>
-                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
-                  <ListField
-                    label="Premissas"
-                    items={data.tap.assumptions}
-                  />
-                </div>
-                <div className="print:shrink-0 print:grow-0 print:basis-[calc(50%-0.5rem)] print:break-inside-avoid">
-                  <ListField
-                    label="Restrições"
-                    items={data.tap.constraints}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+        <ResultSection title="TAP — Termo de Abertura do Projeto">
+          <TapCard tap={data.tap} />
+        </ResultSection>
 
-        <section>
-          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
-            EAP — Estrutura Analítica do Projeto
-          </h2>
+        <ResultSection title="EAP — Estrutura Analítica do Projeto">
           <div className="mt-4">
             <EapBoard deliverables={data.eap.deliverables} />
           </div>
-        </section>
+        </ResultSection>
 
-        <section>
-          <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
-            Cronograma macro
-          </h2>
-          <Card className="mt-4 p-5">
-            <CardContent className="p-0">
-              <Timeline
-                items={data.schedule.phases.map((phase) => ({
-                  title: phase.name,
-                  description:
-                    phase.milestones.length > 0
-                      ? `Marcos: ${phase.milestones.join(", ")}`
-                      : undefined,
-                  meta:
-                    phase.dependencies.length > 0
-                      ? `Dependências: ${phase.dependencies.join(", ")}`
-                      : undefined,
-                }))}
-              />
-            </CardContent>
-          </Card>
-        </section>
+        <ResultSection title="Cronograma macro">
+          <TimelineCard
+            items={data.schedule.phases.map((phase) => ({
+              title: phase.name,
+              description:
+                phase.milestones.length > 0
+                  ? `Marcos: ${phase.milestones.join(", ")}`
+                  : undefined,
+              meta:
+                phase.dependencies.length > 0
+                  ? `Dependências: ${phase.dependencies.join(", ")}`
+                  : undefined,
+            }))}
+          />
+        </ResultSection>
       </div>
 
       {/* Material de Kick-off: usa a largura total liberada pelo
@@ -124,10 +64,7 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
           nunca partir um card no meio. Isso evita o vão quase vazio que
           aparecia quando o bloco inteiro pulava para a página seguinte
           só porque não cabia por completo na anterior. */}
-      <section>
-        <h2 className="text-foreground text-lg font-semibold print:break-after-avoid">
-          Material de Kick-off
-        </h2>
+      <ResultSection title="Material de Kick-off">
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 print:flex print:flex-wrap">
           <KickoffSlide className="bg-[#0b1220] text-white" eyebrow="01" dark>
             <p className="gradient-ai mb-3 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium text-white">
@@ -175,7 +112,7 @@ export function CascataResult({ data }: { data: WaterfallOutput }) {
             )}
           </KickoffSlide>
         </div>
-      </section>
+      </ResultSection>
     </div>
   );
 }
