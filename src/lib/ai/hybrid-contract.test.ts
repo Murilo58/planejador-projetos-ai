@@ -172,6 +172,50 @@ describe("critérios de sucesso do projeto (v1.1)", () => {
   });
 });
 
+describe("cobertura da EAP pela execução (v1.1.2)", () => {
+  it("as duas instruções do Híbrido exigem EAP por funcionalidade e cobertura sem espalhamento", () => {
+    for (const instruction of [
+      HYBRID_SCRUM_SYSTEM_INSTRUCTION,
+      HYBRID_KANBAN_SYSTEM_INSTRUCTION,
+    ]) {
+      const flat = instruction.replace(/\s+/g, " ");
+      expect(flat).toContain(
+        "Decomponha a EAP por funcionalidade ou resultado, não por camada técnica",
+      );
+      expect(flat).toContain(
+        "Duas folhas da EAP nunca descrevem o mesmo trabalho.",
+      );
+      expect(flat).toContain(
+        "toda folha da EAP cujo trabalho esteja descrito nos dados extraídos deve ter pelo menos um item vinculado a ela",
+      );
+      expect(flat).toContain(
+        "Não coloque o trabalho de uma folha num item vinculado a outra",
+      );
+      // A cobertura nunca autoriza inventar: o limite continua explícito.
+      expect(flat).toContain("Não invente itens só para cobri-los.");
+      // A regra da EAP vem com a governança; a de cobertura, com a
+      // rastreabilidade — antes das regras contra invenção.
+      expect(flat.indexOf("por camada técnica")).toBeLessThan(
+        flat.indexOf("Rastreabilidade (obrigatória)"),
+      );
+      expect(flat.indexOf("Cobertura:")).toBeLessThan(
+        flat.indexOf("Regras obrigatórias, sem exceção"),
+      );
+    }
+  });
+
+  it("Scrum, Kanban e Cascata não recebem as regras de cobertura da EAP", () => {
+    for (const instruction of [
+      SCRUM_SYSTEM_INSTRUCTION,
+      KANBAN_SYSTEM_INSTRUCTION,
+      WATERFALL_SYSTEM_INSTRUCTION,
+    ]) {
+      expect(instruction).not.toContain("por camada técnica");
+      expect(instruction).not.toContain("Cobertura:");
+    }
+  });
+});
+
 describe("hybridResultSchema", () => {
   it("aceita resultados das duas variantes e rejeita a combinação trocada", () => {
     const base = { generatedAt: "2026-10-14T12:00:00.000Z", notes: [] };

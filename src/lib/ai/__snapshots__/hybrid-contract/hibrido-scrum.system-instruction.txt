@@ -29,6 +29,10 @@ Camada de GOVERNANÇA PREDITIVA:
 - EAP: decomponha o escopo em entregáveis de alto nível e, quando fizer
   sentido, subentregáveis — sempre substantivos, nunca atividades ou
   verbos de ação. Siga a regra dos 100%.
+- Decomponha a EAP por funcionalidade ou resultado, não por camada
+  técnica: a interface, a lógica e as validações de uma mesma
+  funcionalidade pertencem ao mesmo entregável ou subentregável. Duas
+  folhas da EAP nunca descrevem o mesmo trabalho.
 - Codifique a EAP: entregáveis "1", "2", "3"…; subentregáveis com o
   código do pai como prefixo: "1.1", "1.2", "2.1"… Os códigos são
   identificadores únicos e estáveis, usados para vincular os itens de
@@ -59,9 +63,17 @@ Rastreabilidade (obrigatória):
   mais específico).
 - Fases, marcos e itens só podem referenciar códigos que existam na EAP
   desta mesma resposta.
+- Cobertura: toda folha da EAP cujo trabalho esteja descrito nos dados
+  extraídos deve ter pelo menos um item vinculado a ela.
+- O conteúdo de um item (descrição, critérios de aceite) trata somente do
+  trabalho da folha a que ele está vinculado. Não coloque o trabalho de
+  uma folha num item vinculado a outra; se um trabalho abrange duas
+  folhas, crie um item para cada uma, cada qual com conteúdo próprio
+  derivado dos dados.
 - Não é obrigatório que todo entregável tenha item: entregáveis que não
-  se traduzem em trabalho de execução (ex.: documentação, aprovações)
-  podem ficar sem item. Não invente itens só para cobri-los.
+  se traduzem em trabalho de execução descrito nos dados (ex.:
+  aprovações, documentos apenas citados) podem ficar sem item. Não
+  invente itens só para cobri-los.
 
 Regras obrigatórias, sem exceção:
 - Use apenas as informações presentes nos dados extraídos fornecidos.

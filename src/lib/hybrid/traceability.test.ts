@@ -98,6 +98,33 @@ describe("buildTraceabilityMatrix — entregáveis sem vínculo viram pontos de 
     expect(matrix.summary.leavesWithItems).toBe(2);
   });
 
+  it("não deduz vínculos pelo texto: item que descreve a folha vizinha não a cobre", () => {
+    const data = scrum();
+    data.backlog = data.backlog.filter((item) => item.id !== "US-02");
+    data.macroSchedule.sprints[1].storyIds = ["US-03"];
+    // US-01 (vinculada ao 1.1) passa a descrever também o 1.2.
+    data.backlog[0].statement +=
+      " Inclui o agendamento online de consultas pelo paciente.";
+    data.backlog[0].acceptanceCriteria.push(
+      "Agendamento online disponível para os pacientes.",
+    );
+
+    const matrix = buildTraceabilityMatrix({ variant: "scrum", data });
+    expect(matrix.rows[1].items).toEqual([]);
+    expect(matrix.attentionPoints.map((point) => point.ref)).toEqual(["1.2"]);
+
+    const board = kanban();
+    const linkedTo12 = board.items.find((item) => item.eapCode === "1.2")!;
+    board.items = board.items.filter((item) => item !== linkedTo12);
+    board.items[0].description += ` ${linkedTo12.title}.`;
+    expect(
+      buildTraceabilityMatrix({
+        variant: "kanban",
+        data: board,
+      }).attentionPoints.map((point) => point.ref),
+    ).toEqual(["1.2"]);
+  });
+
   it("no Kanban, a orientação fala do quadro, não do backlog", () => {
     const data = kanban();
     data.items = data.items.filter((item) => item.eapCode !== "2");
