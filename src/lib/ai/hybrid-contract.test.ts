@@ -16,7 +16,6 @@ import { hybridResultSchema } from "@/lib/ai/schemas/hybrid-result";
 import {
   classicResultSchema,
   consolidatedResultSchema,
-  isClassicResult,
 } from "@/lib/ai/schemas/result";
 import { GOLDEN_RESULTS } from "@/lib/export/__fixtures__/golden-results";
 import {
@@ -185,7 +184,5 @@ describe("consolidatedResultSchema com o Híbrido (Fase 5)", () => {
     expect(classicResultSchema.safeParse(hybridScrumResult).success).toBe(
       false,
     );
-    const parsed = consolidatedResultSchema.parse(hybridScrumResult);
-    expect(isClassicResult(parsed)).toBe(false);
   });
 });

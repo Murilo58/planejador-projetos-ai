@@ -1,4 +1,5 @@
 import type { HybridPackage } from "@/lib/ai/schemas/hybrid";
+import { createItemReference } from "@/lib/hybrid/references";
 import { buildTraceabilityMatrix } from "@/lib/hybrid/traceability";
 
 import { EapBoard } from "../eap-board";
@@ -18,9 +19,7 @@ import { TraceabilitySection } from "./traceability-section";
  */
 export function HybridResult({ pkg }: { pkg: HybridPackage }) {
   const { data } = pkg;
-  const eapNames = eapNameIndex(pkg);
-  const eapRef = (code: string) =>
-    `EAP ${code}${eapNames.has(code) ? ` ${eapNames.get(code)}` : ""}`;
+  const referenceOf = createItemReference(data);
 
   return (
     <div className="flex flex-col gap-8">
@@ -78,7 +77,7 @@ export function HybridResult({ pkg }: { pkg: HybridPackage }) {
                     key={story.id}
                     position={index + 1}
                     story={story}
-                    reference={`${story.id} · ${eapRef(story.eapCode)}`}
+                    reference={referenceOf(story.id, story.eapCode)}
                   />
                 ))}
               </div>
@@ -125,7 +124,7 @@ export function HybridResult({ pkg }: { pkg: HybridPackage }) {
                 columns: pkg.data.columns,
                 items: pkg.data.items.map((item) => ({
                   ...item,
-                  reference: `${item.id} · ${eapRef(item.eapCode)}`,
+                  reference: referenceOf(item.id, item.eapCode),
                 })),
               }}
             />
@@ -141,15 +140,4 @@ export function HybridResult({ pkg }: { pkg: HybridPackage }) {
       </div>
     </div>
   );
-}
-
-function eapNameIndex(pkg: HybridPackage): Map<string, string> {
-  const names = new Map<string, string>();
-  for (const deliverable of pkg.data.eap.deliverables) {
-    names.set(deliverable.code, deliverable.name);
-    for (const sub of deliverable.subDeliverables ?? []) {
-      names.set(sub.code, sub.name);
-    }
-  }
-  return names;
 }

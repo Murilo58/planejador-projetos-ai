@@ -8,7 +8,7 @@ import { waterfallOutputSchema } from "@/lib/ai/schemas/waterfall";
 /**
  * Resultado de uma geração de Scrum, Kanban ou Cascata — o contrato
  * homologado na v1.0, inalterado. Usado pela consolidação desses três
- * frameworks e pelas exportações que ainda não tratam o Híbrido.
+ * frameworks, que nunca devolve um resultado do Híbrido.
  */
 export const classicResultSchema = z.discriminatedUnion("framework", [
   z.object({
@@ -46,13 +46,3 @@ export const consolidatedResultSchema = z.discriminatedUnion("framework", [
 ]);
 
 export type ConsolidatedResult = z.infer<typeof consolidatedResultSchema>;
-
-export function isClassicResult(
-  result: ConsolidatedResult,
-): result is ClassicResult {
-  return (
-    result.framework === "scrum" ||
-    result.framework === "kanban" ||
-    result.framework === "cascata"
-  );
-}

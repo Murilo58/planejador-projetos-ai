@@ -1,6 +1,9 @@
-import type { ClassicResult } from "@/lib/ai/schemas/result";
+import type { HybridPackage } from "@/lib/ai/schemas/hybrid";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import { buildTraceabilityMatrix } from "@/lib/hybrid/traceability";
 
 import { addCascataSheets } from "./excel/cascata-sheet";
+import { addHybridSheets } from "./excel/hybrid-sheets";
 import { addKanbanSheets } from "./excel/kanban-sheet";
 import { addScrumSheets } from "./excel/scrum-sheet";
 import { addSummarySheet, excelFilename } from "./excel/shared";
@@ -30,7 +33,7 @@ import { addSummarySheet, excelFilename } from "./excel/shared";
  * em "Exportar Excel", nunca no carregamento inicial da página.
  */
 export async function buildExcelExport(
-  result: ClassicResult,
+  result: ConsolidatedResult,
 ): Promise<{ filename: string; buffer: ArrayBuffer }> {
   const ExcelJS = (await import("exceljs/dist/exceljs.min.js")).default;
   const workbook = new ExcelJS.Workbook();
@@ -52,6 +55,33 @@ export async function buildExcelExport(
       { label: "Itens classificados", value: String(result.data.items.length) },
     ]);
     addKanbanSheets(workbook, result.data);
+  } else if (
+    result.framework === "hibrido-scrum" ||
+    result.framework === "hibrido-kanban"
+  ) {
+    const pkg = (
+      result.framework === "hibrido-scrum"
+        ? { variant: "scrum", data: result.data }
+        : { variant: "kanban", data: result.data }
+    ) as HybridPackage;
+    const matrix = buildTraceabilityMatrix(pkg);
+    const itemsLabel = pkg.variant === "scrum" ? "Histórias" : "Itens Kanban";
+    addSummarySheet(workbook, result, [
+      {
+        label: "Entregáveis da EAP (folhas)",
+        value: String(matrix.summary.leaves),
+      },
+      { label: itemsLabel, value: String(matrix.summary.items) },
+      {
+        label: "Entregáveis com itens vinculados",
+        value: `${matrix.summary.leavesWithItems} de ${matrix.summary.leaves}`,
+      },
+      {
+        label: "Pontos de atenção",
+        value: String(matrix.attentionPoints.length),
+      },
+    ]);
+    addHybridSheets(workbook, pkg, matrix);
   } else {
     addSummarySheet(workbook, result, [
       { label: "Entregáveis da EAP", value: String(result.data.eap.deliverables.length) },

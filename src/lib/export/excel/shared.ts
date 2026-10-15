@@ -1,10 +1,10 @@
 import type { Cell, Row, Workbook, Worksheet } from "exceljs";
 
-import type { ClassicResult } from "@/lib/ai/schemas/result";
-import { FRAMEWORKS } from "@/lib/frameworks";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
+import { getPlanningFrameworkInfo } from "@/lib/planning-frameworks";
 
 /**
- * Estilo compartilhado entre as planilhas dos 3 frameworks — paleta
+ * Estilo compartilhado entre as planilhas de todos os frameworks — paleta
  * replicada de `src/app/globals.css` (tokens claros) para que o arquivo
  * exportado mantenha a identidade visual do Planejador de Projetos AI.
  * ExcelJS usa ARGB (8 dígitos hex, sem "#"); por isso os tokens são
@@ -45,14 +45,12 @@ export function listOrNotIdentified(items: string[]) {
     : NOT_IDENTIFIED;
 }
 
-export function frameworkLabel(framework: ClassicResult["framework"]) {
-  return (
-    FRAMEWORKS.find((item) => item.id === framework)?.name ?? framework
-  );
+export function frameworkLabel(framework: ConsolidatedResult["framework"]) {
+  return getPlanningFrameworkInfo(framework)?.name ?? framework;
 }
 
 /** Nome de arquivo consistente com `to-markdown.ts` (apenas a extensão muda). */
-export function excelFilename(result: ClassicResult) {
+export function excelFilename(result: ConsolidatedResult) {
   const datePart = new Date(result.generatedAt).toISOString().slice(0, 10);
   return `planejamento-${result.framework}-${datePart}.xlsx`;
 }
@@ -130,7 +128,7 @@ export const WRAP_TOP_ALIGNMENT = {
  */
 export function addSummarySheet(
   workbook: Workbook,
-  result: ClassicResult,
+  result: ConsolidatedResult,
   highlights: Array<{ label: string; value: string }>,
 ) {
   const sheet = workbook.addWorksheet("Resumo", {

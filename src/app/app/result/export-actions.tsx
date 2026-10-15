@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Download, FileSpreadsheet, Printer } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import type { ClassicResult } from "@/lib/ai/schemas/result";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
 import { buildExcelExport } from "@/lib/export/to-excel";
 import { buildMarkdownExport } from "@/lib/export/to-markdown";
 
@@ -18,7 +18,7 @@ import { buildMarkdownExport } from "@/lib/export/to-markdown";
  * numa API de desenho — a opção mais simples que ainda produz um PDF com
  * hierarquia visual adequada (RF-054).
  */
-export function ExportActions({ result }: { result: ClassicResult }) {
+export function ExportActions({ result }: { result: ConsolidatedResult }) {
   const [error, setError] = useState<string | null>(null);
   const [isExportingExcel, setIsExportingExcel] = useState(false);
 

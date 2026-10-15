@@ -5,10 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
-import {
-  isClassicResult,
-  type ConsolidatedResult,
-} from "@/lib/ai/schemas/result";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
 import { HYBRID_LABEL } from "@/lib/hybrid/frameworks";
 import { loadResultFromSession } from "@/lib/result/storage";
 import { cn } from "@/lib/utils";
@@ -101,11 +98,7 @@ export function ResultView() {
         <ResultHeader
           frameworkLabel={FRAMEWORK_LABEL[result.framework]}
           generatedAt={result.generatedAt}
-          // Exportações do Híbrido chegam na Fase 6 da v1.1; até lá, só
-          // os três frameworks atuais exibem as ações.
-          actions={
-            isClassicResult(result) ? <ExportActions result={result} /> : null
-          }
+          actions={<ExportActions result={result} />}
         />
 
         {result.framework === "scrum" ? (

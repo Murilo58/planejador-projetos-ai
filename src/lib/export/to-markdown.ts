@@ -1,8 +1,9 @@
-import type { ClassicResult } from "@/lib/ai/schemas/result";
+import type { ConsolidatedResult } from "@/lib/ai/schemas/result";
 import type { ScrumOutput } from "@/lib/ai/schemas/scrum";
 import type { KanbanOutput } from "@/lib/ai/schemas/kanban";
 import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
 import { FRAMEWORKS } from "@/lib/frameworks";
+import { HYBRID_LABEL, isHybridFrameworkId } from "@/lib/hybrid/frameworks";
 
 import {
   backlogToMarkdown,
@@ -13,6 +14,7 @@ import {
   sprintsToMarkdown,
   tapToMarkdown,
 } from "./markdown/sections";
+import { hybridToMarkdown } from "./markdown/hybrid";
 
 /**
  * Exportação para texto (RF-055 / PRD OQ-002).
@@ -27,33 +29,47 @@ import {
  * à IA, nenhum dado novo. Nunca inclui prompt, nome interno de agente ou
  * informação técnica da API (RF-058).
  */
-export function buildMarkdownExport(result: ClassicResult): {
+export function buildMarkdownExport(result: ConsolidatedResult): {
   filename: string;
   content: string;
 } {
-  const frameworkName =
-    FRAMEWORKS.find((item) => item.id === result.framework)?.name ??
-    result.framework;
   const generatedAt = new Date(result.generatedAt);
+  // "Planejamento Híbrido — Cascata + Scrum" (o rótulo já traz o travessão).
+  const title = isHybridFrameworkId(result.framework)
+    ? `# Planejamento ${HYBRID_LABEL[result.framework]}`
+    : `# Planejamento — ${
+        FRAMEWORKS.find((item) => item.id === result.framework)?.name ??
+        result.framework
+      }`;
 
   const header = [
-    `# Planejamento — ${frameworkName}`,
+    title,
     "",
     `Gerado por Planejador de Projetos AI em ${generatedAt.toLocaleString("pt-BR")}.`,
     "",
   ];
 
-  const body =
-    result.framework === "scrum"
-      ? scrumToMarkdown(result.data)
-      : result.framework === "kanban"
-        ? kanbanToMarkdown(result.data)
-        : cascataToMarkdown(result.data);
+  const body = bodyOf(result);
 
   const datePart = generatedAt.toISOString().slice(0, 10);
   const filename = `planejamento-${result.framework}-${datePart}.md`;
 
   return { filename, content: [...header, ...body].join("\n") };
+}
+
+function bodyOf(result: ConsolidatedResult): string[] {
+  switch (result.framework) {
+    case "scrum":
+      return scrumToMarkdown(result.data);
+    case "kanban":
+      return kanbanToMarkdown(result.data);
+    case "cascata":
+      return cascataToMarkdown(result.data);
+    case "hibrido-scrum":
+      return hybridToMarkdown({ variant: "scrum", data: result.data });
+    case "hibrido-kanban":
+      return hybridToMarkdown({ variant: "kanban", data: result.data });
+  }
 }
 
 function scrumToMarkdown(data: ScrumOutput): string[] {

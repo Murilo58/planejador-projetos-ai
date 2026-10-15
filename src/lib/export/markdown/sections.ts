@@ -7,7 +7,12 @@ import type { WaterfallOutput } from "@/lib/ai/schemas/waterfall";
  * monta seu documento combinando-as (`to-markdown.ts`) — e o Planejamento
  * Híbrido (v1.1) reaproveita as da Cascata junto com as de Scrum ou
  * Kanban. Cada função devolve linhas, já com a linha em branco final.
+ *
+ * `reference` (id do item e vínculo com a EAP) só existe no Híbrido; sem
+ * ele, a saída é exatamente a de Scrum e Kanban.
  */
+
+type WithReference<T> = T & { reference?: string };
 
 export function tapToMarkdown(tap: WaterfallOutput["tap"]): string[] {
   return [
@@ -38,12 +43,17 @@ export function eapToMarkdown(
   return lines;
 }
 
-export function backlogToMarkdown(backlog: ScrumOutput["backlog"]): string[] {
+export function backlogToMarkdown(
+  backlog: Array<WithReference<ScrumOutput["backlog"][number]>>,
+): string[] {
   const lines: string[] = ["## Backlog priorizado", ""];
 
   backlog.forEach((story, index) => {
     lines.push(`### ${index + 1}. ${story.title}`);
     lines.push("");
+    if (story.reference) {
+      lines.push(`Vínculo: ${story.reference}`, "");
+    }
     lines.push(story.statement);
     lines.push("");
     lines.push(
@@ -91,7 +101,7 @@ export function sprintsToMarkdown(
 
 export function kanbanBoardToMarkdown(
   columns: KanbanOutput["columns"],
-  items: KanbanOutput["items"],
+  items: Array<WithReference<KanbanOutput["items"][number]>>,
 ): string[] {
   const lines: string[] = ["## Quadro Kanban", ""];
 
@@ -109,6 +119,7 @@ export function kanbanBoardToMarkdown(
       lines.push(
         `- **${item.title}** (${item.type}, prioridade ${item.priority})`,
       );
+      if (item.reference) lines.push(`  Vínculo: ${item.reference}`);
       lines.push(`  ${item.description}`);
       if (item.dependency) lines.push(`  Dependência: ${item.dependency}`);
       if (item.note) lines.push(`  Obs.: ${item.note}`);

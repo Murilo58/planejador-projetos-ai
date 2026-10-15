@@ -1,7 +1,11 @@
 import ExcelJS from "exceljs";
 import { describe, expect, it } from "vitest";
 
-import { classicResultSchema } from "@/lib/ai/schemas/result";
+import {
+  classicResultSchema,
+  consolidatedResultSchema,
+} from "@/lib/ai/schemas/result";
+import { HYBRID_GOLDEN_RESULTS } from "@/lib/export/__fixtures__/golden-hybrid-results";
 import { GOLDEN_RESULTS } from "@/lib/export/__fixtures__/golden-results";
 import { buildExcelExport } from "@/lib/export/to-excel";
 import { buildMarkdownExport } from "@/lib/export/to-markdown";
@@ -33,6 +37,38 @@ describe.each(Object.entries(GOLDEN_RESULTS))(
     it("Markdown idêntico ao homologado", async () => {
       const { filename, content } = buildMarkdownExport(result);
       expect(filename).toBe(`planejamento-${result.framework}-2026-10-09.md`);
+      await expect(content).toMatchFileSnapshot(`${SNAPSHOT_DIR}/${name}.md`);
+    });
+
+    it("Excel idêntico ao homologado (abas, valores e estilos)", async () => {
+      const { filename, buffer } = await buildExcelExport(result);
+      expect(filename).toBe(`planejamento-${result.framework}-2026-10-09.xlsx`);
+
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer as never);
+      await expect(
+        JSON.stringify(describeWorkbook(workbook), null, 2),
+      ).toMatchFileSnapshot(`${SNAPSHOT_DIR}/${name}.xlsx.json`);
+    });
+  },
+);
+
+/**
+ * Planejamento Híbrido (v1.1, Fase 6): mesma rede de proteção, com
+ * snapshots próprios — incluindo um pacote com lacunas para fixar a
+ * exportação dos pontos de atenção.
+ */
+describe.each(Object.entries(HYBRID_GOLDEN_RESULTS))(
+  "exportações golden — %s",
+  (name, result) => {
+    it("o resultado de referência é válido no contrato (inclusive vínculos)", () => {
+      expect(consolidatedResultSchema.safeParse(result).success).toBe(true);
+    });
+
+    it("Markdown idêntico ao homologado", async () => {
+      const { filename, content } = buildMarkdownExport(result);
+      expect(filename).toBe(`planejamento-${result.framework}-2026-10-09.md`);
+      expect(content).not.toMatch(/kick-?off/i);
       await expect(content).toMatchFileSnapshot(`${SNAPSHOT_DIR}/${name}.md`);
     });
 
