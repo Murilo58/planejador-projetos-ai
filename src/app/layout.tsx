@@ -17,6 +17,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Planejador de Projetos AI",
   description: getPlanningCopy().siteDescription,
+  // Nome sob o ícone na tela inicial do iOS. `capable: false` evita que o
+  // Next.js ative o modo standalone (padrão `true`), preservando a navegação.
+  appleWebApp: {
+    title: "Planejador AI",
+    capable: false,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
